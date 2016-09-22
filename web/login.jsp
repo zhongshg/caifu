@@ -6,12 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <%@ include file="inc/common.jsp"%>
-<%@ page import="java.util.*"%>
-<%@ page import="java.sql.*"%>
-<%@ page import="job.tot.global.Sysconfig"%>
-<%@ page import="job.tot.db.DBUtils"%>
 <%@ page import="job.tot.util.RequestUtil"%>
 <%@ page import="wap.wx.util.Forward" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>

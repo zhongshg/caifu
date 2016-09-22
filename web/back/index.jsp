@@ -12,12 +12,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>财富客户管理系统后台</title>
 </head>
-
+<!--  scrolling="NO"  -->
 <frameset rows="59,*" cols="*" frameborder="no" border="0"
 	framespacing="0">
-	<frame src="top.jsp" name="topFrame" scrolling="NO" noresize="noresize" id="topFrame" title="topFrame" />
+	<frame src="top.jsp" name="topFrame"  noresize="noresize" id="topFrame" title="topFrame" />
 	<frameset cols="213,*" frameborder="no" border="0" framespacing="0">
-		<frame src="left.jsp" name="leftFrame" scrolling="NO" noresize="noresize" id="leftFrame" title="leftFrame" />
+		<frame src="left.jsp" name="leftFrame"  noresize="noresize" id="leftFrame" title="leftFrame" />
 		<frame src="main.jsp" name="mainFrame" id="mainFrame"
 			title="mainFrame" />
 	</frameset>
