@@ -67,7 +67,7 @@ public class RolesDAO {
         return count;
     }
 
-    public Map<String, String> getByUsers(Map<String, String> users) {
+    public Map<String, String> getByUsers(int rid) {
         Map<String, String> roles = new HashMap<String, String>();
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
@@ -75,7 +75,7 @@ public class RolesDAO {
         String sql = "select id,name,remark from roles where id=?";
         try {
             ptst = conn.prepareStatement(sql);
-            ptst.setString(1, users.get("rid"));
+            ptst.setInt(1, rid);
             rs = ptst.executeQuery();
             if (rs.next()) {
                 roles.put("id", rs.getString("id"));

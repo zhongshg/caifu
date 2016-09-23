@@ -24,8 +24,6 @@
         <!-- jQuery WYSIWYG Plugin -->
         <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/scripts/jquery.wysiwyg.js"></script>
         <!-- jQuery Datepicker Plugin -->
-        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/scripts/jquery.datePicker.js"></script>
-        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/scripts/jquery.date.js"></script>
     </head>
     <body>
     </body>

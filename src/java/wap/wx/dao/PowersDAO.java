@@ -152,7 +152,8 @@ public class PowersDAO {
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
         ResultSet rs = null;
-        String sql = "select p.id,p.name,p.parentid,pa.name parentname,p.url,p.remark,p.orders from powers p left join powers pa on p.parentid=pa.id where p.id=?";
+        String sql = "select p.id,p.name,p.parentid,pa.name parentname,p.url,p.remark,p.orders from powers p "
+        	+ "left join powers pa on p.parentid=pa.id where p.id=?";
         try {
             ptst = conn.prepareStatement(sql);
             ptst.setInt(1, Integer.parseInt(powers.get("id")));

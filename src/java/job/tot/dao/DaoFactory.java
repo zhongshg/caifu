@@ -10,6 +10,9 @@
 package job.tot.dao;
 
 import job.tot.dao.jdbc.*;
+import wap.wx.dao.PowersDAO;
+import wap.wx.dao.RolesDAO;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,7 +37,10 @@ public class DaoFactory {
     private static PsvDaoImplJDBC psvDaoImplJDBC = new PsvDaoImplJDBC();
     private static UsersDao userDao = null;
     private static UCodeDao uCodeDao = null;
-    
+    private static NodesDao nodesDao = null;
+    private static RolesDAO rolesDao = null;
+    private static PowersDAO powersDao = null;
+
     public static FundsDaoImplJDBC getFundsDao() {
 	return Funds;
     }
@@ -103,6 +109,28 @@ public class DaoFactory {
 	if (uCodeDao == null) {
 	    uCodeDao = new UCodeDao();
 	}
-        return uCodeDao;
+	return uCodeDao;
     }
+
+    public static NodesDao getNodesDao() {
+	if (nodesDao == null) {
+	    nodesDao = new NodesDao();
+	}
+	return nodesDao;
+    }
+
+    public static RolesDAO getRolesDao() {
+	if (rolesDao == null) {
+	    rolesDao = new RolesDAO();
+	}
+	return rolesDao;
+    }
+
+    public static PowersDAO getPowersDao() {
+	if (powersDao == null) {
+	    powersDao = new PowersDAO();
+	}
+        return powersDao;
+    }
+
 }

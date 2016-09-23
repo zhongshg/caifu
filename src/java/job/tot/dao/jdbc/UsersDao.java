@@ -35,7 +35,7 @@ public class UsersDao extends AbstractDao {
     }
 
     public DataField getByNameAndPwd(String ucode, String pwd, String fieldArr) {
-	return getFirstData("select " + fieldArr + " from users where code='" + ucode + "'", fieldArr);
+	return getFirstData("select " + fieldArr + " from users where name='" + ucode + "' and pwd='"+pwd+"'", fieldArr);
     }
 
     public void batDel(String[] s) {

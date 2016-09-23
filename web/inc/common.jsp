@@ -14,6 +14,4 @@
     if (!IpFilter.filter(request.getRemoteAddr())) {
         response.sendRedirect("404.jsp");
     }
-    String wxsid = (String) session.getAttribute("wxsid");
-    String openid = (String) session.getAttribute("openid");
 %>

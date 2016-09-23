@@ -6,9 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <%@ include file="inc/common.jsp"%>
-<%@ page import="job.tot.util.RequestUtil"%>
-<%@ page import="wap.wx.util.Forward" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -31,13 +28,19 @@ body {
 		String code = RequestUtil.getString(request, "code");
 		String pwd = RequestUtil.getString(request, "pwd");
 		String msg = RequestUtil.getString(request, "msg");
+		String act = RequestUtil.getString(request, "act");
+		if(act!=null && act.equals("out")){
+		    session.removeAttribute("user");
+		}
 		if (code != null && pwd != null) {
 			try {
+			    pwd = new MD5().getMD5of32(pwd).toLowerCase();
 				String fieldArr= "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,indate";
 				DataField df = DaoFactory.getUserDao().getByNameAndPwd(code, pwd, fieldArr);
 				if(df != null){
 					request.getSession().setAttribute("user", df);
-					Forward.forward(request, response, "/back/index.jsp");
+					//Forward.forward(request, response, "/back/index.jsp");
+					response.sendRedirect("./back/index.jsp");
 				}else{
 				    response.sendRedirect("login.jsp?msg=nouser");
 				}
@@ -47,7 +50,7 @@ body {
 		}
 		if(msg!=null && msg.equals("nouser")){
 		    StringBuffer tip = new StringBuffer("<script> ");
-			tip.append("alert(\"用户不存在!\")");
+			tip.append("alert(\"用户不存在或者密码错误!\")");
 			tip.append("</script>");
 			out.print(tip.toString());
 		}
