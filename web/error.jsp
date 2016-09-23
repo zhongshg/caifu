@@ -15,6 +15,7 @@
 <%=exception%>
 <%
 log.fatal("error", exception);
+System.out.println(exception);
 %>
 </body>
 </html>

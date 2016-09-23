@@ -55,6 +55,9 @@ public class UsersDao extends AbstractDao {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
+	if(!validate(code)){
+	    return false;
+	}
 	String sql = "insert into users(name,pwd,code,cardid,bankcard,phone,parentid) values(?,?,?,?,?,?,?)";
 	try {
 	    conn = DBUtils.getConnection();
@@ -122,7 +125,7 @@ public class UsersDao extends AbstractDao {
      * */
     public boolean validate(String code) {
 	DataField df = getFirstData("select code from users where code=" + code, "code");
-	if (df.getString("code") == null) {
+	if (df==null || df.getString("code") == null) {
 	    return true;
 	}
 	return false;

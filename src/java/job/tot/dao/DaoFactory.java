@@ -33,7 +33,8 @@ public class DaoFactory {
     private static CourierDaoImplJDBC courierDaoImplJDBC = new CourierDaoImplJDBC();
     private static PsvDaoImplJDBC psvDaoImplJDBC = new PsvDaoImplJDBC();
     private static UsersDao userDao = null;
-
+    private static UCodeDao uCodeDao = null;
+    
     public static FundsDaoImplJDBC getFundsDao() {
 	return Funds;
     }
@@ -98,7 +99,10 @@ public class DaoFactory {
 	return userDao;
     }
 
-    public static void setUserDao(UsersDao userDao) {
-	DaoFactory.userDao = userDao;
+    public static UCodeDao getuCodeDao() {
+	if (uCodeDao == null) {
+	    uCodeDao = new UCodeDao();
+	}
+        return uCodeDao;
     }
 }
