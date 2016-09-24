@@ -2,19 +2,15 @@ var $ = function(id) {
 	return document.getElementById(id);
 }
 
-function show_menu(num) {
-	for (i = 0; i < 100; i++) {
-		if ($('li0' + i)) {
-			$('li0' + i).style.display = 'none';
-			$('f0' + i).className = '';
-		}
-	}
-	$('li0' + num).style.display = 'block';// 触发以后信息块
-	$('f0' + num).className = 'left02down01_xia_li';// 触发以后TAG样式
+function show_menu(mname, fname) {
+	var func = document.getElementById('func');
+	var module = document.getElementById('module');
+	module.innerHTML = mname;
+	func.innerHTML = '&gt;' + fname;// 触发以后信息块
 }
 
 function show_menuB(numB) {
-	for (j = 0; j < 100; j++) {
+	for (j = 0; j < 50; j++) {
 		if (j != numB) {
 			if ($('Bli0' + j)) {
 				$('Bli0' + j).style.display = 'none';
