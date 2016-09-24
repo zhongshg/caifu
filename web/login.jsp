@@ -29,8 +29,12 @@ body {
 		String pwd = RequestUtil.getString(request, "pwd");
 		String msg = RequestUtil.getString(request, "msg");
 		String act = RequestUtil.getString(request, "act");
-		if(act!=null && act.equals("out")){
-		    session.removeAttribute("user");
+		if(act!=null && act.equals("exit")){
+		    session = request.getSession(false);//防止创建Session  
+			if (session == null) {
+			    return;
+			}
+			session.removeAttribute("user");
 		}
 		if (code != null && pwd != null) {
 			try {

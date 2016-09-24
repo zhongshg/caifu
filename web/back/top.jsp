@@ -10,15 +10,30 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>财富客户管理系统</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/JavaScript" src="js/back.js"></script>
-</head>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<script type="text/javascript" src="js/libs/modernizr.min.js"></script>
 
+</head>
 <body>
-	<div class="header">
-		<div class="header03"></div>
-		<div class="header01"></div>
-		<div class="header02">财富客户管理系统</div>
+	<div class="topbar-wrap white">
+		<div class="topbar-inner clearfix">
+			<div class="topbar-logo-wrap clearfix">
+				<h1 class="topbar-logo none">
+					<a href="index.html" class="navbar-brand">后台管理</a>
+				</h1>
+				<ul class="navbar-list clearfix">
+					<li><a class="on" href="index.html">首页</a></li>
+				</ul>
+			</div>
+			<div class="top-info-wrap">
+				<ul class="top-info-list clearfix">
+					<li><a href="#">管理员</a></li>
+					<li><a href="editpwd.jsp" target="mainFrame">修改密码</a></li>
+					<li><a href="../login.jsp"  target="_top" >退出</a></li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

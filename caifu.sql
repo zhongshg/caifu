@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.1.40-community)
-# Date: 2016-09-23 18:16:15
+# Date: 2016-09-24 18:19:06
 # Generator: MySQL-Front 5.3  (Build 4.233)
 
 /*!40101 SET NAMES utf8 */;
@@ -183,7 +183,7 @@ CREATE TABLE `powers` (
 # Data for table "powers"
 #
 
-INSERT INTO `powers` VALUES (1,'自定义菜单管理','',0,'自定义菜单',1),(2,'素材管理','',0,'',1),(3,'自定义回复管理','',0,'自定义回复',1),(4,'微信网页维护','',0,'',1),(6,'微信用户日志','',0,'微信用户日志',1),(7,'安全设置','',0,'安全设置',1),(8,'管理员设置','',0,'管理员设置',1),(9,'自定义菜单','/servlet/MenuServlet?method=getList',1,'自定义菜单',1),(10,'文本消息','/servlet/TextServlet?method=getList',2,'文本消息',1),(11,'图文消息','/servlet/NewsmServlet?method=getList',2,'图文消息',1),(12,'图文明细','/servlet/ItemsmServlet?method=getList',2,'图文明细',1),(13,'自定义回复管理','/servlet/NativeServlet?method=getList',3,'自定义回复管理',1),(14,'新闻网页','/servlet/NewsServlet?method=getList&sid=1',4,'新闻网页',1),(17,'已关注用户','/servlet/SubscriberServlet?method=getList',6,'已关注用户',1),(18,'修改密码','/UsersServlet?method=modPassword',7,'修改密码',1),(19,'操作员管理','/UsersServlet?method=getList',8,'操作员管理',1),(20,'角色管理','/servlet/RolesServlet?method=getList',8,'角色管理',1),(21,'权限管理','/servlet/PowersServlet?method=getList',8,'权限管理',1),(23,'系统登录记录','/servlet/LoginInfoServlet?method=getList',7,'',1),(26,'临时素材管理','/servlet/MaterialServlet?method=getList',2,'',1),(27,'素材管理','/servlet/PerMaterialServlet?method=getList',2,'',1),(28,'用户操作记录','/servlet/SubscriberdetailServlet?method=getList',6,'',1),(29,'发送客服消息','/servlet/SendMesSerServlet?method=initManage',3,'',1),(30,'群发信息管理','/servlet/MassServlet?method=getList&sid=1',3,NULL,1),(36,'分类管理','/servlet/NewstypesServlet?method=getList&sid=1',4,'',1),(38,'app商城管理','',0,'',1),(39,'商品分类管理','/app/shop/manage/category_manage.jsp',38,'',1),(40,'商品管理','/app/shop/manage/p_manage.jsp',38,'',1),(41,'轮播图管理','/app/shop/manage/slide.jsp',38,'',1),(42,'物流公司管理','/app/shop/manage/courier/courier_manage.jsp',38,'',1),(43,'属性管理','/app/shop/manage/order_manage.jsp?IsPay=-1',38,'',1),(44,'订单管理','/app/shop/manage/order_manage.jsp?IsPay=-1',38,'',1),(45,'社区管理','/servlet/WxsServlet?method=getList',38,'',1);
+INSERT INTO `powers` VALUES (1,'系统设置','',0,'',1),(2,'会员管理','',0,'',2),(3,'商品管理','',0,'',3),(4,'订单管理','',0,'',4),(5,'数据统计','',0,'',5),(7,'角色管理','manageRoles.jsp',1,'',1),(8,'密码修改','editpwd.jsp',1,'',2),(9,'会员管理','#',2,'',1),(10,'会员审批','#',2,'',2),(11,'会员服务中心','#',2,'',3),(12,'商品管理','#',3,'',1),(13,'订单查询','#',4,'',1),(14,'发货管理','#',4,'',2),(15,'数据统计','#',5,'',1),(16,'系统设置','#',999,'',1),(17,'会员管理','#',999,'',2),(18,'商品管理','#',999,'',3),(19,'订单管理','#',999,'',4),(20,'资金管理','#',999,'',5),(21,'数据统计','#',999,NULL,6),(22,'分类管理','#',999,'',1),(23,'会员服务中心','#',999,'',1);
 
 #
 # Structure for table "product"
@@ -284,7 +284,7 @@ CREATE TABLE `rolespowers` (
 # Data for table "rolespowers"
 #
 
-INSERT INTO `rolespowers` VALUES (73,1,9),(74,1,1),(75,1,10),(76,1,11),(77,1,12),(78,1,26),(79,1,27),(80,1,2),(81,1,13),(82,1,30),(83,1,3),(84,1,14),(85,1,36),(86,1,4),(87,1,17),(88,1,28),(89,1,6),(90,1,18),(91,1,23),(92,1,7),(93,1,19),(94,1,20),(95,1,21),(96,1,8),(97,2,9),(98,2,1),(99,2,10),(100,2,11),(101,2,12),(102,2,26),(103,2,27),(104,2,2),(105,2,13),(106,2,30),(107,2,3),(108,2,14),(109,2,36),(110,2,4),(111,2,17),(112,2,28),(113,2,6),(114,2,18),(115,2,23),(116,2,7),(117,2,19),(118,2,20),(119,2,21),(120,2,8),(121,2,39),(122,2,40),(123,2,41),(124,2,42),(125,2,43),(126,2,44),(127,2,45),(128,2,38);
+INSERT INTO `rolespowers` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15);
 
 #
 # Structure for table "ucode"
@@ -322,7 +322,7 @@ CREATE TABLE `users` (
   `dr` int(1) DEFAULT '0' COMMENT '数据删除标识',
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '时间戳',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 #
 # Data for table "users"

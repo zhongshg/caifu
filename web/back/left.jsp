@@ -11,7 +11,7 @@
     DataField df = (DataField) request.getSession().getAttribute("user");
     String act = RequestUtil.getString(request, "act");
     String mainJsp = RequestUtil.getString(request, "rjsp");
-    if (df == null || (act!=null && act.equals("exit"))) {
+    if (df == null || (act != null && act.equals("exit"))) {
 		session = request.getSession(false);//防止创建Session  
 		if (session == null) {
 		    response.sendRedirect("../login.jsp");
@@ -21,9 +21,8 @@
 		response.sendRedirect("../login.jsp");
     }
     String name = null;
-    Map<Map<String, String>, List<Map<String, String>>> powersPS =  
-	    (Map<Map<String, String>, List<Map<String, String>>>)request.getSession().getAttribute("powersPS");
-    if (act != null && act.equals("login") && powersPS==null) {
+    Map<Map<String, String>, List<Map<String, String>>> powersPS = (Map<Map<String, String>, List<Map<String, String>>>) request.getSession().getAttribute("powersPS");
+    if (act != null && act.equals("login") && powersPS == null) {
 		int roleid = -1;
 		int id = -1;
 		int rid = -1;
@@ -51,57 +50,47 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>财富客户管理系统</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/JavaScript" src="js/back.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<script type="text/javascript" src="js/libs/modernizr.min.js"></script>
 </head>
 
 <body>
-	<div class="left" id="LeftBox">
-		<div class="left01">
-			<div class="left01_right"></div>
-			<div class="left01_left"></div>
-			<div class="left01_c">
-				欢迎您 <a href=""><%=name%></a>
+	<div class="container clearfix">
+		<div class="sidebar-wrap">
+			<div class="sidebar-title">
+				<h1>菜单</h1>
 			</div>
-		</div>
-		<div class="left02">
-			<div class="left02top">
-				<div class="left02top_right"></div>
-				<div class="left02top_left"></div>
-				<div class="left02top_c">管理菜单</div>
-			</div>
-			<div class="left02down">
-				<c:forEach items="${sessionScope.powersPS}" var="powersPSMap">
-					<div class="left02down01">
-						<a onclick="show_menuB(${powersPSMap.key.id})" href="javascript:;"><div
-								id="Bf0${powersPSMap.key.id}" class="left02down01_img"></div>${powersPSMap.key.name}</a>
-					</div>
-
-					<div class="left02down01_xia noneBox"
-						id="Bli0${powersPSMap.key.id}">
-						<ul>
+			<div class="sidebar-content">
+				<ul class="sidebar-list">
+					<c:forEach items="${sessionScope.powersPS}" var="powersPSMap">
+						<li><a href="#"><i class="icon-font">&#xe003;</i>${powersPSMap.key.name}</a>
+							<ul class="sub-menu">
 							<c:forEach items="${powersPSMap.value}" var="subPowersPSMap">
-								<li id="f0${subPowersPSMap.id}" class=''><a
-									onclick="show_menu('${powersPSMap.key.name}',this.text)" 
-									href="${subPowersPSMap.url}" target="mainFrame">&middot;${subPowersPSMap.name}</a></li>
-							</c:forEach>
-						</ul>
-					</div>
-				</c:forEach>
-			</div>
-
-		</div>
-
-		<!-- 左侧底部推出DIV -->
-		<div class="left01">
-			<div class="left03_right"></div>
-			<div class="left01_left"></div>
-			<div class="left03_c">
-				<a href="?act=exit">安全退出</a>
+								<li><a href="${subPowersPSMap.url}" target="mainFrame">
+								<i class="icon-font">&#xe008;</i>${subPowersPSMap.name}</a></li>
+									</c:forEach>
+							</ul></li>
+					</c:forEach>
+				</ul>
 			</div>
 		</div>
-		<!-- END  左侧底部推出DIV-->
-	</div>
 
+		
+			<div class="left02down01">
+				<a onclick="show_menuB(${powersPSMap.key.id})" href="javascript:;"><div
+						id="Bf0${powersPSMap.key.id}" class="left02down01_img"></div>${powersPSMap.key.name}</a>
+			</div>
+
+			<div class="left02down01_xia noneBox" id="Bli0${powersPSMap.key.id}">
+				<ul>
+					
+						<li id="f0${subPowersPSMap.id}" class=''><a
+							onclick="show_menu('${powersPSMap.key.name}',this.text)"
+							href="${subPowersPSMap.url}" target="mainFrame">&middot;${subPowersPSMap.name}</a></li>
+				
+				</ul>
+			</div>
+		
 </body>
 </html>
