@@ -11,103 +11,163 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title></title>
-<script type="text/javascript"
-	src="${pageContext.servletContext.contextPath}/js/system.js"></script>
-<!--                       CSS                       -->
-<!-- Reset Stylesheet -->
-<jsp:include page="../public/css.jsp"></jsp:include>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/JavaScript">
+	var $ = function(id) {
+		return document.getElementById(id);
+	}
+
+	function show_menu(num) {
+		for (i = 0; i < 100; i++) {
+			if ($('li0' + i)) {
+				$('li0' + i).style.display = 'none';
+				$('f0' + i).className = '';
+			}
+		}
+		$('li0' + num).style.display = 'block';//触发以后信息块
+		$('f0' + num).className = 'left02down01_xia_li';//触发以后TAG样式
+	}
+
+	function show_menuB(numB) {
+		for (j = 0; j < 100; j++) {
+			if (j != numB) {
+				if ($('Bli0' + j)) {
+					$('Bli0' + j).style.display = 'none';
+					$('Bf0' + j).style.background = 'url(images/01.gif)';
+				}
+			}
+		}
+		if ($('Bli0' + numB)) {
+			if ($('Bli0' + numB).style.display == 'block') {
+				$('Bli0' + numB).style.display = 'none';
+				$('Bf0' + numB).style.background = 'url(images/01.gif)';
+			} else {
+				$('Bli0' + numB).style.display = 'block';
+				$('Bf0' + numB).style.background = 'url(images/02.gif)';
+			}
+		}
+	}
+
+	var temp = 0;
+	function show_menuC() {
+		if (temp == 0) {
+			document.getElementById('LeftBox').style.display = 'none';
+			document.getElementById('RightBox').style.marginLeft = '0';
+			document.getElementById('Mobile').style.background = 'url(images/center.gif)';
+
+			temp = 1;
+		} else {
+			document.getElementById('RightBox').style.marginLeft = '222px';
+			document.getElementById('LeftBox').style.display = 'block';
+			document.getElementById('Mobile').style.background = 'url(images/center0.gif)';
+
+			temp = 0;
+		}
+	}
+</script>
 </head>
+
 <body>
-	<%
-	    DataField df = (DataField) request.getSession().getAttribute("user");
-	    String name = null;
-	    int roleid = -1;
-	    int id = -1;
-	    int rid = -1;
-	    if (df != null) {
-			name = df.getString("name");
-			roleid = Integer.parseInt(df.getFieldValue("roleid") == null ? "-1" : df.getFieldValue("roleid"));
-			id = Integer.parseInt(df.getFieldValue("id") == null ? "-1" : df.getFieldValue("id"));
-			rid = Integer.parseInt(df.getFieldValue("roleid") == null ? "-1" : df.getFieldValue("roleid"));
-	    }
-	    // List<DataField> nodeList = (List<DataField>)DaoFactory.getNodesDao().getList(id);
-	    Map<Map<String, String>, List<Map<String, String>>> powersPS = new LinkedHashMap<Map<String, String>, List<Map<String, String>>>();
-	    System.out.println("roleid=" + roleid);
-	    Map<String, String> roles = DaoFactory.getRolesDao().getByUsers(roleid);
-	    Map<String, String> powers = new LinkedHashMap<String, String>();
-	    powers.put("id", "0");
-	    List<Map<String, String>> powersFirstList = DaoFactory.getPowersDao().getListByRP(roles, powers);
-	    for (Map<String, String> powersFirst : powersFirstList) {
-			List<Map<String, String>> powersSubList = DaoFactory.getPowersDao().getListByRP(roles, powersFirst);
-			powersPS.put(powersFirst, powersSubList);
-	    }
-	    request.setAttribute("powersPS", powersPS);
-	%>
-	<div id="body-wrapper">
-		<div id="sidebar">
-			<div id="sidebar-wrapper">
-				<p style="margin-top: 30px;">&nbsp;</p>
-				<div id="profile-links">
-					欢迎您, <a href="#" title="Edit your profile"><%=name == null ? "" : name%></a>
+	<div class="header">
+		<div class="header03"></div>
+		<div class="header01"></div>
+		<div class="header02"></div>
+	</div>
+	<div class="left" id="LeftBox">
+		<div class="left01">
+			<div class="left01_right"></div>
+			<div class="left01_left"></div>
+			<div class="left01_c">超级管理员：admin</div>
+		</div>
+		<div class="left02">
+			<div class="left02top">
+				<div class="left02top_right"></div>
+				<div class="left02top_left"></div>
+				<div class="left02top_c">用户信息管理</div>
+			</div>
+			<div class="left02down">
+				<div class="left02down01">
+					<a onclick="show_menuB(80)" href="javascript:;"><div id="Bf080"
+							class="left02down01_img"></div>用户信息查询</a>
 				</div>
-				<ul id="main-nav">
-					<c:forEach items="${powersPS}" var="powersPSMap">
-						<li><a href="#" class="nav-top-item"
-							id="${powersPSMap.key.id}" name="menu"
-							onclick="javascript:checkscss('${powersPSMap.key.id}')">
-								${powersPSMap.key.name} </a>
-							<ul>
-								<c:forEach items="${powersPSMap.value}" var="subPowersPSMap">
-									<li><a
-										href="${pageContext.servletContext.contextPath}${subPowersPSMap.url}"
-										id="${subPowersPSMap.id}" target="mainFrame">${subPowersPSMap.name}</a></li>
-								</c:forEach>
-							</ul></li>
-					</c:forEach>
-				</ul>
-				<div id="messages" style="display: none">
-					<!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
-					<h3>3 Messages</h3>
-					<p>
-						<strong>17th May 2009</strong> by Admin<br /> Lorem ipsum dolor
-						sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi
-						at felis aliquet congue. <small><a href="#"
-							class="remove-link" title="Remove message">Remove</a></small>
-					</p>
-					<p>
-						<strong>2nd May 2009</strong> by Jane Doe<br /> Ut a est eget
-						ligula molestie gravida. Curabitur massa. Donec eleifend, libero
-						at sagittis mollis, tellus est malesuada tellus, at luctus turpis
-						elit sit amet quam. Vivamus pretium ornare est. <small><a
-							href="#" class="remove-link" title="Remove message">Remove</a></small>
-					</p>
-					<p>
-						<strong>25th April 2009</strong> by Admin<br /> Lorem ipsum dolor
-						sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi
-						at felis aliquet congue. <small><a href="#"
-							class="remove-link" title="Remove message">Remove</a></small>
-					</p>
-					<form action="#" method="post">
-						<h4>New Message</h4>
-						<fieldset>
-							<textarea class="textarea" name="textfield" cols="79" rows="5"></textarea>
-						</fieldset>
-						<fieldset>
-							<select name="dropdown" class="small-input">
-								<option value="option1">Send to...</option>
-								<option value="option2">Everyone</option>
-								<option value="option3">Admin</option>
-								<option value="option4">Jane Doe</option>
-							</select> <input class="button" type="submit" value="Send" />
-						</fieldset>
-					</form>
+				<div class="left02down01_xia noneBox" id="Bli080">
+					<ul>
+						<li onmousemove="show_menu(10)" id="f010"><a href="#">&middot;精确查询</a></li>
+						<li onmousemove="show_menu(11)" id="f011"><a href="#">&middot;组合条件查询</a></li>
+					</ul>
 				</div>
-				<!-- End #messages -->
+				<div class="left02down01">
+					<a onclick="show_menuB(81)" href="javascript:;">
+						<div id="Bf081" class="left02down01_img"></div> 用户密码管理
+					</a>
+				</div>
+				<div class="left02down01_xia noneBox" id="Bli081">
+					<ul>
+						<li onmousemove="show_menu(12)" id="f012"><a href="#">&middot;找回密码</a></li>
+						<li onmousemove="show_menu(13)" id="f013"><a href="#">&middot;更改密码</a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<!-- End #sidebar -->
+		<div class="left02">
+			<div class="left02top">
+				<div class="left02top_right"></div>
+				<div class="left02top_left"></div>
+				<div class="left02top_c">用户分析</div>
+			</div>
+			<div class="left02down">
+				<div class="left02down01">
+					<a onclick="show_menuB(82)" href="javascript:;"><div id="Bf082"
+							class="left02down01_img"></div>用户注册统计</a>
+				</div>
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>用户登录统计</a>
+				</div>
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>用户激活统计</a>
+				</div>
+			</div>
+		</div>
+		<div class="left02">
+			<div class="left02top">
+				<div class="left02top_right"></div>
+				<div class="left02top_left"></div>
+				<div class="left02top_c">用户过滤</div>
+			</div>
+			<div class="left02down">
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>过滤IP(段)</a>
+				</div>
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>过滤用户名</a>
+				</div>
+			</div>
+		</div>
+		<div class="left02">
+			<div class="left02top">
+				<div class="left02top_right"></div>
+				<div class="left02top_left"></div>
+				<div class="left02top_c">系统管理</div>
+			</div>
+			<div class="left02down">
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>权限管理</a>
+				</div>
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>用户组管理</a>
+				</div>
+				<div class="left02down01">
+					<a href="#"><div class="left02down01_img"></div>操作日志</a>
+				</div>
+			</div>
+		</div>
+		<div class="left01">
+			<div class="left03_right"></div>
+			<div class="left01_left"></div>
+			<div class="left03_c">安全退出</div>
+		</div>
 	</div>
 </body>
 </html>

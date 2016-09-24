@@ -17,23 +17,39 @@ body {
 	margin-bottom: 0px;
 	background-color: #4AA3D8;
 }
-html { overflow-x: ; overflow-y: ; border:0;} 
+
+html {
+	overflow-x:;
+	overflow-y:;
+	border: 0;
+}
 -->
 </style>
 </head>
-
 <body>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td bgcolor="#4AA3D8"></td>
-  </tr>
-  <tr>
-    <td><table width="768" height="500" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td valign="top"><img src="../images/welcome.gif" width="768" height="536" /></td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
+	<div class="rrcc" id="RightBox">
+		<div class="center" id="Mobile" onclick="show_menuC()"></div>
+		<div class="right" id="li010">
+			<div class="right01">
+				<img src="../images/04.gif" /> 用户信息查询 &gt; <span>精确查询</span>
+			</div>
+		</div>
+
+		<div class="right noneBox" id="li011">
+			<div class="right01">
+				<img src="../images/04.gif" /> 用户信息查询 &gt; <span>组合条件查询</span>
+			</div>
+		</div>
+		<div class="right noneBox" id="li012">
+			<div class="right01">
+				<img src="../images/04.gif" /> 用户密码管理 &gt; <span>找回密码</span>
+			</div>
+		</div>
+		<div class="right noneBox" id="li013">
+			<div class="right01">
+				<img src="../images/04.gif" /> 用户密码管理 &gt; <span>更改密码</span>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
