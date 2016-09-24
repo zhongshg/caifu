@@ -12,6 +12,7 @@
 <%
     DataField df = (DataField) request.getSession().getAttribute("user");
     String act = RequestUtil.getString(request, "act");
+    String mainJsp = RequestUtil.getString(request, "rjsp");
     if (df == null || act.equals("exit")) {
 		session = request.getSession(false);//防止创建Session  
 		if (session == null) {
@@ -22,7 +23,7 @@
 		response.sendRedirect("../login.jsp");
     }
     String name = null;
-    if (act != null || act != "") {
+    if (act != null && act.equals("login")) {
 		int roleid = -1;
 		int id = -1;
 		int rid = -1;
@@ -48,7 +49,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>财富客户管理系统</title>
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/JavaScript" src="js/back.js"></script>
@@ -85,8 +86,9 @@
 						id="Bli0${powersPSMap.key.id}">
 						<ul>
 							<c:forEach items="${powersPSMap.value}" var="subPowersPSMap">
-								<li id="f0${subPowersPSMap.id}" class=''><a onclick="show_menu('${powersPSMap.key.name}',this.text)"
-									href="${subPowersPSMap.url}">&middot;${subPowersPSMap.name}</a></li>
+								<li id="f0${subPowersPSMap.id}" class=''><a
+									onclick="show_menu('${powersPSMap.key.name}',this.text)"
+									href="back.jsp?rjsp=${subPowersPSMap.url}">&middot;${subPowersPSMap.name}</a></li>
 							</c:forEach>
 						</ul>
 					</div>
@@ -109,11 +111,15 @@
 	<!-- 主页右侧 -->
 	<div class="rrcc" id="RightBox">
 		<div class="center" id="Mobile" onclick="show_menuC()"></div>
-		<div class="right" id="li001">
-			<div class="right01">
-				<img src="images/04.gif" /><span id='module'></span>  <span id='func'></span>
+		<div class="righth" id="li001">
+			<div class="righth01">
+				<img src="images/04.gif" /><span id='module'></span> <span
+					id='func'></span>
 			</div>
 			<div class="right02"></div>
+		</div>
+		<div class="rightb" id="li001">
+			<c:import url="<%=mainJsp == null ?\"shouye.jsp\" : mainJsp%>" />
 		</div>
 	</div>
 </body>

@@ -39,8 +39,7 @@ body {
 				DataField df = DaoFactory.getUserDao().getByNameAndPwd(code, pwd, fieldArr);
 				if(df != null){
 					request.getSession().setAttribute("user", df);
-					//Forward.forward(request, response, "/back/index.jsp");
-					response.sendRedirect("./back/index.jsp?act=login");
+					response.sendRedirect("./back/back.jsp?act=login");
 				}else{
 				    response.sendRedirect("login.jsp?msg=nouser");
 				}
