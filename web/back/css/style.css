@@ -34,17 +34,11 @@ body,html{height:100%;}
 .left03_right{float:right;height:33px;width:30px;background:url(../images/03.gif);}
 .left03_c{float:left;height:33px;line-height:33px;width:171px;padding-left:10px;color:#002f76;}
 /*----rrcc-------------*/
-.rrcc{width:auto;height:90%;margin:8px 8px 8px 222px;}
+.rrcc{width:auto;height:100%;margin:8px 8px 8px 222px;}
 /*----center---------------------------*/
 .center{float:left;height:200px;width:8px;margin-left:8px!important;margin-left:4px; background:url(../images/center0.gif) no-repeat;cursor:pointer;}
 
-
-/*----right-top---------------------------*/
-.righth{width:auto;height:5%;margin-left:20px!important;margin-left:10px;border:1px solid #b4b4b4;background:#eee;}
-.righth span{color:#666;}
-.righth01{padding-left:10px;margin:9px 0;} 
-
 /*----right-bottom---------------------------*/
-.rightb{width:auto;height:85%;margin-left:20px!important;margin-left:10px;border:1px solid #b4b4b4;background:#fff;}
+.rightb{width:auto;height:100%;margin-left:20px!important;margin-left:10px;border:1px solid #b4b4b4;background:#fff;}
 .rightb span{color:#666;}
 .rightb01{padding-left:10px;margin:9px 0;} 

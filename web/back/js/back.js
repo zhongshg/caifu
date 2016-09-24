@@ -2,9 +2,9 @@ var $ = function(id) {
 	return document.getElementById(id);
 }
 
-function show_menu(mname, fname) {
-	var func = document.getElementById('func');
-	var module = document.getElementById('module');
+function show_menu(mname, fname,url) {
+	var func = $('func');
+	var module = $('module');
 	module.innerHTML = mname;
 	func.innerHTML = '&gt;' + fname;// 触发以后信息块
 }
@@ -28,7 +28,7 @@ function show_menuB(numB) {
 		}
 	}
 }
-
+/*
 var temp = 0;
 function show_menuC() {
 	if (temp == 0) {
@@ -44,4 +44,4 @@ function show_menuC() {
 
 		temp = 0;
 	}
-}
+}*/
