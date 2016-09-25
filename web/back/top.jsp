@@ -4,6 +4,10 @@
     Author     : Administrator
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="../inc/common.jsp"%>
+<%
+ 
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -28,9 +32,9 @@
 			</div>
 			<div class="top-info-wrap">
 				<ul class="top-info-list clearfix">
-					<li><a href="#">管理员</a></li>
+					<li><a href="#"><%=request.getSession().getAttribute("admin_name") %></a></li>
 					<li><a href="editpwd.jsp" target="mainFrame">修改密码</a></li>
-					<li><a href="../login.jsp"  target="_top" >退出</a></li>
+					<li><a href="../login.jsp?act=exit" target="_top">退出</a></li>
 				</ul>
 			</div>
 		</div>

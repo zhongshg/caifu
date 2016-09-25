@@ -3,7 +3,10 @@ package job.tot.dao.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -82,16 +85,27 @@ public class UsersDao extends AbstractDao {
 	return returnValue;
     }
 
-    public boolean update(int id, String svname) {
+    public boolean update(String id, Map<String,String> users) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
-	String sql = "update users set svname=? where id=?";
+	String sql = "update users set ";
+	List<String> values = new ArrayList<String>();
+	for(String key:users.keySet()){
+	    sql += key+"=?,";
+	    values.add(users.get(key));
+	}
+	sql.subSequence(0, sql.length()-1);
+	
+	sql += " where id=?";
 	try {
+	    System.out.println(sql);
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sql);
-	    ps.setString(1, svname);
-	    ps.setInt(2, id);
+	    for(int i =0;i<values.size();i++){
+		ps.setString(i+1, values.get(i));
+	    }
+	    ps.setInt(values.size()+1, Integer.parseInt(id));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }

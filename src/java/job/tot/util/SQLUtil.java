@@ -11,7 +11,7 @@ import java.util.List;
 public class SQLUtil {
 
     /** 将List的值转换为"a,a,a,a,a,a"的形式 */
-    public static String ListToStr(List<String> list) {
+    public static String listToStr(List<String> list) {
 	StringBuffer sqlStr = new StringBuffer("");
 	if (list != null && list.size() > 0) {
 	    sqlStr.append(list.get(0));
@@ -24,7 +24,7 @@ public class SQLUtil {
     }
 
     /** 将String数组的值转换为"a,a,a"的形式 */
-    public static String ListToStr(String[] arr) {
+    public static String arrayToStr(String[] arr) {
 	StringBuffer sqlStr = new StringBuffer("");
 	if (arr != null && arr.length > 0) {
 	    sqlStr.append(arr[0]);

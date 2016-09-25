@@ -3,9 +3,17 @@
     Created on : 2014-7-7, 9:30:55
     Author     : Administrator
 --%>
-
+<%@ page import="job.tot.exception.*"%>
+<%@ page import="job.tot.util.*" %>
+<%@ page import="job.tot.bean.*" %>
+<%@ page import="job.tot.dao.DaoFactory" %>
+<%@ page import="job.tot.filter.IpFilter" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.sql.*"%>
+<%@ page import="java.net.*"%>
+<%@ page import="job.tot.global.Sysconfig" %>
+<%@ page import="wap.wx.util.Forward" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
-<%@ include file="inc/common.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -25,9 +33,11 @@ body {
 </head>
 <body>
 	<%
-		String code = RequestUtil.getString(request, "code");
-		String pwd = RequestUtil.getString(request, "pwd");
-		String msg = RequestUtil.getString(request, "msg");
+	 	request.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html; charset=UTF-8");
+	    if (!IpFilter.filter(request.getRemoteAddr())) {
+	        response.sendRedirect("404.jsp");
+	    }
 		String act = RequestUtil.getString(request, "act");
 		if(act!=null && act.equals("exit")){
 		    session = request.getSession(false);//防止创建Session  
@@ -36,13 +46,22 @@ body {
 			}
 			session.removeAttribute("user");
 		}
+		String code = RequestUtil.getString(request, "code");
+		String pwd = RequestUtil.getString(request, "pwd");
 		if (code != null && pwd != null) {
 			try {
 			    pwd = new MD5().getMD5of32(pwd).toLowerCase();
 				String fieldArr= "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,indate";
-				DataField df = DaoFactory.getUserDao().getByNameAndPwd(code, pwd, fieldArr);
-				if(df != null){
-					request.getSession().setAttribute("user", df);
+				DataField dfUser = DaoFactory.getUserDao().getByNameAndPwd(code, pwd, fieldArr);
+				if(dfUser != null){
+					request.getSession().setAttribute("admin_name", dfUser.getString("name"));
+					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
+					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
+					request.getSession().setAttribute("admin_code", dfUser.getString("code"));
+					request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
+					request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
+					request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
+					request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
 					response.sendRedirect("./back/frames.jsp");
 				}else{
 				    response.sendRedirect("login.jsp?msg=nouser");
@@ -51,6 +70,7 @@ body {
 				out.print("登录失败"+e.getMessage());
 			}
 		}
+		String msg = RequestUtil.getString(request, "msg");
 		if(msg!=null && msg.equals("nouser")){
 		    StringBuffer tip = new StringBuffer("<script> ");
 			tip.append("alert(\"用户不存在或者密码错误!\")");

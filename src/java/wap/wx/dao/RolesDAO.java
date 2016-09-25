@@ -95,7 +95,7 @@ public class RolesDAO {
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
         ResultSet rs = null;
-        String sql = "select id,name,remark from roles";
+        String sql = "select id,name,remark from roles order by id ";
         try {
             ptst = conn.prepareStatement(sql);
             rs = ptst.executeQuery();
@@ -141,11 +141,12 @@ public class RolesDAO {
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
         ResultSet rs = null;
-        String sql = "insert into roles(name,remark) values (?,?)";
+        String sql = "insert into roles(id,name,remark) values (?,?,?)";
         try {
             ptst = conn.prepareStatement(sql);
-            ptst.setString(1, roles.get("name"));
-            ptst.setString(2, roles.get("remark"));;
+            ptst.setInt(1, Integer.parseInt(roles.get("id")));
+            ptst.setString(2, roles.get("name"));
+            ptst.setString(3, roles.get("remark"));;
             ptst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,12 +173,15 @@ public class RolesDAO {
         }
     }
 
-    public void delete(Map<String, String> roles, Connection conn) {
+    public void delete(String id,Connection conn) {
+	if(conn==null){
+	   conn = DbConn.getConn();
+	}
         PreparedStatement ptst = null;
         String sql = "delete from roles where id=?";
         try {
             ptst = conn.prepareStatement(sql);
-            ptst.setString(1, roles.get("id"));
+            ptst.setInt(1, Integer.parseInt(id));
             ptst.executeUpdate();
             ptst.close();
         } catch (SQLException ex) {

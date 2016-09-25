@@ -21,7 +21,7 @@ public class RolesService {
         Connection conn = DbConn.getConn();
         try {
             conn.setAutoCommit(false);
-            new RolesDAO().delete(roles, conn);
+            new RolesDAO().delete(roles.get("id"), conn);
             new RolesPowersDAO().deleteByRoles(roles, conn);
             conn.commit();
         } catch (Exception e) {
