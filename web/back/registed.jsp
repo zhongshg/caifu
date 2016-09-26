@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
-<%@ include file="inc/common.jsp"%>
+<%@ include file="../inc/common.jsp"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="job.tot.global.Sysconfig"%>
@@ -20,11 +20,11 @@
 <title>财富客户管理系统注册</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-<link href="css/styleRe.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery.validate.js"></script>
-<script type="text/javascript" src="js/page_regist.js"></script>
-<script type="text/javascript" src="js/md5.js"></script>
+<link href="../css/styleRe.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.validate.js"></script>
+<script type="text/javascript" src="../js/page_regist.js"></script>
+<script type="text/javascript" src="../js/md5.js"></script>
 
 </head>
 <body class="loginbody">
@@ -69,9 +69,6 @@
 				<a class="login-btn" id="submit">注册</a>
 			</div>
 			</form>
-		</div>
-		<div class="go-regist">
-			已有帐号,请<a href="login.jsp" class="link">登录</a>
 		</div>
 	</div>
 	

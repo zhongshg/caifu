@@ -12,7 +12,7 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="java.net.*"%>
 <%@ page import="job.tot.global.Sysconfig" %>
-<%@ page import="wap.wx.util.Forward" %>
+<%@ page import="job.tot.util.Forward" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

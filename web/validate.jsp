@@ -11,7 +11,7 @@
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.db.DBUtils"%>
 <%@ page import="job.tot.util.RequestUtil"%>
-<%@ page import="wap.wx.util.Forward"%>
+<%@ page import="job.tot.util.Forward"%>
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="job.tot.dao.DaoFactory"%>
 <%@ page import="job.tot.bean.DataField"%>

@@ -2,11 +2,15 @@ package job.tot.dao.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +20,7 @@ import job.tot.dao.AbstractDao;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
+import job.tot.util.DbConn;
 
 /**
  * @author zhongshg
@@ -38,7 +43,7 @@ public class UsersDao extends AbstractDao {
     }
 
     public DataField getByNameAndPwd(String ucode, String pwd, String fieldArr) {
-	return getFirstData("select " + fieldArr + " from users where name='" + ucode + "' and pwd='"+pwd+"'", fieldArr);
+	return getFirstData("select " + fieldArr + " from users where name='" + ucode + "' and pwd='" + pwd + "'", fieldArr);
     }
 
     public void batDel(String[] s) {
@@ -58,7 +63,7 @@ public class UsersDao extends AbstractDao {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
-	if(!validate(code)){
+	if (!validate(code)) {
 	    return false;
 	}
 	String sql = "insert into users(name,pwd,code,cardid,bankcard,phone,parentid) values(?,?,?,?,?,?,?)";
@@ -85,27 +90,26 @@ public class UsersDao extends AbstractDao {
 	return returnValue;
     }
 
-    public boolean update(String id, Map<String,String> users) {
+    public boolean update(String id, Map<String, String> users) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	String sql = "update users set ";
 	List<String> values = new ArrayList<String>();
-	for(String key:users.keySet()){
-	    sql += key+"=?,";
+	for (String key : users.keySet()) {
+	    sql += key + "=?,";
 	    values.add(users.get(key));
 	}
-	sql.subSequence(0, sql.length()-1);
-	
-	sql += " where id=?";
+	sql = sql.substring(0, sql.length() - 1);
+
+	sql += "  where id=?";
 	try {
-	    System.out.println(sql);
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sql);
-	    for(int i =0;i<values.size();i++){
-		ps.setString(i+1, values.get(i));
+	    for (int i = 0; i < values.size(); i++) {
+		ps.setString(i + 1, values.get(i));
 	    }
-	    ps.setInt(values.size()+1, Integer.parseInt(id));
+	    ps.setInt(values.size() + 1, Integer.parseInt(id));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }
@@ -123,23 +127,48 @@ public class UsersDao extends AbstractDao {
 	return exe("delete from users where id='" + id);
     }
 
-    public Collection get_Limit(int id, int currentpage, int pagesize) {
+    public List<Map<String,String>> get_Limit(int currentpage, int pagesize) {
 	String str = "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,indate,dr,ts";
-	StringBuilder sql = new StringBuilder("select id,svid,svname,sid,signid,wxsid from users where id='" + id);
-	return getDataList_mysqlLimit(sql.toString(), str, pagesize, (currentpage - 1) * pagesize);
+	StringBuilder sql = new StringBuilder("select " + str + " from users order by id ");
+	int offset = currentpage==0?currentpage:(currentpage - 1) * pagesize + 1;
+	sql.append(" limit " + offset + "," + pagesize);
+	List<Map<String, String>> userList = new ArrayList<Map<String, String>>();
+	Connection conn = DbConn.getConn();
+	PreparedStatement ptst = null;
+	ResultSet rs = null;
+	try {
+	    System.out.println(sql);
+	    ptst = conn.prepareStatement(sql.toString());
+	    rs = ptst.executeQuery();
+	    while (rs.next()) {
+		Map<String, String> users = new HashMap<String, String>();
+		users.put("id", rs.getString("id"));
+		users.put("name", rs.getString("name"));
+		System.out.println(rs.getString("id"));
+		System.out.println(rs.getString("name"));
+		userList.add(users);
+	    }
+	} catch (SQLException ex) {
+	    Logger.getLogger(RolesDAO.class.getName()).log(Level.SEVERE, null, ex);
+	} finally {
+	    DbConn.getAllClose(conn, ptst, rs);
+	}
+	return userList;
     }
 
-    public int getTotalCount(String sid, String signid, String wxsid) {
-	return getDataCount("select count(*) from users where sid='" + sid + "' and signid=" + signid + " and wxsid=" + wxsid);
+    public int getTotalCount() {
+	return getDataCount("select count(1) from users where 1=1");
     }
 
     /**
      * 校验用户会员编号是否存在
-     * @param code 新会员编号
-     * */
+     * 
+     * @param code
+     *            新会员编号
+     */
     public boolean validate(String code) {
 	DataField df = getFirstData("select code from users where code=" + code, "code");
-	if (df==null || df.getString("code") == null) {
+	if (df == null || df.getString("code") == null) {
 	    return true;
 	}
 	return false;

@@ -9,12 +9,24 @@
  */
 package job.tot.dao;
 
-import job.tot.dao.jdbc.*;
-import wap.wx.dao.PowersDAO;
-import wap.wx.dao.RolesDAO;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import job.tot.dao.jdbc.AddressDaoImplJDBC;
+import job.tot.dao.jdbc.AreaDaoImplJDBC;
+import job.tot.dao.jdbc.BasketDaoImplJDBC;
+import job.tot.dao.jdbc.CategoryDaoImplJDBC;
+import job.tot.dao.jdbc.CourierDaoImplJDBC;
+import job.tot.dao.jdbc.ExportlogDaoImplJDBC;
+import job.tot.dao.jdbc.FundsDaoImplJDBC;
+import job.tot.dao.jdbc.MysqlDaoImplJDBC;
+import job.tot.dao.jdbc.NodesDao;
+import job.tot.dao.jdbc.OrderDaoImplJDBC;
+import job.tot.dao.jdbc.PowersDAO;
+import job.tot.dao.jdbc.ProductDaoImplJDBC;
+import job.tot.dao.jdbc.PropertysDaoImplJDBC;
+import job.tot.dao.jdbc.PsvDaoImplJDBC;
+import job.tot.dao.jdbc.RolesDAO;
+import job.tot.dao.jdbc.SlideDaoImplJDBC;
+import job.tot.dao.jdbc.UCodeDao;
+import job.tot.dao.jdbc.UsersDao;
 
 /**
  * 
