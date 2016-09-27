@@ -35,20 +35,14 @@ public class MD5 {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        /* 锟斤拷锟斤拷锟斤拷锟斤拷锟皆憋拷锟?D5锟斤拷锟斤拷锟斤拷锟斤拷锟矫碉拷锟斤拷3锟斤拷锟斤拷锟斤拷锟捷ｏ拷锟斤拷原始锟斤拷C实锟斤拷锟斤拷
-           锟斤拷锟斤拷锟藉到MD5_CTX锟结构锟斤拷        
-         */
+        
+        
         private long[] state = new long[4];  // state (ABCD)
         private long[] count = new long[2];  // number of bits, modulo 2^64 (lsb first)
         private byte[] buffer = new byte[64]; // input buffer
-        
-    /* digestHexStr锟斤拷MD5锟斤拷唯一一锟斤拷锟斤拷锟皆憋拷锟斤拷锟斤拷锟斤拷锟揭伙拷渭锟斤拷锟斤拷锟斤拷
-    锟斤拷 16锟斤拷锟斤拷ASCII锟斤拷示.
-    */
+
         public String digestHexStr;
         
-        /* digest,锟斤拷锟斤拷锟斤拷一锟轿硷拷锟斤拷锟斤拷锟?锟斤拷锟斤拷锟节诧拷锟斤拷示锟斤拷锟斤拷示128bit锟斤拷MD5值.
-    */
         private byte[] digest = new byte[16];
         
 
@@ -75,7 +69,6 @@ public class MD5 {
 
                 return;
         }
-        /* md5Init锟斤拷一锟斤拷锟绞硷拷锟斤拷锟斤拷锟斤拷始锟斤拷锟斤拷锟侥憋拷锟斤拷装锟斤拷锟阶硷拷幕锟斤拷锟?*/
         private void md5Init() {
                 count[0] = 0L;
                 count[1] = 0L;
@@ -88,10 +81,6 @@ public class MD5 {
 
                 return;
         }
-        /* F, G, H ,I 锟斤拷4锟斤拷锟斤拷MD5锟斤拷锟斤拷锟斤拷原始锟斤拷MD5锟斤拷C实锟斤拷锟叫ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
-        锟津单碉拷位锟斤拷锟姐，锟斤拷锟杰筹拷锟斤拷效锟绞的匡拷锟角帮拷锟斤拷锟斤拷实锟街筹拷锟剿宏，锟斤拷java锟叫ｏ拷锟斤拷锟角帮拷锟斤拷锟斤拷
-     锟斤拷锟斤拷实锟街筹拷锟斤拷private锟斤拷锟斤拷锟斤拷锟斤拷锟街憋拷锟斤拷锟斤拷原4C锟叫的★拷 */
-
         private long F(long x, long y, long z) {
                 return (x & y) | ((~x) & z);
 
@@ -108,11 +97,6 @@ public class MD5 {
                 return y ^ (x | (~z));
         }
         
-       /* 
-          FF,GG,HH锟斤拷II锟斤拷锟斤拷锟斤拷F,G,H,I锟斤拷锟叫斤拷一锟斤拷锟戒换
-          FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
-          Rotation is separate from addition to prevent recomputation.
-       */  
 
         private long FF(long a, long b, long c, long d, long x, long s,
                 long ac) {
@@ -177,7 +161,6 @@ public class MD5 {
         }
         
         /*
-          md5Final锟斤拷锟斤拷锟斤拷锟叫达拷锟斤拷锟斤拷
         */
         private void md5Final () {
                 byte[] bits = new byte[8];
@@ -199,10 +182,6 @@ public class MD5 {
 
         }
          
-        /* md5Memcpy锟斤拷一锟斤拷锟节诧拷使锟矫碉拷byte锟斤拷锟斤拷目榭斤拷锟斤拷锟斤拷锟斤拷input锟斤拷inpos锟斤拷始锟斤拷len锟斤拷锟饺碉拷
-锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷 锟街节匡拷锟斤拷锟斤拷output锟斤拷outpos位锟矫匡拷始 
-        */
-
         private void md5Memcpy (byte[] output, byte[] input,
                 int outpos, int inpos, int len)
         {
@@ -212,9 +191,6 @@ public class MD5 {
                         output[outpos + i] = input[inpos + i];
         }
         
-        /*
-           md5Transform锟斤拷MD5锟斤拷锟侥变换锟斤拷锟斤拷锟斤拷md5Update锟斤拷锟矫ｏ拷block锟角分匡拷锟皆?始锟街斤??
-        */
         private void md5Transform (byte block[]) {
                 long a = state[0], b = state[1], c = state[2], d = state[3];
                 long[] x = new long[16];
@@ -299,9 +275,6 @@ public class MD5 {
                 state[3] += d;
         }
         
-        /*Encode锟斤拷long锟斤拷锟介按顺锟斤拷锟斤拷byte锟斤拷锟介，锟斤拷为java锟斤拷long锟斤拷锟斤拷锟斤拷64bit锟侥ｏ拷
-          只锟斤拷锟?32bit锟斤拷锟斤拷锟斤拷应原始C实锟街碉拷锟斤拷途
-        */
         private void Encode (byte[] output, long[] input, int len) {
                 int i, j;
                 for (i = 0, j = 0; j < len; i++, j += 4) {
@@ -311,10 +284,7 @@ public class MD5 {
                         output[j + 3] = (byte)((input[i] >>> 24) & 0xffL);
                 }
         }
-
-        /*Decode锟斤拷byte锟斤拷锟介按顺锟斤拷铣沙锟?long锟斤拷锟介，锟斤拷为java锟斤拷long锟斤拷锟斤拷锟斤拷64bit锟侥ｏ拷
-          只锟较成碉拷32bit锟斤拷锟斤拷32bit锟斤拷锟姐，锟斤拷锟斤拷应原始C实锟街碉拷锟斤拷途
-        */
+        
         private void Decode (long[] output, byte[] input, int len) {
                 int i, j;
                 for (i = 0, j = 0; j < len; i++, j += 4)
@@ -329,10 +299,6 @@ public class MD5 {
                 return b < 0 ? b & 0x7F + 128 : b;
         }
         
-    /*byteHEX()锟斤拷锟斤拷4锟斤拷一锟斤拷byte锟斤拷锟酵碉拷锟斤拷转锟斤拷锟斤拷十锟斤拷锟斤拷频锟?ASCII锟斤拷示锟斤拷
-    锟斤拷锟斤拷为java锟叫碉拷byte锟斤拷toString锟睫凤拷实锟斤拷锟斤拷一锟姐，锟斤拷锟斤拷锟斤拷没锟斤拷C锟斤拷锟斤拷锟叫碉拷
-      sprintf(outbuf,"%02X",ib)
-    */
         public static String byteHEX(byte ib) {
                 char[] Digit = { '0','1','2','3','4','5','6','7','8','9',
                 'A','B','C','D','E','F' };
@@ -342,23 +308,28 @@ public class MD5 {
                 String s = new String(ob);
                 return s;
         }
-    /** 锟斤拷锟斤拷
-        public static void main(String args[]) {
-                MD5 m = new MD5();
-                if (Array.getLength(args) == 0) {   //锟斤拷锟矫伙拷胁锟斤拷锟街达拷斜锟阶硷拷锟?Test Suite                
-                    System.out.println("MD5 Test suite:");
-                    System.out.println("MD5(\"\"):"+m.getMD5of16("123456"));
-                    System.out.println("MD5(\"a\"):"+m.getMD5of32("a"));
-                    System.out.println("MD5(\"abc\"):"+m.getMD5of32("abc"));
-                    System.out.println("MD5(\"message digest\"):"+m.getMD5of32("message digest"));
-                    System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):"+
-                    m.getMD5of32("abcdefghijklmnopqrstuvwxyz"));
-                    System.out.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):"+
-                    m.getMD5of32("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
-                }
-                else 
-                     System.out.println("MD5(" + args[0] + ")=" + m.getMD5of32(args[0]));               
-         
+        
+        public boolean checkMD5(String origin,String check){
+            origin = this.getMD5of32(origin);
+            return origin.equals(check);
         }
-     */
+        
+//        public static void main(String args[]) {
+//                MD5 m = new MD5();
+//                System.out.println(m.b2iu(Byte.parseByte("202cb962ac59075b964b07152d234b70")));
+//                if (Array.getLength(args) == 0) {                 
+//                    System.out.println("MD5 Test suite:");
+//                    System.out.println("MD5(\"\"):"+m.getMD5of16("123456"));
+//                    System.out.println("MD5(\"a\"):"+m.getMD5of32("a"));
+//                    System.out.println("MD5(\"abc\"):"+m.getMD5of32("abc"));
+//                    System.out.println("MD5(\"message digest\"):"+m.getMD5of32("message digest"));
+//                    System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):"+
+//                    m.getMD5of32("abcdefghijklmnopqrstuvwxyz"));
+//                    System.out.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):"+
+//                    m.getMD5of32("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
+//                }
+//                else 
+//                     System.out.println("MD5(" + args[0] + ")=" + m.getMD5of32(args[0]));               
+//         
+//        }
 }

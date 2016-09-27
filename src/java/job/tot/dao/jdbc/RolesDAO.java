@@ -115,18 +115,19 @@ public class RolesDAO {
         return rolesList;
     }
 
-    public Map<String, String> getById(Map<String, String> roles) {
+    public Map<String, String> getById(String roleid) {
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
         ResultSet rs = null;
+        Map<String,String> roles = new HashMap<String,String>();
         String sql = "select id,name,remark from roles where id=?";
         try {
             ptst = conn.prepareStatement(sql);
-            ptst.setString(1, roles.get("id"));
+            ptst.setString(1, roleid);
             rs = ptst.executeQuery();
             if (rs.next()) {
                 roles = new HashMap<String, String>();
-                roles.put("id", rs.getString("id"));
+                roles.put("id", roleid);
                 roles.put("name", rs.getString("name"));
                 roles.put("remark", rs.getString("remark"));
             }
@@ -160,12 +161,13 @@ public class RolesDAO {
         Connection conn = DbConn.getConn();
         PreparedStatement ptst = null;
         ResultSet rs = null;
-        String sql = "update roles set name=?,remark=? where id=?";
+        String sql = "update roles set name=?,remark=?,id=? where id=?";
         try {
             ptst = conn.prepareStatement(sql);
             ptst.setString(1, roles.get("name"));
             ptst.setString(2, roles.get("remark"));
-            ptst.setString(3, roles.get("id"));
+            ptst.setInt(3, Integer.parseInt(roles.get("id")));
+            ptst.setInt(4, Integer.parseInt(roles.get("id")));
             ptst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RolesDAO.class.getName()).log(Level.SEVERE, null, ex);

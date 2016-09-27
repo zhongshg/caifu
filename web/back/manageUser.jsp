@@ -9,57 +9,79 @@
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 
 <%
-	String rm = RequestUtil.getString(request, "rm");
-    String rname = RequestUtil.getString(request, "rname");
-	String remark = RequestUtil.getString(request, "remark");
-	String id = RequestUtil.getString(request, "id");
 	String rmr = RequestUtil.getString(request, "rmr");
-	if(rmr!=null){
-	    if(rmr.equals("add")&&rname != null && id != null){ //新增用户
-			rname = URLDecoder.decode(rname, "utf-8");
-			remark = URLDecoder.decode(remark, "utf-8");
-			Map<String, String> roles = new HashMap<String, String>();
-			roles.put("id", id);
-			roles.put("name", rname);
-			roles.put("remark", remark);
-			DaoFactory.getRolesDao().add(roles);
-			Forward.forward(request, response, "manageRoles.jsp");
-	    }else if(rmr.equals("edit")&& rname != null && id != null){//修改角色
-			rname = URLDecoder.decode(rname, "utf-8");
-			remark = URLDecoder.decode(remark, "utf-8");
-			Map<String, String> roles = new HashMap<String, String>();
-			roles.put("id", id);
-			roles.put("name", rname);
-			roles.put("remark", remark);
-			DaoFactory.getRolesDao().update(roles);
-			Forward.forward(request, response, "manageRoles.jsp");
-	    }else if(rmr.equals("del")){//删除角色
-			DaoFactory.getRolesDao().delete(id,null);
-			response.sendRedirect("manageRoles.jsp?msg=suc");
-	    }
+	String id = RequestUtil.getString(request, "uid");
+	String uname = null;
+	String pwd = null;
+	String bankcard = null;
+	String cardid = null;
+	String phone = null;
+	String roleid = null;
+	System.out.println("程序到达A点");
+	if (rmr != null) {
+		if (rmr.equals("edit")) {//修改角色
+		    System.out.println("程序到达B点");
+		    //name,pwd,code,cardid,bankcard,phone,parentid
+			uname = URLDecoder.decode(RequestUtil.getString(request, "uname"), "utf-8");
+			pwd = URLDecoder.decode(RequestUtil.getString(request, "pwd"), "utf-8");
+			bankcard = URLDecoder.decode(RequestUtil.getString(request, "bankcard"), "utf-8");
+			cardid = URLDecoder.decode(RequestUtil.getString(request, "cardid"), "utf-8");
+			phone = URLDecoder.decode(RequestUtil.getString(request, "phone"), "utf-8");
+			roleid = URLDecoder.decode(RequestUtil.getString(request, "roleid"), "utf-8");
+			Map<String, String> user = new HashMap<String, String>();
+			if(pwd!=null) {
+			    System.out.println("程序到达C点");
+			    pwd = new MD5().getMD5of32(pwd);
+			    user.put("pwd", pwd);
+			}
+			user.put("name", uname);
+			user.put("bankcard", bankcard);
+			user.put("cardid", cardid);
+			user.put("phone", phone);
+			user.put("roleid", roleid);
+			System.out.println("程序到达D点");
+			DaoFactory.getUserDao().update(id, user);
+			System.out.println("程序到达E点");
+			Forward.forward(request, response, "manageuser.jsp");
+		} else if (rmr.equals("del")) {//删除角色
+			DaoFactory.getUserDao().del(id);
+			response.sendRedirect("manageUsers.jsp?msg=suc");
+		}
+	}else if(id!=null){
+	    DataField udf = DaoFactory.getUserDao().getByCol("id", id, "name,pwd,cardid,bankcard,phone,roleid,parentid,indate");
+		uname = udf.getString("name");
+		bankcard = udf.getString("bankcard");
+		cardid = udf.getString("cardid");
+		phone = udf.getString("phone");
+		roleid = udf.getString("roleid");
 	}
 %>
 </head>
 <body>
-	I D:
-	<input type="text" id="rid" value="<%=id==null?"":id%>" disabled="false"/>
-	<br> 角色:
-	<input type="text" id="rname" value="<%=rname==null?"":rname %>" />
-	<br> 备注:
-	<input type="text" id="remark" value="<%=remark==null?"":remark %>" />
-	<br>
-	<input type="submit" id="submit" onclick="javascript:addRole()"></input>
+	<form action="" method="post">
+		I D: <input type="text" id="uid" name="uid" value="<%=id == null ? "" : id%>" disabled="disabled" /> <br> 
+		用户名: <input type="text" id="uname" name="phone" value="<%=uname == null ? "" : uname%>" /> <br>
+		密码: <input type="text" id="pwd" name="pwd" value="" /> <br>
+		银行卡号: <input type="text" id="bankcard" name="bankcard" value="<%=bankcard == null ? "" : bankcard%>" /> <br>
+		身份证号:<input type="text" id="cardid" name="cardid" value="<%=cardid == null ? "" : cardid%>" /> <br>
+		联系方式:<input type="text" id="phone" name="phone" name="phone" value="<%=phone == null ? "" : phone%>" /> <br>
+		角色:<input type="text" id=roleid name="roleid" value="<%=roleid == null ? "" : roleid%>" /> <br>
+		<input type="submit" id="submit" onclick="manageUser();"></input>
+	</form>
 </body>
 <script>
-	function addRole(){
-		var id = document.getElementById("rid");
-		var rname = document.getElementById("rname");
-		var remark = document.getElementById("remark");
-		if("<%=rm%>"!=null && "<%=rm%>"=="edit"){
-			document.getElementById('rid').disabled = false;
-		}
-		var url = "manageRole.jsp?rmr="+"<%=rm%>"+"&id=" + id.value + "&rname=" + rname.value + "&remark="
-			+ remark.value;
+	function manageUser(){
+		var id = document.getElementById("uid").value;
+		var uname = document.getElementById("uname").value;
+		var pwd = document.getElementById("pwd").value;
+		var bankcard = document.getElementById("bankcard").value;
+		var cardid = document.getElementById("cardid").value;
+		var phone = document.getElementById("phone").value;
+		var roleid = document.getElementById("roleid").value;
+		document.getElementById('uid').disabled = false;
+		var url = "manageUser.jsp?rmr=edit&uid=" + id
+				+ "&uname=" + uname + "&pwd=" + pwd+"&bankcard="+bankcard
+				+"&cardid="+cardid+"&phone="+phone+"&roleid="+roleid;
 		window.location.href = encodeURI(encodeURI(url));
 	}
 </script>

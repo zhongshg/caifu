@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -51,7 +51,7 @@
 			<form name="myform" id="myform" method="post">
 				<div class="result-title">
 					<div class="result-list">
-						<a href="manageRole.jsp"><i class="icon-font"></i>新增角色</a> <a
+						<a href="manageRole.jsp?rm=add"><i class="icon-font"></i>新增角色</a> <a
 							id="batchDel" href="javascript:void(0)"
 							onclick="javascript:aeRole(this)"><i class="icon-font"></i>批量删除</a>
 						<a id="updateOrd" href="javascript:void(0)"><i
@@ -75,7 +75,7 @@
 								<td>${roleMap.id}</td>
 								<td>${roleMap.name}</td>
 								<td>${roleMap.remark}</td>
-								<td><a class="link-update" href="manageRole.jsp?rm=edit&id=${roleMap.id}&rname=${roleMap.name}&remark=${roleMap.remark}">修改</a> <a
+								<td><a class="link-update" href="manageRole.jsp?rm=edit&id=${roleMap.id}">修改</a> <a
 									class="link-del" href="manageRole.jsp?rmr=del&id=${roleMap.id}">删除</a></td>
 							</tr>
 						</c:forEach>

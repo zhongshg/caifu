@@ -86,7 +86,7 @@
 <div class="loading">
 	<div class="mask">
 		<div class="loading-img">
-		<img src="images/loading.gif" width="31" height="31">
+		<img src="../images/loading.gif" width="31" height="31">
 		</div>
 	</div>
 </div>

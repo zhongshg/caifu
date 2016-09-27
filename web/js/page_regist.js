@@ -135,13 +135,12 @@ $(document).ready(function() {
 
 function regist() {
 	// 校验uname, password，校验如果失败的话不提交
-	var md5 = new MD5();
 	$.ajax({
 		url : "./validate.jsp",
 		type : "post",
 		data : {
 			uname : $("#uname").val(),
-			password : md5.MD5($("#password").val()),
+			password : $("#password").val(),
 			parentid : $("#parentid").val(),
 			cardid : $("#cardid").val(),
 			bankcard : $("#bankcard").val(),
@@ -149,11 +148,9 @@ function regist() {
 		},
 		dataType : "json",
 		beforeSend : function() {
-			debugger;
 			$('.loading').show();
 		},
 		success : function(data) {
-			debugger;
 			$('.loading').hide();
 			if (data.hasOwnProperty("code")) {
 				if (data.code == 0) {

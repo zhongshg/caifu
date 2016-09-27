@@ -9,7 +9,7 @@
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.util.Forward" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" language="java"
+<%@page pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
 <%
     request.setCharacterEncoding("utf-8");

@@ -9,15 +9,20 @@
 <%@ include file="../inc/common.jsp"%>
 <%!int currentpage = 0;
 	int pagesize = 20;
-	int totalCount = 0;%>
+	int totalCount = 0;
+	int totalPage = 0;
+%>
 <%
 	currentpage = request.getAttribute("currentpage")==null?currentpage:RequestUtil.getInt(request, "currentpage");
 	totalCount = DaoFactory.getUserDao().getTotalCount();
-	totalCount = (totalCount%pagesize)==0?(totalCount/pagesize):(totalCount/pagesize+1);
+	totalPage = (totalCount%pagesize)==0?(totalCount/pagesize):(totalCount/pagesize+1);
 	List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize);
+	request.setAttribute("usersList", usersList);
 	String msg = RequestUtil.getString(request, "msg");
 	if (msg != null && msg.equals("suc")) {
 		out.print("<script>alert(\"删除成功\");  </script>");
+		out.flush();
+		out.close();
 	}
 %>
 </head>
@@ -67,15 +72,15 @@
 								<td>${userMap.id}</td>
 								<td>${userMap.name}</td>
 								<td><a class="link-update"
-									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
-									class="link-del" href="manageUser.jsp?rmr=del&id=${userMap.id}">删除</a></td>
+									href="manageUser.jsp?uid=${userMap.id}">修改</a> <a
+									class="link-del" href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
 							</tr>
 						</c:forEach>
 					</table>
 					<div class="list-page">
 						第<%=currentpage%>页（共<%=totalCount%>页） <br> <a
 							href="manageUsers.jsp?currentpage=1">首页</a> <a
-							href="manageUsers.jsp?currentpage=<%=currentpage - 1%>">上一页</a>
+							href="manageUsers.jsp?currentpage=<%=currentpage > 0 ? currentpage - 1:currentpage%>">上一页</a>
 						<%
 						    //根据pageCount的值显示每一页的数字并附加上相应的超链接
 						   
@@ -88,8 +93,8 @@
 						<%
 						    }
 						%>
-						<a href="manageUsers?currentpage=<%=currentpage + 1%>">下一页</a> <a
-							href="manageUsers?currentpage=<%=totalCount%>">末页</a>
+						<a href="manageUsers.jsp?currentpage=<%=currentpage < totalPage?currentpage + 1:currentpage%>">下一页</a> 
+						<a href="manageUsers.jsp?currentpage=<%=totalPage%>">末页</a>
 						<!-- 通过表单提交用户想要显示的页数 -->
 						<form action="#" method="get">
 							跳转到第<input type="text" name="showPage" size="4">页 <input

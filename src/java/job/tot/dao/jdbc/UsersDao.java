@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
+import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
@@ -38,7 +39,6 @@ public class UsersDao extends AbstractDao {
      *            要查询的字段
      */
     public DataField getByCol(String col, Object id, String fieldArr) {
-	// String fieldArr = "id,svid,svname,sid,signid,wxsid";
 	return getFirstData("select " + fieldArr + " from users where " + col + "='" + id + "'", fieldArr);
     }
 
@@ -137,19 +137,16 @@ public class UsersDao extends AbstractDao {
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
 	try {
-	    System.out.println(sql);
 	    ptst = conn.prepareStatement(sql.toString());
 	    rs = ptst.executeQuery();
 	    while (rs.next()) {
 		Map<String, String> users = new HashMap<String, String>();
 		users.put("id", rs.getString("id"));
 		users.put("name", rs.getString("name"));
-		System.out.println(rs.getString("id"));
-		System.out.println(rs.getString("name"));
 		userList.add(users);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(RolesDAO.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, ex);
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
 	}
@@ -170,6 +167,15 @@ public class UsersDao extends AbstractDao {
 	DataField df = getFirstData("select code from users where code=" + code, "code");
 	if (df == null || df.getString("code") == null) {
 	    return true;
+	}
+	try {
+	    DaoFactory.getuCodeDao().del(code);
+	} catch (ObjectNotFoundException e) {
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    e.printStackTrace();
+	} catch (DatabaseException e) {
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    e.printStackTrace();
 	}
 	return false;
     }

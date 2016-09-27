@@ -15,6 +15,7 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="job.tot.dao.DaoFactory"%>
 <%@ page import="job.tot.bean.DataField"%>
+<%@ page import="job.tot.util.MD5"%>
 
 <%
     // 返回json数据根据code判断是否成功
@@ -47,10 +48,11 @@
 					DaoFactory.getuCodeDao().createCode();
 					ucode = DaoFactory.getuCodeDao().getNewCode();
 			    }
+			    password = new MD5().getMD5of32(password);
 			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, ucode);
 			    if (flag) {
-				DaoFactory.getuCodeDao().del(ucode);
-				code = 0;
+					DaoFactory.getuCodeDao().del(ucode);
+					code = 0;
 			    } else {
 				code = 6;
 			    }
