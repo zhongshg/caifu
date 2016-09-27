@@ -25,21 +25,22 @@
     String cardid = RequestUtil.getString(request, "cardid");
     String bankcard = RequestUtil.getString(request, "bankcard");
     String tel = RequestUtil.getString(request, "tel");
-
+	String nick = RequestUtil.getString(request, "nick");
+	String store = RequestUtil.getString(request, "store");
     int code = -1;
     if (uname == null || password == null || parentid == null || tel == null) {
 		code = 2;
     }
     try {
-		DataField count = DaoFactory.getUserDao().getByCol("phone", tel, "id");
+		DataField count = DaoFactory.getUserDao().getByCol("phone="+ tel, "id");
 		if (count != null && count.getInt("id") > 0) {
 		    code = 4;
 		} else {
-		    DataField bcCount = DaoFactory.getUserDao().getByCol("bankcard", tel, "id");
+		    DataField bcCount = DaoFactory.getUserDao().getByCol("cardid="+ cardid, "id");
 		    if (bcCount != null && bcCount.getInt("id") > 0) {
-			code = 3;
+				code = 3;
 		    } else {
-			DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard", tel, "id");
+				DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard="+ bankcard, "id");
 			if (identityCount != null && identityCount.getInt("id") > 0) {
 			    code = 5;
 			} else {
@@ -49,7 +50,7 @@
 					ucode = DaoFactory.getuCodeDao().getNewCode();
 			    }
 			    password = new MD5().getMD5of32(password);
-			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, ucode);
+			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, ucode,nick,store);
 			    if (flag) {
 					DaoFactory.getuCodeDao().del(ucode);
 					code = 0;

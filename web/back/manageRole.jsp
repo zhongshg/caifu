@@ -19,8 +19,6 @@
 	   remark = role.get("remark");
 	}
 	String rmr = RequestUtil.getString(request, "rmr");
-	System.out.println(rmr);
-	System.out.println(rid);
 	if(rmr!=null){
 	    rname = RequestUtil.getString(request, "rname");
 		remark = RequestUtil.getString(request, "remark");

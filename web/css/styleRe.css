@@ -897,7 +897,7 @@ input.error{border:1px solid #C00;background:#FFD2D2;color:#666;}
 /* dialog */
 
 /* login */
-.loginbox,.not-box{width:400px;margin:50px auto 100px auto;}
+.loginbox,.not-box{width:500px;margin:50px auto 100px auto;}
 .loginbox .logo-a,.not-box .logo-a{height:150px; text-align:center;}
 .loginbox .loginbox-title{background:#FFFFFF;height:70px;border-radius:3px 3px 0 0;}
 .loginbox .loginbox-title .logo{padding:12px 20px;}
@@ -925,7 +925,7 @@ a.link,.go-regist a,.loginbox label a{color:#006DA7; cursor:pointer; line-height
 .registbox{margin-top:20px;}
 .registbox .reg-content{}
 .registbox .reg-content .row{padding:10px 0;}
-.registbox .reg-content .row .field{position:absolute;left:10px;top:13px;height:35px;line-height:35px;}
+.registbox .reg-content .row .field{position:absolute;left:-70px;top:13px;height:35px;line-height:35px;}
 .registbox .reg-content .row .noPic{background-image:none;padding:0 15px;}
 .registbox .reg-content .row label.error{position:absolute;left:auto;right:10px;bottom:5px;}
 .registbox .reg-content .tips{padding:0;}

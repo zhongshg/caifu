@@ -33,7 +33,6 @@
 			<div class="top-info-wrap">
 				<ul class="top-info-list clearfix">
 					<li><a href="#"><%=request.getSession().getAttribute("admin_name") %></a></li>
-					<li><a href="editpwd.jsp" target="mainFrame">修改密码</a></li>
 					<li><a href="../login.jsp?act=exit" target="_top">退出</a></li>
 				</ul>
 			</div>

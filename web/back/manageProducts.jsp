@@ -62,8 +62,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="1">会员号</option>
-								<option value="2">用户名</option>
+								<option value="0">ID</option>
+								<option value="1">用户名</option>
+								<option value="2">会员号</option>
 								<option value="3">会员等级</option>
 								<option value="4">身份证号</option>
 								<option value="5">银行卡号</option>
@@ -87,7 +88,7 @@
 			<form name="myform" id="myform" method="post">
 				<div class="result-title">
 					<div class="result-list">
-						<a href="registed.jsp"><i class="icon-font"></i>新增用户</a>
+						<a href="registed.jsp"><i class="icon-font"></i>新增商品</a>
 					</div>
 				</div>
 				<div class="result-content">
@@ -95,10 +96,10 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>ID</th>
-							<th>用户名</th>
-							<th>会员号</th>
-							<th>会员等级</th>
+							<th>商品编号</th>
+							<th>商品名称</th>
+							<th>商品号</th>
+							<th>商品价格</th>
 							<th>身份证号</th>
 							<th>银行卡号</th>
 							<th>手机号</th>

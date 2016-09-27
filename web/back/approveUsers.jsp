@@ -18,23 +18,19 @@
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getUserDao().getTotalCount();
-		String where = " isvip = 1 ";
+		String where = " isvip = 0 ";
 		List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize,where);
 		request.setAttribute("usersList", usersList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
-			out.print("<script>alert(\"删除成功\");  </script>");
-		} else if (msg != null && msg.equals("suce")) {
-			out.print("<script>alert(\"修改成功\");  </script>");
-		} else if (msg != null && msg.equals("sucr")) {
-			out.print("<script>alert(\"新增用户成功\");  </script>");
+			out.print("<script>alert(\"审批成功\");  </script>");
 		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=1 ";
+				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=0 ";
 				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
 				request.setAttribute("usersList", usersList);
 				currentpage = 1;
@@ -53,7 +49,7 @@
 		<div class="crumb-wrap">
 			<div class="crumb-list">
 				<i class="icon-font"></i><a href="#">会员管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">会员管理</span>
+					class="crumb-step">&gt;</span><span class="crumb-name">会员审批</span>
 			</div>
 		</div>
 		<div class="search-wrap">
@@ -62,8 +58,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="1">会员号</option>
-								<option value="2">用户名</option>
+								<option value="0">ID</option>
+								<option value="1">用户名</option>
+								<option value="2">会员号</option>
 								<option value="3">会员等级</option>
 								<option value="4">身份证号</option>
 								<option value="5">银行卡号</option>
@@ -86,9 +83,6 @@
 		<div class="result-wrap">
 			<form name="myform" id="myform" method="post">
 				<div class="result-title">
-					<div class="result-list">
-						<a href="registed.jsp"><i class="icon-font"></i>新增用户</a>
-					</div>
 				</div>
 				<div class="result-content">
 					<table class="result-tab" width="100%">
@@ -122,7 +116,7 @@
 								<td>${userMap.ts}</td>
 								<td>${userMap.roleid}</td>
 								<td><a class="link-update"
-									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
+									href="approveUser.jsp?rmr=approve&id=${userMap.id}">审批</a> <a
 									class="link-del"
 									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
 							</tr>
@@ -150,7 +144,7 @@
 	function search() {
 		var search = document.getElementById("search-sort").value;
 		var value = document.getElementById("keywords").value;
-		var src_to = "manageUsers.jsp?sr=search&search=" + search + "&value="
+		var src_to = "approveUsers.jsp?sr=search&search=" + search + "&value="
 				+ value;
 		window.location.href = encodeURI(encodeURI(src_to));
 	}

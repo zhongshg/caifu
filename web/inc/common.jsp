@@ -17,7 +17,7 @@
     if (!IpFilter.filter(request.getRemoteAddr())) {
 		response.sendRedirect("404.jsp");
     }
-    String admin_id = (String) request.getSession().getAttribute("admin_id");
+    String admin_id = (String) session.getAttribute("admin_id");
     if (admin_id == null) {
 		session = request.getSession(false);
 		if (session == null) {

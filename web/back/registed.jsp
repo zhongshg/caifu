@@ -21,10 +21,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 <link href="../css/styleRe.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery.validate.js"></script>
 <script type="text/javascript" src="../js/page_regist.js"></script>
-<script type="text/javascript" src="../js/md5.js"></script>
 
 </head>
 <body class="loginbody">
@@ -32,10 +31,14 @@
 	<div class="loginbox registbox">
 		<div class="login-content reg-content">
 			<div class="loginbox-title">
-				<h3>注册</h3>
+				<h3 align="center">注册新用户</h3>
 			</div>
 			<form id="signupForm">
 			<div class="login-error"></div>
+			<div class="row">
+				<label class="field" for="nick">昵称</label>
+				<input type="text" value="" class="input-text-user noPic input-click" name="nick" id="nick">
+			</div>
 			<div class="row">
 				<label class="field" for="uname">姓名</label>
 				<input type="text" value="" class="input-text-user noPic input-click" name="uname" id="uname">
@@ -47,6 +50,10 @@
 			<div class="row">
 				<label class="field" for="passwordAgain">确认密码</label>
 				<input type="password" value="" class="input-text-password noPic input-click" name="passwordAgain" id="passwordAgain">
+			</div>
+			<div class="row">
+				<label class="field" for="storecode">专卖店号</label>
+				<input type="text" value="" class="input-text-user noPic input-click" name="storecode" id="storecode">
 			</div>
 			<div class="row">
 				<label class="field" for="parentid">上级会员号</label>
@@ -71,16 +78,6 @@
 			</form>
 		</div>
 	</div>
-	
-<div id="footer">
-	<div class="dblock">
-		<div class="inline-block"><img src="images/logo-gray.png"></div>
-		<div class="inline-block copyright">
-			<p><a href="#">关于我们</a></p>
-			<p> Copyright © 2013 万巷坊网络科技</p>
-		</div>
-	</div>
-</div>
 </div>
  
 <div class="loading">

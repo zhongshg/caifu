@@ -52,8 +52,8 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">会员管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">会员管理</span>
+				<i class="icon-font"></i><a href="#">订单管理</a><span
+					class="crumb-step">&gt;</span><span class="crumb-name">发货管理</span>
 			</div>
 		</div>
 		<div class="search-wrap">
@@ -62,12 +62,13 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="1">会员号</option>
-								<option value="2">用户名</option>
-								<option value="3">会员等级</option>
-								<option value="4">身份证号</option>
-								<option value="5">银行卡号</option>
-								<option value="6">手机号</option>
+								<option value="0">ID</option>
+								<option value="1">订单号</option>
+								<option value="2">会员号</option>
+								<option value="3">单价</option>
+								<option value="4">数量</option>
+								<option value="5">总额</option>
+								<option value="6">优惠</option>
 								<option value="7">上级会员号</option>
 								<option value="8">加入时间</option>
 								<option value="9">角色</option>
@@ -86,16 +87,13 @@
 		<div class="result-wrap">
 			<form name="myform" id="myform" method="post">
 				<div class="result-title">
-					<div class="result-list">
-						<a href="registed.jsp"><i class="icon-font"></i>新增用户</a>
-					</div>
 				</div>
 				<div class="result-content">
 					<table class="result-tab" width="100%">
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>ID</th>
+							<th>订单编号</th>
 							<th>用户名</th>
 							<th>会员号</th>
 							<th>会员等级</th>

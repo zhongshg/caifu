@@ -25,7 +25,7 @@
 	<frameset cols="230,*">
 		<frame src="left.jsp?act=login" name="leftFrame" id="leftFrame"
 			crolling="no" noresize="noresize" title="leftFrame"">
-		<frame src="manageRoles.jsp" name="mainFrame" id="mainFrame"
+		<frame src="manageUsers.jsp" name="mainFrame" id="mainFrame"
 			scrolling="yes" title="mainFrame">
 	</frameset>
 </html>

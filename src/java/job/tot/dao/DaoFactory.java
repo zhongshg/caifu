@@ -111,9 +111,7 @@ public class DaoFactory {
     }
 
     public static UsersDao getUserDao() {
-	if (userDao == null) {
-	    userDao = new UsersDao();
-	}
+	userDao = new UsersDao();
 	return userDao;
     }
 

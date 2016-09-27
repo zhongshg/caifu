@@ -62,8 +62,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="1">会员号</option>
-								<option value="2">用户名</option>
+								<option value="0">ID</option>
+								<option value="1">用户名</option>
+								<option value="2">会员号</option>
 								<option value="3">会员等级</option>
 								<option value="4">身份证号</option>
 								<option value="5">银行卡号</option>

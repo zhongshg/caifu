@@ -1,8 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : 2014-7-7, 9:30:55
-    Author     : Administrator
---%>
 <%@ page import="job.tot.exception.*"%>
 <%@ page import="job.tot.util.*" %>
 <%@ page import="job.tot.bean.*" %>
@@ -50,14 +45,12 @@ body {
 		String pwd = RequestUtil.getString(request, "pwd");
 		if (code != null && pwd != null) {
 			try {
-			    pwd = new MD5().getMD5of32(pwd).toLowerCase();
-				String fieldArr= "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,indate";
-				DataField dfUser = DaoFactory.getUserDao().getByNameAndPwd(code, pwd, fieldArr);
+			    pwd = new MD5().getMD5of32(pwd);
+				String fieldArr= "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid";
+				DataField dfUser = DaoFactory.getUserDao().getByCodeAndPwd(code, pwd, fieldArr);
 				if(dfUser != null){
 					request.getSession().setAttribute("admin_name", dfUser.getString("name"));
 					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
-					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
-					request.getSession().setAttribute("admin_code", dfUser.getString("code"));
 					request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
 					request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
 					request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
@@ -81,7 +74,7 @@ body {
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td height="147" background="images/top02.gif"><img
-				src="images/top03.gif" width="776" height="147" />
+				src="images/top03.gif" width="100%" height="147" />
 			</td>
 		</tr>
 	</table>

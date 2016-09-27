@@ -22,101 +22,6 @@ $(document).ready(function() {
 		});
 
 	};
-	/* 下面是调用方法 */
-	$.focusblur("#uname");
-
-	// 输入框激活焦点、溢出焦点的渐变特效
-	if ($("#uname").val()) {
-		$("#uname").prev().fadeOut();
-	}
-	;
-	$("#uname").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#uname").blur(function() {
-		if (!$("#uname").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#password").val()) {
-		$("#password").prev().fadeOut();
-	}
-	;
-	$("#password").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#password").blur(function() {
-		if (!$("#password").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#passwordAgain").val()) {
-		$("#passwordAgain").prev().fadeOut();
-	}
-	;
-	$("#passwordAgain").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#passwordAgain").blur(function() {
-		if (!$("#passwordAgain").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#parentid").val()) {
-		$("#parentid").prev().fadeOut();
-	}
-	;
-	$("#parentid").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#parentid").blur(function() {
-		if (!$("#parentid").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#cardid").val()) {
-		$("#cardid").prev().fadeOut();
-	}
-	;
-	$("#cardid").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#cardid").blur(function() {
-		if (!$("#cardid").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#bankcard").val()) {
-		$("#bankcard").prev().fadeOut();
-	}
-	;
-	$("#bankcard").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#bankcard").blur(function() {
-		if (!$("#bankcard").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
-	if ($("#tel").val()) {
-		$("#tel").prev().fadeOut();
-	}
-	;
-	$("#tel").focus(function() {
-		$(this).prev().fadeOut();
-	});
-	$("#tel").blur(function() {
-		if (!$("#tel").val()) {
-			$(this).prev().fadeIn();
-		}
-		;
-	});
 
 	// ajax提交注册信息
 	$("#submit").bind("click", function() {
@@ -144,7 +49,9 @@ function regist() {
 			parentid : $("#parentid").val(),
 			cardid : $("#cardid").val(),
 			bankcard : $("#bankcard").val(),
-			tel : $("#tel").val()
+			tel : $("#tel").val(),
+			storecode : $("#storecode").val(),
+			nick:$("#nick").val()
 		},
 		dataType : "json",
 		beforeSend : function() {
@@ -155,7 +62,7 @@ function regist() {
 			if (data.hasOwnProperty("code")) {
 				if (data.code == 0) {
 					// 注册成功
-					window.location.href = "./login.jsp";
+					window.location.href = "manageUsers.jsp?msg=sucr";
 				} else if (data.code == 1) {
 					// 数据库链接失败
 					$(".login-error").show();

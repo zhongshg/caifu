@@ -21,7 +21,7 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">首页</a><span class="crumb-step">&gt;</span><span
+				<i class="icon-font"></i><a href="#">系统设置</a><span class="crumb-step">&gt;</span><span
 					class="crumb-name">角色管理</span>
 			</div>
 		</div>
@@ -30,13 +30,6 @@
 				<form action="#" method="post">
 					<table class="search-tab">
 						<tr>
-							<th width="120">选择类型:</th>
-							<td><select name="search-sort" id="">
-									<option value="0">全部</option>
-									<c:forEach items="${roleList}" var="roleMap">
-										<option value="${roleMap.id}">${roleMap.name}</option>
-									</c:forEach>
-							</select></td>
 							<th width="70">关键字:</th>
 							<td><input class="common-text" placeholder="关键字"
 								name="keywords" value="" id="keywords" type="text"></td>
@@ -51,11 +44,7 @@
 			<form name="myform" id="myform" method="post">
 				<div class="result-title">
 					<div class="result-list">
-						<a href="manageRole.jsp?rm=add"><i class="icon-font"></i>新增角色</a> <a
-							id="batchDel" href="javascript:void(0)"
-							onclick="javascript:aeRole(this)"><i class="icon-font"></i>批量删除</a>
-						<a id="updateOrd" href="javascript:void(0)"><i
-							class="icon-font"></i>更新排序</a>
+						<a href="manageRole.jsp?rm=add"><i class="icon-font"></i>新增角色</a> 
 					</div>
 				</div>
 				<div class="result-content">
