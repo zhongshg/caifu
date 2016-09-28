@@ -8,6 +8,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="job.tot.global.Sysconfig" %>
 <%@ page import="job.tot.util.Forward" %>
+<%@ page import="job.tot.dao.jdbc.UsersDao" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -47,8 +48,10 @@ body {
 			try {
 			    pwd = new MD5().getMD5of32(pwd);
 				String fieldArr= "id,name,pwd,age,viplvl,cardid,bankcard,phone,roleid,parentid";
-				DataField dfUser = DaoFactory.getUserDao().getByIdAndPwd(id, pwd, fieldArr);
+				UsersDao userDao = DaoFactory.getUserDao();
+				DataField dfUser = userDao.getByIdAndPwd(id, pwd, fieldArr);
 				if(dfUser != null){
+				    userDao.remarkLogininfo(dfUser.getString("id"));
 					request.getSession().setAttribute("admin_name", dfUser.getString("name"));
 					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
 					request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));

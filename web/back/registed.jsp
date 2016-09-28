@@ -36,6 +36,10 @@
 			<form id="signupForm">
 			<div class="login-error"></div>
 			<div class="row">
+				<label class="field" for="uid">会员号</label>
+				<input type="text" value="" class="input-text-user noPic input-click" name="uid" id="uid">
+			</div>
+			<div class="row">
 				<label class="field" for="nick">昵称</label>
 				<input type="text" value="" class="input-text-user noPic input-click" name="nick" id="nick">
 			</div>
@@ -54,10 +58,6 @@
 			<div class="row">
 				<label class="field" for="storecode">专卖店号</label>
 				<input type="text" value="" class="input-text-user noPic input-click" name="storecode" id="storecode">
-			</div>
-			<div class="row">
-				<label class="field" for="parentid">上级会员号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="parentid" id="parentid">
 			</div>
 			<div class="row">
 				<label class="field" for="cardid">身份证号</label>

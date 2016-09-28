@@ -106,7 +106,8 @@ public class UsersDao extends AbstractDao {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	try {
-	    id = validate(id);
+	    if(validate(id)) 
+		return false;
 	} catch (SQLException e1) {
 	    e1.printStackTrace();
 	} catch (ObjectNotFoundException e1) {
@@ -227,24 +228,42 @@ public class UsersDao extends AbstractDao {
     }
 
     /**
-     * 校验用户会员编号是否存在
-     * 如果存在就删除重新获取
-     * 如果不存在就就返回
+     * 记录会员登录时间
+     * @throws Exception 
+     */
+    public void remarkLogininfo(String uid) throws Exception {
+	Connection conn = null;
+	PreparedStatement ps = null;
+	String sql = "insert into logininfo(userid) values(?)";
+	try {
+	    conn = DBUtils.getConnection();
+	    System.out.println("用户"+uid+"登录,SQL="+sql);
+	    ps = conn.prepareStatement(sql);
+	    ps.setString(1, uid);
+	    ps.executeUpdate();
+	} catch (SQLException e) {
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    e.printStackTrace();
+	} finally {
+	    DBUtils.closePrepareStatement(ps);
+	    DBUtils.closeConnection(conn);
+	}
+    }
+
+    /**
+     * 校验用户会员编号是否存在 如果存在就删除重新获取 如果不存在就就返回
+     * 
      * @param code
      *            新会员编号
-     * @throws SQLException 
-     * @throws DatabaseException 
-     * @throws ObjectNotFoundException 
+     * @throws SQLException
+     * @throws DatabaseException
+     * @throws ObjectNotFoundException
      */
-    public String validate(String id) throws SQLException, ObjectNotFoundException, DatabaseException {
+    public boolean validate(String id) throws SQLException, ObjectNotFoundException, DatabaseException {
 	DataField df = getFirstData("select id from users where id=" + id, "id");
-	if (df == null || df.getString("code") == null) {
-	    return id;
-	}else{//如果该编码存在  就删除当前id 重新获取新id
-	    DaoFactory.getuCodeDao().del(id);
-	    id = DaoFactory.getuCodeDao().getNewCode();
-	    validate(id);//重新校验新获取的id
-	}
-	return id;
+	if (df != null || df.getString("id") != null) {
+	    return false;
+	} 
+	return true;
     }
 }

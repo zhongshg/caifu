@@ -6,21 +6,17 @@ import job.tot.dao.DaoFactory;
 import job.tot.util.CodeUtils;
 
 public class Test {
-    
+
     public static void main(String[] args) throws SQLException {
 	createCodeTest();
     }
-    
-    private void generateTest(){
+
+    private void generateTest() {
 	CodeUtils cu = new CodeUtils();
-	try {
-	    cu.generate(6, 20);
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
+	cu.generate(6, 20);
     }
-    
-    private static void createCodeTest() throws SQLException{
+
+    private static void createCodeTest() throws SQLException {
 	DaoFactory.getuCodeDao().createCode();
     }
 }

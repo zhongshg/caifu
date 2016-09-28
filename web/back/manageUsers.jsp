@@ -34,7 +34,7 @@
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=1 ";
+				String where = SearchUtil.userSearchMap.get(search).split("#")[0] + " like '%" + value + "%' and isvip=1 ";
 				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
 				request.setAttribute("usersList", usersList);
 				currentpage = 1;
@@ -63,7 +63,7 @@
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
 						<%
-							out.print(SearchUtil.getSelect(1));
+							out.print(SearchUtil.getUsersSelect("1"));
 						%>
 						</select></td>
 						<th width="70">关键字:</th>

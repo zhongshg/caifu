@@ -20,8 +20,7 @@ import job.tot.dao.jdbc.MysqlDaoImplJDBC;
 import job.tot.dao.jdbc.NodesDao;
 import job.tot.dao.jdbc.OrderDaoImplJDBC;
 import job.tot.dao.jdbc.PowersDAO;
-import job.tot.dao.jdbc.ProductDaoImplJDBC;
-import job.tot.dao.jdbc.PropertysDaoImplJDBC;
+import job.tot.dao.jdbc.ProductDao;
 import job.tot.dao.jdbc.PsvDaoImplJDBC;
 import job.tot.dao.jdbc.RolesDAO;
 import job.tot.dao.jdbc.SlideDaoImplJDBC;
@@ -35,7 +34,6 @@ import job.tot.dao.jdbc.UsersDao;
 public class DaoFactory {
 
     private static CategoryDaoImplJDBC CategoryDao = new CategoryDaoImplJDBC();
-    private static ProductDaoImplJDBC ProductDao = new ProductDaoImplJDBC();
     private static OrderDaoImplJDBC OrderDao = new OrderDaoImplJDBC();
     private static BasketDaoImplJDBC BasketDao = new BasketDaoImplJDBC();
     private static SlideDaoImplJDBC SlideDao = new SlideDaoImplJDBC();
@@ -43,7 +41,6 @@ public class DaoFactory {
     private static MysqlDaoImplJDBC MysqlDao = new MysqlDaoImplJDBC();
     private static FundsDaoImplJDBC Funds = new FundsDaoImplJDBC();
     private static ExportlogDaoImplJDBC exportlogDaoImplJDBC = new ExportlogDaoImplJDBC();
-    private static PropertysDaoImplJDBC propertysDaoImplJDBC = new PropertysDaoImplJDBC();
     private static AreaDaoImplJDBC areaDaoImplJDBC = new AreaDaoImplJDBC();
     private static CourierDaoImplJDBC courierDaoImplJDBC = new CourierDaoImplJDBC();
     private static PsvDaoImplJDBC psvDaoImplJDBC = new PsvDaoImplJDBC();
@@ -52,6 +49,7 @@ public class DaoFactory {
     private static NodesDao nodesDao = null;
     private static RolesDAO rolesDao = null;
     private static PowersDAO powersDao = null;
+    private static ProductDao productDao = null;
 
     public static FundsDaoImplJDBC getFundsDao() {
 	return Funds;
@@ -65,10 +63,6 @@ public class DaoFactory {
 
     public static CategoryDaoImplJDBC getCategoryDAO() {
 	return CategoryDao;
-    }
-
-    public static ProductDaoImplJDBC getProductDAO() {
-	return ProductDao;
     }
 
     public static OrderDaoImplJDBC getOrderDAO() {
@@ -89,10 +83,6 @@ public class DaoFactory {
 
     public static ExportlogDaoImplJDBC getExportlogDaoImplJDBC() {
 	return exportlogDaoImplJDBC;
-    }
-
-    public static PropertysDaoImplJDBC getPropertysDaoImplJDBC() {
-	return propertysDaoImplJDBC;
     }
 
     public static AreaDaoImplJDBC getAreaDaoImplJDBC() {
@@ -143,4 +133,10 @@ public class DaoFactory {
         return powersDao;
     }
 
+    public static ProductDao getProductDao() {
+	if (productDao == null) {
+	    productDao = new ProductDao();
+	}
+        return productDao;
+    }
 }

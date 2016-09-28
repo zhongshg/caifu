@@ -21,41 +21,44 @@
     // 返回json数据根据code判断是否成功
     String uname = RequestUtil.getString(request, "uname");
     String password = RequestUtil.getString(request, "password");
-    String parentid = RequestUtil.getString(request, "parentid");
+    String uid = RequestUtil.getString(request, "uid");
     String cardid = RequestUtil.getString(request, "cardid");
     String bankcard = RequestUtil.getString(request, "bankcard");
     String tel = RequestUtil.getString(request, "tel");
-	String nick = RequestUtil.getString(request, "nick");
-	String store = RequestUtil.getString(request, "store");
+    String nick = RequestUtil.getString(request, "nick");
+    String store = RequestUtil.getString(request, "store");
     int code = -1;
-    if (uname == null || password == null || parentid == null || tel == null) {
-		code = 2;
-    }
+
     try {
-		DataField count = DaoFactory.getUserDao().getByCol("phone="+ tel, "id");
-		if (count != null && count.getInt("id") > 0) {
-		    code = 4;
+		if (uname == null || password == null || uid == null || bankcard == null || cardid == null) {
+		    code = 2;
 		} else {
-		    DataField bcCount = DaoFactory.getUserDao().getByCol("cardid="+ cardid, "id");
-		    if (bcCount != null && bcCount.getInt("id") > 0) {
-				code = 3;
+		    DataField count = DaoFactory.getUserDao().getByCol("phone=" + tel, "id");
+		    if (count != null && count.getInt("id") > 0) {
+			code = 4;
 		    } else {
-				DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard="+ bankcard, "id");
-			if (identityCount != null && identityCount.getInt("id") > 0) {
-			    code = 5;
+			DataField bcCount = DaoFactory.getUserDao().getByCol("cardid=" + cardid, "id");
+			if (bcCount != null && bcCount.getInt("id") > 0) {
+			    code = 3;
 			} else {
-			    String id = DaoFactory.getuCodeDao().getNewCode();
-			    if (id == null) {
-					DaoFactory.getuCodeDao().createCode();
-					id = DaoFactory.getuCodeDao().getNewCode();
-			    }
-			    password = new MD5().getMD5of32(password);
-			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, id,nick,store);
-			    if (flag) {
-					DaoFactory.getuCodeDao().del(id);
-					code = 0;
+			    DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard=" + bankcard, "id");
+			    if (identityCount != null && identityCount.getInt("id") > 0) {
+				code = 5;
 			    } else {
-				code = 6;
+				/* String id = DaoFactory.getuCodeDao().getNewCode();
+				if (id == null) {
+				    DaoFactory.getuCodeDao().createCode();
+				    id = DaoFactory.getuCodeDao().getNewCode();
+				} */
+				password = new MD5().getMD5of32(password);
+				//管理员账户添加的会员上级都为88888
+				boolean flag = DaoFactory.getUserDao().add(uname, password, "88888", cardid, bankcard, tel, uid, nick, store);
+				if (flag) {
+				    DaoFactory.getuCodeDao().del(uid);
+				    code = 0;
+				} else {
+				    code = 6;
+				}
 			    }
 			}
 		    }

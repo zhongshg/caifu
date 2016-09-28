@@ -6,54 +6,65 @@ import java.util.Map;
 
 public class SearchUtil {
 
-    public static Map<Integer, String> userSearchMap = new HashMap<Integer, String>();
-    public static Map<Integer, String> userSelectMap = new HashMap<Integer, String>();
+    public static Map<String, String> userSearchMap = new HashMap<String, String>();
+    public static Map<String, String> productSearchMap = new HashMap<String, String>();
 
     static {
-	userSearchMap.put(new Integer("1"), "id");
-	userSearchMap.put(new Integer("2"), "name");
-	userSearchMap.put(new Integer("3"), "viplvl");
-	userSearchMap.put(new Integer("4"), "cardid");
-	userSearchMap.put(new Integer("5"), "bankcard");
-	userSearchMap.put(new Integer("6"), "phone");
-	userSearchMap.put(new Integer("7"), "parentid");
-	userSearchMap.put(new Integer("8"), "ts");
-	userSearchMap.put(new Integer("9"), "roleid");
-	userSearchMap.put(new Integer("10"), "nick");
-	userSearchMap.put(new Integer("11"), "storecode");
+	userSearchMap.put("1", "id#会员号");
+	userSearchMap.put("2", "name#用户名");
+	userSearchMap.put("3", "viplvl#会员等级");
+	userSearchMap.put("4", "cardid#身份证号");
+	userSearchMap.put("5", "bankcard#银行卡号");
+	userSearchMap.put("6", "phone#手机号");
+	userSearchMap.put("7", "parentid#上级会员号");
+	userSearchMap.put("8", "ts#加入时间");
+	userSearchMap.put("9", "roleid#角色");
+	userSearchMap.put("10", "nick#昵称");
+	userSearchMap.put("11", "storecode#商铺号");
 
-	userSelectMap.put(new Integer("1"), "会员号");
-	userSelectMap.put(new Integer("2"), "用户名");
-	userSelectMap.put(new Integer("3"), "会员等级");
-	userSelectMap.put(new Integer("4"), "身份证号");
-	userSelectMap.put(new Integer("5"), "银行卡号");
-	userSelectMap.put(new Integer("6"), "手机号");
-	userSelectMap.put(new Integer("7"), "上级会员号");
-	userSelectMap.put(new Integer("8"), "加入时间");
-	userSelectMap.put(new Integer("9"), "角色");
-	userSelectMap.put(new Integer("10"), "昵称");
-	userSelectMap.put(new Integer("11"), "店铺号");
+	productSearchMap.put("1", "procode#商品编号");
+	productSearchMap.put("2", "proname#商品名称");
+	productSearchMap.put("3", "propertys#商品属性");
     }
 
-    public static String getSelect(int cid) {
+    public static String getProductSelect(String cid) {
 	StringBuffer sb = new StringBuffer();
-	Iterator<Integer> iterator = userSelectMap.keySet().iterator();
+	Iterator<String> iterator = productSearchMap.keySet().iterator();
 	while (iterator.hasNext()) {
-	    Integer id = (Integer) iterator.next();
-	    String val = (String) userSelectMap.get(id);
+	    String id = (String) iterator.next();
+	    String val =  (String) productSearchMap.get(id);
 	    sb.append("<option value=\"");
 	    sb.append(id);
 	    sb.append("\"");
-	    if (id == cid)
+	    if (id.equals(cid))
 		sb.append(" selected=\"selected\"");
 	    sb.append(">");
-	    sb.append(val);
+	    sb.append(val.split("#")[1]);
 	    sb.append("</option>\n");
 	}
 	return sb.toString();
     }
 
+    public static String getUsersSelect(String cid) {
+	StringBuffer sb = new StringBuffer();
+	Iterator<String> iterator = userSearchMap.keySet().iterator();
+	
+	while (iterator.hasNext()) {
+	    String id = (String) iterator.next();
+	    String val =  (String) userSearchMap.get(id);
+	    sb.append("<option value=\"");
+	    sb.append(id);
+	    sb.append("\"");
+	    if (id.equals(cid))
+		sb.append(" selected=\"selected\"");
+	    sb.append(">");
+	    sb.append(val.split("#")[1]);
+	    sb.append("</option>\n");
+	}
+	return sb.toString();
+    }
+    
     public static String getItem(int index) {
-	return (String) userSearchMap.get(new Integer(index));
+	return (String) userSearchMap.get(index);
     }
 }

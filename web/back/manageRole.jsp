@@ -22,7 +22,7 @@
 	if(rmr!=null){
 	    rname = RequestUtil.getString(request, "rname");
 		remark = RequestUtil.getString(request, "remark");
-	    if(rmr.equals("add")&&rname != null && rid != null){ //新增用户
+	    if(rmr.equals("add")&&rname != null && rid != null){ //新增角色
 			rname = URLDecoder.decode(rname, "utf-8");
 			remark = URLDecoder.decode(remark, "utf-8");
 			Map<String, String> roles = new HashMap<String, String>();
@@ -34,8 +34,6 @@
 	    }else if(rmr.equals("edit")&& rname != null && rid != null){//修改角色
 			rname = URLDecoder.decode(rname, "utf-8");
 			remark = URLDecoder.decode(remark, "utf-8");
-			System.out.println(rname);
-			System.out.println(remark);
 			Map<String, String> roles = new HashMap<String, String>();
 			roles.put("id", rid);
 			roles.put("name", rname);

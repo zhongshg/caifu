@@ -32,7 +32,7 @@
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSelectMap.get(search) + " like '%" + value + "%' and isvip=1 ";
+				String where = " like '%" + value + "%' and isvip=1 ";//SearchUtil.userSelectMap.get(search) + 
 				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
 				request.setAttribute("usersList", usersList);
 				currentpage = 1;

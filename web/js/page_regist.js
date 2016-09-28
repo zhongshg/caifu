@@ -46,7 +46,7 @@ function regist() {
 		data : {
 			uname : $("#uname").val(),
 			password : $("#password").val(),
-			parentid : $("#parentid").val(),
+			parentid : $("#uid").val(),
 			cardid : $("#cardid").val(),
 			bankcard : $("#bankcard").val(),
 			tel : $("#tel").val(),
@@ -70,7 +70,7 @@ function regist() {
 				} else if (data.code == 2) {
 					// 参数传递失败
 					$(".login-error").show();
-					$(".login-error").html("数据存在空值");
+					$(".login-error").html("会员号、用户名、密码、身份证号以及银行卡号不能为空");
 				} else if (data.code == 3) {
 					// 银行卡号已经被注册
 					$("#bankcard").addClass("error");
@@ -92,7 +92,7 @@ function regist() {
 				} else if (data.code == 6) {
 					// 新增用户失败
 					$(".login-error").show();
-					$(".login-error").html("新增用户失败");
+					$(".login-error").html("会员号已经被注册!");
 				} else {
 					// 系统错误
 					$(".login-error").show();
