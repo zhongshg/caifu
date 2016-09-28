@@ -44,15 +44,15 @@
 			if (identityCount != null && identityCount.getInt("id") > 0) {
 			    code = 5;
 			} else {
-			    String ucode = DaoFactory.getuCodeDao().getNewCode();
-			    if (ucode == null) {
+			    String id = DaoFactory.getuCodeDao().getNewCode();
+			    if (id == null) {
 					DaoFactory.getuCodeDao().createCode();
-					ucode = DaoFactory.getuCodeDao().getNewCode();
+					id = DaoFactory.getuCodeDao().getNewCode();
 			    }
 			    password = new MD5().getMD5of32(password);
-			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, ucode,nick,store);
+			    boolean flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, id,nick,store);
 			    if (flag) {
-					DaoFactory.getuCodeDao().del(ucode);
+					DaoFactory.getuCodeDao().del(id);
 					code = 0;
 			    } else {
 				code = 6;

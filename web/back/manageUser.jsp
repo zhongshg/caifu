@@ -13,7 +13,6 @@
 	String roleid = null;
 	String viplvl = null;
 	String isvip = null;
-	String code = null;
 	if (rmr != null) {
 		if (rmr.equals("edit")) {//修改会员信息
 			//name,pwd,code,cardid,bankcard,phone,parentid
@@ -43,7 +42,7 @@
 		}
 	} else if (id != null) {
 		DataField udf = DaoFactory.getUserDao().getByCol("id="+ id,
-				"name,pwd,cardid,bankcard,phone,roleid,parentid,viplvl,isvip,code");
+				"name,pwd,cardid,bankcard,phone,roleid,parentid,viplvl,isvip");
 		uname = udf.getString("name");
 		bankcard = udf.getString("bankcard");
 		cardid = udf.getString("cardid");
@@ -51,7 +50,6 @@
 		roleid = udf.getString("roleid");
 		viplvl = udf.getString("viplvl");
 		isvip = udf.getString("isvip");
-		code = udf.getString("code");
 	}
 %>
 <!DOCTYPE html>
@@ -71,7 +69,7 @@
 				<div class="login-error"></div>
 				<div class="row">
 					<label class="field" for="uid">会员号</label> <input type="text"
-						value="<%=code %>" class="input-text-password noPic input-click" id="uid"
+						value="<%=id %>" class="input-text-password noPic input-click" id="uid"
 						name="uid" disabled="disabled">
 				</div>
 				<div class="row">

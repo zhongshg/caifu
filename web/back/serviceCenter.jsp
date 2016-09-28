@@ -53,7 +53,7 @@
 		<div class="crumb-wrap">
 			<div class="crumb-list">
 				<i class="icon-font"></i><a href="#">会员管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">会员管理</span>
+					class="crumb-step">&gt;</span><span class="crumb-name">会员服务中心</span>
 			</div>
 		</div>
 		<div class="search-wrap">

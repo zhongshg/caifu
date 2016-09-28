@@ -9,13 +9,18 @@
  */
 package job.tot.dao;
 
-import java.sql.*;
-import java.util.*;
-
-import job.tot.bean.DataField;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import job.tot.bean.DataField;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
@@ -34,10 +39,10 @@ public class AbstractDao {
     public AbstractDao() {
     }
 
-    public Collection getData(String sqlStr, String fieldArr, Connection conn) {
+    public List<DataField> getData(String sqlStr, String fieldArr, Connection conn) {
 	Statement stmt = null;
 	ResultSet rs = null;
-	Collection returnList = new ArrayList();
+	List<DataField> returnList = new ArrayList<DataField>();
 	try {
 	    stmt = conn.createStatement();
 	    rs = stmt.executeQuery(sqlStr);
@@ -61,11 +66,11 @@ public class AbstractDao {
 	return returnList;
     }
 
-    public Collection getData(String sqlStr, String fieldArr) {
+    public List<DataField> getData(String sqlStr, String fieldArr) {
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	Collection returnList = new ArrayList();
+	List<DataField> returnList = new ArrayList<DataField>();
 	try {
 	    conn = DBUtils.getConnection();
 	    stmt = conn.createStatement();
@@ -91,18 +96,18 @@ public class AbstractDao {
 	return returnList;
     }
 
-    public Collection getDataList_mysqlLimit(String sqlStr, String fieldArr, int rowsNum, int offset) {
+    public List<DataField> getDataList_mysqlLimit(String sqlStr, String fieldArr, int rowsNum, int offset) {
 	StringBuffer sb = new StringBuffer(512);
 	sb.append(sqlStr);
 	sb.append(" limit " + offset + "," + rowsNum);
 	return this.getData(sb.toString(), fieldArr);
     }
 
-    public Collection getDataList_Limit_Normal(String sqlStr, String fieldArr, int rowsNum, int offset) {
+    public List<DataField> getDataList_Limit_Normal(String sqlStr, String fieldArr, int rowsNum, int offset) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
-	Collection returnList = new ArrayList();
+	List<DataField> returnList = new ArrayList<DataField>();
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sqlStr, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -174,7 +179,6 @@ public class AbstractDao {
 	int returnInt = 0;
 	try {
 	    conn = DBUtils.getConnection();
-	    ResultSet resultSet = null;
 	    stmt = conn.createStatement();
 	    rs = stmt.executeQuery(sqlStr);
 	    if (rs.next()) {
@@ -215,7 +219,6 @@ public class AbstractDao {
     public void bat(String sqlStr, String[] fieldvalue) {
 	Connection conn = null;
 	PreparedStatement ps = null;
-	int returnInt = 0;
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sqlStr);
@@ -235,7 +238,6 @@ public class AbstractDao {
     public void bat_list(String sqlStr, List<String> codeList) {
 	Connection conn = null;
 	PreparedStatement ps = null;
-	int returnInt = 0;
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sqlStr);
@@ -254,7 +256,6 @@ public class AbstractDao {
     public void bat_String(String sqlStr, String[] fieldvalue) {
 	Connection conn = null;
 	PreparedStatement ps = null;
-	int returnInt = 0;
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sqlStr);

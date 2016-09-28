@@ -3,10 +3,11 @@ package job.tot.dao.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
@@ -107,7 +108,7 @@ public class NodesDao extends AbstractDao {
     /**
      * 查询所有节点
      */
-    public Collection getList(int id) {
+    public List<DataField> getList(int id) {
         StringBuffer sql = new StringBuffer(512);
         String fieldArr = "t.id,t.name,t.url,t.parentid,t.orders,t.remark";
         sql.append("select ");

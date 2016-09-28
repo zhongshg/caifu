@@ -41,13 +41,13 @@ body {
 			}
 			session.removeAttribute("user");
 		}
-		String code = RequestUtil.getString(request, "code");
+		String id = RequestUtil.getString(request, "code");
 		String pwd = RequestUtil.getString(request, "pwd");
-		if (code != null && pwd != null) {
+		if (id != null && pwd != null) {
 			try {
 			    pwd = new MD5().getMD5of32(pwd);
-				String fieldArr= "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid";
-				DataField dfUser = DaoFactory.getUserDao().getByCodeAndPwd(code, pwd, fieldArr);
+				String fieldArr= "id,name,pwd,age,viplvl,cardid,bankcard,phone,roleid,parentid";
+				DataField dfUser = DaoFactory.getUserDao().getByIdAndPwd(id, pwd, fieldArr);
 				if(dfUser != null){
 					request.getSession().setAttribute("admin_name", dfUser.getString("name"));
 					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
@@ -55,7 +55,11 @@ body {
 					request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
 					request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
 					request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
-					response.sendRedirect("./back/frames.jsp");
+					if(dfUser.getString("roleid").equals("1")){//管理员
+						response.sendRedirect("./back/frames.jsp");
+					}else{//普通用户
+					    response.sendRedirect("./fore/frames.jsp"); 
+					}
 				}else{
 				    response.sendRedirect("login.jsp?msg=nouser");
 				}
@@ -95,7 +99,6 @@ body {
 								<tr>
 									<td height="40" align="center">&nbsp;</td>
 								</tr>
-
 							</table>
 						</td>
 						<td><img src="images/line01.gif" width="5" height="292" />

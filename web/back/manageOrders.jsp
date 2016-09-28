@@ -26,15 +26,13 @@
 			out.print("<script>alert(\"删除成功\");  </script>");
 		} else if (msg != null && msg.equals("suce")) {
 			out.print("<script>alert(\"修改成功\");  </script>");
-		} else if (msg != null && msg.equals("sucr")) {
-			out.print("<script>alert(\"新增用户成功\");  </script>");
-		}
+		} 
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=1 ";
+				String where = SearchUtil.userSelectMap.get(search) + " like '%" + value + "%' and isvip=1 ";
 				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
 				request.setAttribute("usersList", usersList);
 				currentpage = 1;

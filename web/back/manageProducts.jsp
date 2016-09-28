@@ -27,7 +27,7 @@
 		} else if (msg != null && msg.equals("suce")) {
 			out.print("<script>alert(\"修改成功\");  </script>");
 		} else if (msg != null && msg.equals("sucr")) {
-			out.print("<script>alert(\"新增用户成功\");  </script>");
+			out.print("<script>alert(\"新增商品成功\");  </script>");
 		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
@@ -52,8 +52,8 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">会员管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">会员管理</span>
+				<i class="icon-font"></i><a href="#">商品管理</a><span
+					class="crumb-step">&gt;</span><span class="crumb-name">商品管理</span>
 			</div>
 		</div>
 		<div class="search-wrap">

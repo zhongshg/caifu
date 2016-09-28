@@ -10,19 +10,19 @@
 <%@ page import="job.tot.util.RequestUtil"%>
 <%@ page import="job.tot.util.Forward"%>
 <%
-    String oldpwd = RequestUtil.getString(request, "oldpwd");
+   // String oldpwd = RequestUtil.getString(request, "oldpwd");oldpwd != null && oldpwd != ""&&
     String newpwd1 = RequestUtil.getString(request, "newpwd1");
     String newpwd2 = RequestUtil.getString(request, "newpwd2");
     Map<String, String> users = new HashMap<String, String>();
-    if (oldpwd != null && oldpwd != "" && newpwd1 != null && newpwd1 != "" && newpwd2 != null && newpwd2 != "") {
+    if ( newpwd1 != null && newpwd1 != "" && newpwd2 != null && newpwd2 != "") {
 		if (!newpwd1.equals(newpwd2)) {
 		    out.print("<script>alert(\"新密码两次输入不一致\");window.location.href=\"editpwd.jsp\";</script>");
 		    return;
 		}
-		if (oldpwd.equals(newpwd1)) {
+	/* 	if (oldpwd.equals(newpwd1)) {
 		    out.print("<script>alert(\"新旧密码一致,请修改新密码\");window.location.href=\"editpwd.jsp\";</script>");
 		    return;
-		}
+		} */
 		newpwd1 = new MD5().getMD5of32(newpwd1);
 		users.put("pwd", newpwd1);
 		boolean flag = false;
@@ -64,12 +64,12 @@
 				</div>
 				<form id="editForm" action="" method="get">
 					<div class="login-error"></div>
-					<div class="row">
+					<!-- <div class="row">
 						<label class="field" for="oldpwd">旧密码</label> <input
 							type="password" value=""
 							class="input-text-password noPic input-click" id="oldpwd"
 							name="oldpwd">
-					</div>
+					</div> -->
 					<div class="row">
 						<label class="field" for="newpwd1">新密码</label> <input
 							type="password" value=""

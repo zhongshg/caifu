@@ -44,7 +44,7 @@ public class UsersDao extends AbstractDao {
 
     public List<Map<String, String>> searchBywhere(String where, String fieldArr) {
 	if (fieldArr == null) {
-	    fieldArr = "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,dr,ts,nick,store,isvip";
+	    fieldArr = "id,name,pwd,age,viplvl,cardid,bankcard,phone,roleid,parentid,dr,ts,nick,store,isvip";
 	}
 	StringBuffer sql = new StringBuffer("select ");
 	sql.append(fieldArr);
@@ -63,7 +63,6 @@ public class UsersDao extends AbstractDao {
 		Map<String, String> users = new HashMap<String, String>();
 		users.put("id", rs.getString("id"));
 		users.put("name", rs.getString("name"));
-		users.put("code", rs.getString("code"));
 		users.put("viplvl", rs.getString("viplvl"));
 		users.put("cardid", rs.getString("cardid"));
 		users.put("bankcard", rs.getString("bankcard"));
@@ -78,14 +77,15 @@ public class UsersDao extends AbstractDao {
 	    }
 	} catch (SQLException ex) {
 	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
 	}
 	return userList;
     }
 
-    public DataField getByCodeAndPwd(String ucode, String pwd, String fieldArr) {
-	return getFirstData("select " + fieldArr + " from users where id='" + ucode + "' and pwd='" + pwd + "'", fieldArr);
+    public DataField getByIdAndPwd(String id, String pwd, String fieldArr) {
+	return getFirstData("select " + fieldArr + " from users where id='" + id + "' and pwd='" + pwd + "'", fieldArr);
     }
 
     public void batDel(String[] s) {
@@ -101,12 +101,18 @@ public class UsersDao extends AbstractDao {
 	return getDataCount("select max(id) from users");
     }
 
-    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String code, String nick, String store) {
+    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
-	if (!validate(code)) {
-	    return false;
+	try {
+	    id = validate(id);
+	} catch (SQLException e1) {
+	    e1.printStackTrace();
+	} catch (ObjectNotFoundException e1) {
+	    e1.printStackTrace();
+	} catch (DatabaseException e1) {
+	    e1.printStackTrace();
 	}
 	String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(?,?,?,?,?,?,?,?,?)";
 	try {
@@ -114,7 +120,7 @@ public class UsersDao extends AbstractDao {
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1, uname);
 	    ps.setString(2, password);
-	    ps.setString(3, code);
+	    ps.setString(3, id);
 	    ps.setString(4, cardid);
 	    ps.setString(5, bankcard);
 	    ps.setString(6, tel);
@@ -125,6 +131,7 @@ public class UsersDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
@@ -158,6 +165,7 @@ public class UsersDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
+	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
@@ -172,7 +180,7 @@ public class UsersDao extends AbstractDao {
     }
 
     public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
-	String str = "id,name,pwd,code,age,viplvl,cardid,bankcard,phone,roleid,parentid,dr,ts,nick,store,isvip";
+	String str = "id,name,pwd,age,viplvl,cardid,bankcard,phone,roleid,parentid,dr,ts,nick,store,isvip";
 	StringBuilder sql = new StringBuilder("select ");
 	sql.append(str);
 	sql.append(" from users ");
@@ -193,7 +201,6 @@ public class UsersDao extends AbstractDao {
 		Map<String, String> users = new HashMap<String, String>();
 		users.put("id", rs.getString("id"));
 		users.put("name", rs.getString("name"));
-		users.put("code", rs.getString("code"));
 		users.put("viplvl", rs.getString("viplvl"));
 		users.put("cardid", rs.getString("cardid"));
 		users.put("bankcard", rs.getString("bankcard"));
@@ -208,6 +215,7 @@ public class UsersDao extends AbstractDao {
 	    }
 	} catch (SQLException ex) {
 	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
 	}
@@ -220,24 +228,23 @@ public class UsersDao extends AbstractDao {
 
     /**
      * 校验用户会员编号是否存在
-     * 
+     * 如果存在就删除重新获取
+     * 如果不存在就就返回
      * @param code
      *            新会员编号
+     * @throws SQLException 
+     * @throws DatabaseException 
+     * @throws ObjectNotFoundException 
      */
-    public boolean validate(String code) {
-	DataField df = getFirstData("select code from users where code=" + code, "code");
+    public String validate(String id) throws SQLException, ObjectNotFoundException, DatabaseException {
+	DataField df = getFirstData("select id from users where id=" + id, "id");
 	if (df == null || df.getString("code") == null) {
-	    return true;
+	    return id;
+	}else{//如果该编码存在  就删除当前id 重新获取新id
+	    DaoFactory.getuCodeDao().del(id);
+	    id = DaoFactory.getuCodeDao().getNewCode();
+	    validate(id);//重新校验新获取的id
 	}
-	try {
-	    DaoFactory.getuCodeDao().del(code);
-	} catch (ObjectNotFoundException e) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
-	    e.printStackTrace();
-	} catch (DatabaseException e) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
-	    e.printStackTrace();
-	}
-	return false;
+	return id;
     }
 }

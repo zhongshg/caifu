@@ -58,9 +58,8 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="0">ID</option>
-								<option value="1">用户名</option>
-								<option value="2">会员号</option>
+								<option value="1">会员号</option>
+								<option value="2">用户名</option>
 								<option value="3">会员等级</option>
 								<option value="4">身份证号</option>
 								<option value="5">银行卡号</option>
@@ -89,9 +88,8 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>ID</th>
-							<th>用户名</th>
 							<th>会员号</th>
+							<th>用户名</th>
 							<th>会员等级</th>
 							<th>身份证号</th>
 							<th>银行卡号</th>
@@ -107,7 +105,6 @@
 									type="checkbox"></td>
 								<td>${userMap.id}</td>
 								<td>${userMap.name}</td>
-								<td>${userMap.code}</td>
 								<td>${userMap.viplvl}</td>
 								<td>${userMap.cardid}</td>
 								<td>${userMap.bankcard}</td>
