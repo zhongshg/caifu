@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
-import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
@@ -101,42 +100,55 @@ public class UsersDao extends AbstractDao {
 	return getDataCount("select max(id) from users");
     }
 
-    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store) {
+    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store) throws SQLException {
+	System.out.println("开始新增用户");
+	System.out.println(uname);
+	System.out.println(password);
+	System.out.println(parentid);
+	System.out.println(cardid);
+	System.out.println(bankcard);
+	System.out.println(tel);
+	System.out.println(id);
+	
+	
 	Connection conn = null;
-	PreparedStatement ps = null;
+	Statement ps = null;
 	boolean returnValue = true;
 	try {
-	    if(validate(id)) 
-		return false;
-	} catch (SQLException e1) {
-	    e1.printStackTrace();
-	} catch (ObjectNotFoundException e1) {
-	    e1.printStackTrace();
-	} catch (DatabaseException e1) {
-	    e1.printStackTrace();
-	}
-	String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(?,?,?,?,?,?,?,?,?)";
-	try {
 	    conn = DBUtils.getConnection();
-	    ps = conn.prepareStatement(sql);
-	    ps.setString(1, uname);
-	    ps.setString(2, password);
-	    ps.setString(3, id);
-	    ps.setString(4, cardid);
-	    ps.setString(5, bankcard);
-	    ps.setString(6, tel);
-	    ps.setString(7, parentid);
-	    ps.setString(8, nick);
-	    ps.setString(9, store);
-	    if (ps.executeUpdate() != 1) {
-		returnValue = false;
+	    conn.setAutoCommit(false);
+	    ps = conn.createStatement();
+	    StringBuffer sql = new StringBuffer("insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(");
+	    sql.append("'"+uname).append("','").append(password).append("',").append(id).append(",'");
+	    sql.append(cardid).append("','").append(bankcard).append("','").append(tel).append("',").append(parentid);
+	    if(nick!=null){
+		sql.append(",'").append(store).append("'");
+	    }
+	    sql.append(")");
+	    System.out.println(sql.toString());
+	    ps = conn.prepareStatement(sql.toString());
+	    ps.addBatch(sql.toString());
+
+	    // if (ps.executeUpdate() != 1) {
+	    // returnValue = false;
+	    // }
+	    // 开始新增资产财富表信息
+	    String tsql = "insert into assets(id) values("+parentid+")";
+	    ps.addBatch(tsql);
+
+	    // 开始记录代理信息
+	    tsql = "insert into agency(id,agencyid) values("+parentid+","+id+")";
+	    ps.addBatch(tsql);
+	    int[] value = ps.executeBatch();
+	    if (value.length == 3) {
+		return true;
 	    }
 	} catch (SQLException e) {
 	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
-	    DBUtils.closePrepareStatement(ps);
+	    ps.close();
 	    DBUtils.closeConnection(conn);
 	}
 	return returnValue;
@@ -177,7 +189,7 @@ public class UsersDao extends AbstractDao {
     }
 
     public boolean del(String id) throws ObjectNotFoundException, DatabaseException {
-	return exe("delete from users where id='" + id);
+	return exe("delete from users where id=" + id);
     }
 
     public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
@@ -229,7 +241,8 @@ public class UsersDao extends AbstractDao {
 
     /**
      * 记录会员登录时间
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     public void remarkLogininfo(String uid) throws Exception {
 	Connection conn = null;
@@ -237,7 +250,7 @@ public class UsersDao extends AbstractDao {
 	String sql = "insert into logininfo(userid) values(?)";
 	try {
 	    conn = DBUtils.getConnection();
-	    System.out.println("用户"+uid+"登录,SQL="+sql);
+	    System.out.println("用户" + uid + "登录,SQL=" + sql);
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1, uid);
 	    ps.executeUpdate();
@@ -251,7 +264,7 @@ public class UsersDao extends AbstractDao {
     }
 
     /**
-     * 校验用户会员编号是否存在 如果存在就删除重新获取 如果不存在就就返回
+     * 校验用户会员编号是否存在
      * 
      * @param code
      *            新会员编号
@@ -260,10 +273,15 @@ public class UsersDao extends AbstractDao {
      * @throws ObjectNotFoundException
      */
     public boolean validate(String id) throws SQLException, ObjectNotFoundException, DatabaseException {
-	DataField df = getFirstData("select id from users where id=" + id, "id");
-	if (df != null || df.getString("id") != null) {
+	DataField cdf = getFirstData("select ucode from ucode where ucode=" + id, "ucode");
+	if (cdf == null || cdf.getString("ucode") == null) {
 	    return false;
-	} 
+	} else {
+	    DataField udf = getFirstData("select id from users where id=" + id, "id");
+	    if (udf != null && udf.getString("id") != null) {
+		return false;
+	    }
+	}
 	return true;
     }
 }

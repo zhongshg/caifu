@@ -13,7 +13,9 @@
 <%@ page import="job.tot.db.DBUtils"%>
 <%@ page import="job.tot.util.RequestUtil"%>
 <%@ page import="job.tot.util.Forward"%>
-
+<%
+	String newCode = DaoFactory.getuCodeDao().getNewCode();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,7 @@
 <link href="../css/styleRe.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery.validate.js"></script>
-<script type="text/javascript" src="../js/page_regist.js"></script>
+<script type="text/javascript" src="js/page_regist.js"></script>
 
 </head>
 <body class="loginbody">
@@ -37,7 +39,7 @@
 			<div class="login-error"></div>
 			<div class="row">
 				<label class="field" for="uid">会员号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="uid" id="uid">
+				<input type="text" value="<%=newCode %>" class="input-text-user noPic input-click" name="uid" id="uid" disabled="disabled">
 			</div>
 			<div class="row">
 				<label class="field" for="nick">昵称</label>

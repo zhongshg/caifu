@@ -17,28 +17,25 @@
 		currentpage = RequestUtil.getString(request, "currentpage") == null
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
-		totalCount = DaoFactory.getUserDao().getTotalCount();
-		String where = " isvip = 1 ";
-		List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize,where);
-		request.setAttribute("usersList", usersList);
+		totalCount = DaoFactory.getOrdersDao().getTotalCount();
+		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,null);
+		request.setAttribute("orderList", orderList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
-			out.print("<script>alert(\"删除成功\");  </script>");
+			out.print("<script>alert(\"取消订单成功\");  </script>");
 		} else if (msg != null && msg.equals("suce")) {
-			out.print("<script>alert(\"修改成功\");  </script>");
-		} else if (msg != null && msg.equals("sucr")) {
-			out.print("<script>alert(\"新增用户成功\");  </script>");
-		}
+			out.print("<script>alert(\"发货成功\");  </script>");
+		} 
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=1 ";
-				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
-				request.setAttribute("usersList", usersList);
+				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
+				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
+				request.setAttribute("orderList", orderList);
 				currentpage = 1;
-				pagesize = usersList.size();
+				pagesize = orderList.size();
 				if (pagesize > 50) {
 					out.print("<script>alert(\"数据量太大,请精确查询条件\");  </script>");
 					return;
@@ -62,18 +59,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="0">ID</option>
-								<option value="1">订单号</option>
-								<option value="2">会员号</option>
-								<option value="3">单价</option>
-								<option value="4">数量</option>
-								<option value="5">总额</option>
-								<option value="6">优惠</option>
-								<option value="7">上级会员号</option>
-								<option value="8">加入时间</option>
-								<option value="9">角色</option>
-								<option value="10">昵称</option>
-								<option value="11">店铺号</option>
+							<%
+							out.print(SearchUtil.getOrdersSelect("1"));
+							%>
 						</select></td>
 						<th width="70">关键字:</th>
 						<td><input class="common-text" name="keywords" value=""
@@ -93,46 +81,45 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>订单编号</th>
-							<th>用户名</th>
-							<th>会员号</th>
-							<th>会员等级</th>
-							<th>身份证号</th>
-							<th>银行卡号</th>
-							<th>手机号</th>
-							<th>上级会员号</th>
-							<th>加入时间</th>
-							<th>角色</th>
-							<th>操作</th>
+							<th>订单号</th>
+							<th>下单人</th>
+							<th>商品价格</th>
+							<th>商品名称</th>
+							<th>商品数量</th>
+							<th>订单总额</th>
+							<th>下单时间</th>
+							<th>发货时间</th>
+							<th>订单状态</th>
+							<th>完成时间</th>
 						</tr>
-						<c:forEach items="${usersList}" var="userMap">
+						<c:forEach items="${orderList}" var="orderMap">
 							<tr>
-								<td class="tc"><input name="id[]" value="${userMap.id}"
+								<td class="tc"><input name="id[]" value="${orderMap.oid}"
 									type="checkbox"></td>
-								<td>${userMap.id}</td>
-								<td>${userMap.name}</td>
-								<td>${userMap.code}</td>
-								<td>${userMap.viplvl}</td>
-								<td>${userMap.cardid}</td>
-								<td>${userMap.bankcard}</td>
-								<td>${userMap.phone}</td>
-								<td>${userMap.parentid}</td>
-								<td>${userMap.ts}</td>
-								<td>${userMap.roleid}</td>
+								<td>${orderMap.onum}</td>
+								<td>${orderMap.oUserName}</td>
+								<td>${orderMap.ouserid}</td>
+								<td>${orderMap.oprice}</td>
+								<td>${orderMap.ocount}</td>
+								<td>${orderMap.oamountmoney}</td>
+								<td>${orderMap.odt}</td>
+								<td>${orderMap.osenddt}</td>
+								<td>${orderMap.ostatus}</td>
+								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
-									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
+									href="express.jsp?act=ok&oid=${orderMap.oid}">发货</a> <a
 									class="link-del"
-									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
+									href="express.jsp?act=cancel&oid=${orderMap.oid}">取消</a></td>
 							</tr>
 						</c:forEach>
 					</table>
 					<div class="list-page">
 						第<%=currentpage%>页（共<%=totalPage%>页） <br> <a
-							href="manageUsers.jsp?currentpage=1">首页</a> <a
-							href="manageUsers.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
+							href="manageExpresses.jsp?currentpage=1">首页</a> <a
+							href="manageExpresses.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a
-							href="manageUsers.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>
-						<a href="manageUsers.jsp?currentpage=<%=totalPage%>">末页</a>
+							href="manageExpresses.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>
+						<a href="manageExpresses.jsp?currentpage=<%=totalPage%>">末页</a>
 						<!-- 通过表单提交用户想要显示的页数 -->
 						<form action="#" method="get">
 							跳转到第<input type="text" name="currentpage" size="4">页 <input
@@ -148,7 +135,7 @@
 	function search() {
 		var search = document.getElementById("search-sort").value;
 		var value = document.getElementById("keywords").value;
-		var src_to = "manageUsers.jsp?sr=search&search=" + search + "&value="
+		var src_to = "manageExpresses.jsp?sr=search&search=" + search + "&value="
 				+ value;
 		window.location.href = encodeURI(encodeURI(src_to));
 	}

@@ -32,9 +32,9 @@ class DBOptions {
 
     // if useDatasource = false
     String driverClassName  = "org.gjt.mm.mysql.Driver";
-    String databaseURL      = "jdbc:mysql://localhost/caifu?useUnicode=true&characterEncoding=utf-8";
-    String databaseUser     = "root";
-    String databasePassword = "";
+    String databaseURL      = "jdbc:mysql://222.124.43.155/caifu?useUnicode=true&characterEncoding=utf-8";
+    String databaseUser     = "test";
+    String databasePassword = "123456";
     int maxConnection       = 20;
     int maxTimeToWait       = 2000;// 2 seconds
     int minutesBetweenRefresh = 30;// 30 minutes

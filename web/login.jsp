@@ -52,15 +52,21 @@ body {
 				DataField dfUser = userDao.getByIdAndPwd(id, pwd, fieldArr);
 				if(dfUser != null){
 				    userDao.remarkLogininfo(dfUser.getString("id"));
-					request.getSession().setAttribute("admin_name", dfUser.getString("name"));
-					request.getSession().setAttribute("admin_id", dfUser.getString("id"));
-					request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
-					request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
-					request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
-					request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
 					if(dfUser.getString("roleid").equals("1")){//管理员
+					    request.getSession().setAttribute("admin_name", dfUser.getString("name"));
+						request.getSession().setAttribute("admin_id", dfUser.getString("id"));
+						request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
+						request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
+						request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
+						request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
 						response.sendRedirect("./back/frames.jsp");
 					}else{//普通用户
+					    request.getSession().setAttribute("user_name", dfUser.getString("name"));
+						request.getSession().setAttribute("user_id", dfUser.getString("id"));
+						request.getSession().setAttribute("user_viplvl", dfUser.getString("viplvl"));
+						request.getSession().setAttribute("user_roleid", dfUser.getString("roleid"));
+						request.getSession().setAttribute("user_parentid", dfUser.getString("parentid"));
+						request.getSession().setAttribute("user_bankcard", dfUser.getString("bankcard"));
 					    response.sendRedirect("./fore/frames.jsp"); 
 					}
 				}else{

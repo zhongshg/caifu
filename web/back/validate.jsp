@@ -33,34 +33,39 @@
 		if (uname == null || password == null || uid == null || bankcard == null || cardid == null) {
 		    code = 2;
 		} else {
-		    DataField count = DaoFactory.getUserDao().getByCol("phone=" + tel, "id");
-		    if (count != null && count.getInt("id") > 0) {
-			code = 4;
-		    } else {
-			DataField bcCount = DaoFactory.getUserDao().getByCol("cardid=" + cardid, "id");
-			if (bcCount != null && bcCount.getInt("id") > 0) {
-			    code = 3;
-			} else {
-			    DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard=" + bankcard, "id");
-			    if (identityCount != null && identityCount.getInt("id") > 0) {
-				code = 5;
+		    boolean flag = DaoFactory.getUserDao().validate(uid);
+		    if(flag){
+			    DataField count = DaoFactory.getUserDao().getByCol("phone=" + tel, "id");
+			    if (count != null && count.getInt("id") > 0) {
+				code = 4;
 			    } else {
-				/* String id = DaoFactory.getuCodeDao().getNewCode();
-				if (id == null) {
-				    DaoFactory.getuCodeDao().createCode();
-				    id = DaoFactory.getuCodeDao().getNewCode();
-				} */
-				password = new MD5().getMD5of32(password);
-				//管理员账户添加的会员上级都为88888
-				boolean flag = DaoFactory.getUserDao().add(uname, password, "88888", cardid, bankcard, tel, uid, nick, store);
-				if (flag) {
-				    DaoFactory.getuCodeDao().del(uid);
-				    code = 0;
+				DataField bcCount = DaoFactory.getUserDao().getByCol("cardid=" + cardid, "id");
+				if (bcCount != null && bcCount.getInt("id") > 0) {
+				    code = 3;
 				} else {
-				    code = 6;
+				    DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard=" + bankcard, "id");
+				    if (identityCount != null && identityCount.getInt("id") > 0) {
+					code = 5;
+				    } else {
+					/* String id = DaoFactory.getuCodeDao().getNewCode();
+					if (id == null) {
+					    DaoFactory.getuCodeDao().createCode();
+					    id = DaoFactory.getuCodeDao().getNewCode();
+					} */
+					password = new MD5().getMD5of32(password);
+					//管理员账户添加的会员上级都为88888
+					flag = DaoFactory.getUserDao().add(uname, password, "88888", cardid, bankcard, tel, uid, nick, store);
+					if (flag) {
+					    DaoFactory.getuCodeDao().del(uid);
+					    code = 0;
+					} else {
+					    code = 6;
+					}
+				    }
 				}
 			    }
-			}
+		    }else{
+				code = 7;
 		    }
 		}
 

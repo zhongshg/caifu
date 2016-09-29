@@ -18,7 +18,7 @@ import job.tot.dao.jdbc.ExportlogDaoImplJDBC;
 import job.tot.dao.jdbc.FundsDaoImplJDBC;
 import job.tot.dao.jdbc.MysqlDaoImplJDBC;
 import job.tot.dao.jdbc.NodesDao;
-import job.tot.dao.jdbc.OrderDaoImplJDBC;
+import job.tot.dao.jdbc.OrdersDao;
 import job.tot.dao.jdbc.PowersDAO;
 import job.tot.dao.jdbc.ProductDao;
 import job.tot.dao.jdbc.PsvDaoImplJDBC;
@@ -34,7 +34,6 @@ import job.tot.dao.jdbc.UsersDao;
 public class DaoFactory {
 
     private static CategoryDaoImplJDBC CategoryDao = new CategoryDaoImplJDBC();
-    private static OrderDaoImplJDBC OrderDao = new OrderDaoImplJDBC();
     private static BasketDaoImplJDBC BasketDao = new BasketDaoImplJDBC();
     private static SlideDaoImplJDBC SlideDao = new SlideDaoImplJDBC();
     private static AddressDaoImplJDBC AddressDao = new AddressDaoImplJDBC();
@@ -50,6 +49,11 @@ public class DaoFactory {
     private static RolesDAO rolesDao = null;
     private static PowersDAO powersDao = null;
     private static ProductDao productDao = null;
+    private static OrdersDao ordersDao = null;
+
+    public static void setOrdersDao(OrdersDao ordersDao) {
+        DaoFactory.ordersDao = ordersDao;
+    }
 
     public static FundsDaoImplJDBC getFundsDao() {
 	return Funds;
@@ -63,10 +67,6 @@ public class DaoFactory {
 
     public static CategoryDaoImplJDBC getCategoryDAO() {
 	return CategoryDao;
-    }
-
-    public static OrderDaoImplJDBC getOrderDAO() {
-	return OrderDao;
     }
 
     public static BasketDaoImplJDBC getBasketDAO() {
@@ -139,4 +139,12 @@ public class DaoFactory {
 	}
         return productDao;
     }
+    
+    public static OrdersDao getOrdersDao() {
+	if (ordersDao == null) {
+	    ordersDao = new OrdersDao();
+	}
+        return ordersDao;
+    }
+
 }

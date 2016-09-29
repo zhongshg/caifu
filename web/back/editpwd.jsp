@@ -36,7 +36,6 @@
 		    session.removeAttribute("admin_id");
 		    out.println("<html>");
 		    out.println("<script>");
-		    out.println("$('.loading').hide();");
 		    out.println("window.open('../login.jsp','_top')");
 		    out.println("</script>");
 		    out.println("</html>");
@@ -52,8 +51,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>重置密码</title>
 <link href="../css/styleRe.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="js/page_editpwd.js"></script>
 </head>
 <body class="loginbody">
 	<div class="dataEye">
@@ -88,13 +85,5 @@
 			</div>
 		</div>
 	</div>
-	<div class="loading">
-		<div class="mask">
-			<div class="loading-img">
-				<img src="../images/loading.gif" width="31" height="31">
-			</div>
-		</div>
-	</div>
-
 </body>
 </html>

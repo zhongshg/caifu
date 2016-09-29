@@ -65,25 +65,23 @@ public class Sysconfig {
     public static String getDataSourceName() {
         return dataSourceName;
     }
-
     
-
     private static String driverClassName = "org.gjt.mm.mysql.Driver";
     public static String getDriverClassName() {
         return driverClassName;
     }
 
-    private static String databaseURL = "jdbc:mysql://127.0.0.1/caifu?useUnicode=true&characterEncoding=utf-8";
+    private static String databaseURL = "jdbc:mysql://222.43.124.155/caifu?useUnicode=true&characterEncoding=utf-8";
     public static String getDatabaseURL() {
         return databaseURL;
     }
 
-    private static String databaseUser = "root";
+    private static String databaseUser = "test";
     public static String getDatabaseUser() {
         return databaseUser;
     }
 
-    private static String databasePassword = "";
+    private static String databasePassword = "123456";
     public static String getDatabasePassword() {
         return databasePassword;
     }
