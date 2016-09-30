@@ -10,14 +10,15 @@
 package job.tot.dao;
 
 import job.tot.dao.jdbc.AddressDaoImplJDBC;
+import job.tot.dao.jdbc.AgencyDao;
 import job.tot.dao.jdbc.AreaDaoImplJDBC;
+import job.tot.dao.jdbc.AssetsDao;
 import job.tot.dao.jdbc.BasketDaoImplJDBC;
 import job.tot.dao.jdbc.CategoryDaoImplJDBC;
 import job.tot.dao.jdbc.CourierDaoImplJDBC;
 import job.tot.dao.jdbc.ExportlogDaoImplJDBC;
 import job.tot.dao.jdbc.FundsDaoImplJDBC;
 import job.tot.dao.jdbc.MysqlDaoImplJDBC;
-import job.tot.dao.jdbc.NodesDao;
 import job.tot.dao.jdbc.OrdersDao;
 import job.tot.dao.jdbc.PowersDAO;
 import job.tot.dao.jdbc.ProductDao;
@@ -45,14 +46,15 @@ public class DaoFactory {
     private static PsvDaoImplJDBC psvDaoImplJDBC = new PsvDaoImplJDBC();
     private static UsersDao userDao = null;
     private static UCodeDao uCodeDao = null;
-    private static NodesDao nodesDao = null;
     private static RolesDAO rolesDao = null;
     private static PowersDAO powersDao = null;
     private static ProductDao productDao = null;
     private static OrdersDao ordersDao = null;
+    private static AgencyDao agencyDao = null;
+    private static AssetsDao assetsDao = null;
 
     public static void setOrdersDao(OrdersDao ordersDao) {
-        DaoFactory.ordersDao = ordersDao;
+	DaoFactory.ordersDao = ordersDao;
     }
 
     public static FundsDaoImplJDBC getFundsDao() {
@@ -112,13 +114,6 @@ public class DaoFactory {
 	return uCodeDao;
     }
 
-    public static NodesDao getNodesDao() {
-	if (nodesDao == null) {
-	    nodesDao = new NodesDao();
-	}
-	return nodesDao;
-    }
-
     public static RolesDAO getRolesDao() {
 	if (rolesDao == null) {
 	    rolesDao = new RolesDAO();
@@ -130,21 +125,26 @@ public class DaoFactory {
 	if (powersDao == null) {
 	    powersDao = new PowersDAO();
 	}
-        return powersDao;
+	return powersDao;
     }
 
     public static ProductDao getProductDao() {
-	if (productDao == null) {
-	    productDao = new ProductDao();
-	}
-        return productDao;
-    }
-    
-    public static OrdersDao getOrdersDao() {
-	if (ordersDao == null) {
-	    ordersDao = new OrdersDao();
-	}
-        return ordersDao;
+	productDao = new ProductDao();
+	return productDao;
     }
 
+    public static OrdersDao getOrdersDao() {
+	ordersDao = new OrdersDao();
+	return ordersDao;
+    }
+
+    public static AgencyDao getAgencyDao() {
+	agencyDao = new AgencyDao();
+	return agencyDao;
+    }
+
+    public static AssetsDao getAssetsDao() {
+	assetsDao = new AssetsDao();
+	return assetsDao;
+    }
 }

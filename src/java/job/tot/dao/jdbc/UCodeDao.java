@@ -1,19 +1,22 @@
 package job.tot.dao.jdbc;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
 import job.tot.dao.DaoFactory;
+import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
 import job.tot.util.CodeUtils;
 
 public class UCodeDao extends AbstractDao {
     public String getNewCode() throws SQLException, ObjectNotFoundException, DatabaseException {
-	String sql = "select ucode from ucode order by rand() limit 1";
+	String sql = "select ucode from ucode where dr = 0 order by rand() limit 1 ";
 	DataField df = getFirstData(sql, "ucode");
 	//如果号码已经被取完，重新生成新号码再取
 	if(df==null || df.getField("ucode")==null){
@@ -26,7 +29,7 @@ public class UCodeDao extends AbstractDao {
 	if(flag){
 	    return df.getString("ucode");
 	}else{//如果已经号码已经被注册  就删除重新获取
-	    del(code);
+	    update(code,null);
 	    getNewCode();
 	}
 	return df.getString("ucode");
@@ -36,7 +39,27 @@ public class UCodeDao extends AbstractDao {
 	return this.exe("delete from ucode where ucode=" + ucode);
     }
 
-    
+    public boolean update(String ucode,Connection conn) throws ObjectNotFoundException, DatabaseException {
+	Statement stmt = null;
+	boolean returnValue = false;
+	try {
+	    if(conn==null){
+		conn = DBUtils.getConnection();
+	    }
+	    stmt = conn.createStatement();
+	    String sqlStr="update ucode set dr=1 where ucode=" + ucode;
+	    if (stmt.executeUpdate(sqlStr) != 0) {
+		returnValue = true;
+	    } else {
+		returnValue = false;
+	    }
+	} catch (SQLException e) {
+	    DBUtils.closeStatement(stmt);
+	    DBUtils.closeConnection(conn);
+	    throw new DatabaseException("Got Exception on Call Medthod exe in tot.dao.AbstractDao");
+	} 
+	return returnValue;
+    }   
     /**
      * 生成code
      */

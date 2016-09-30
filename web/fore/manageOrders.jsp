@@ -115,7 +115,7 @@
 						</c:forEach>
 					</table>
 					<div class="list-page">
-						第<%=currentpage%>页（共<%=totalPage%>页） <br> <a
+						第<%=currentpage%>页（共<%=totalPage!=0?totalPage:currentpage%>页） <br> <a
 							href="manageOrders.jsp?currentpage=1">首页</a> <a
 							href="manageOrders.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a

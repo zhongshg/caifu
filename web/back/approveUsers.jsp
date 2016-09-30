@@ -111,7 +111,8 @@
 								<td>${userMap.phone}</td>
 								<td>${userMap.parentid}</td>
 								<td>${userMap.ts}</td>
-								<td>${userMap.roleid}</td>
+								<td><c:if test="${userMap.roleid=='0'}">普通用户</c:if>
+								<c:if test="${userMap.roleid=='1'}">管理员</c:if></td>
 								<td><a class="link-update"
 									href="approveUser.jsp?rmr=approve&id=${userMap.id}">审批</a> <a
 									class="link-del"

@@ -19,7 +19,7 @@
 					<a href="index.html" class="navbar-brand">后台管理</a>
 				</h1>
 				<ul class="navbar-list clearfix">
-					<li><a class="on" href="index.html">首页</a></li>
+					<li><a class="on" href="">首页</a></li>
 				</ul>
 			</div>
 			<div class="top-info-wrap">

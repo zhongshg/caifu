@@ -56,7 +56,6 @@
 					//管理员账户添加的会员上级都为88888
 					flag = DaoFactory.getUserDao().add(uname, password, "88888", cardid, bankcard, tel, uid, nick, store);
 					if (flag) {
-					    DaoFactory.getuCodeDao().del(uid);
 					    code = 0;
 					} else {
 					    code = 6;

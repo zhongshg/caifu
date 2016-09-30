@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
+import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
@@ -27,7 +27,7 @@ import job.tot.util.DbConn;
  * @since 2016年9月21日 15:51:19 用户数据库操作DAO类
  */
 public class UsersDao extends AbstractDao {
-    private static Log log = LogFactory.getLog(UsersDao.class);
+    private Logger log = Logger.getLogger(UsersDao.class.getName());
 
     /**
      * @param col
@@ -75,7 +75,7 @@ public class UsersDao extends AbstractDao {
 		userList.add(users);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
@@ -84,7 +84,7 @@ public class UsersDao extends AbstractDao {
     }
 
     public DataField getByIdAndPwd(String id, String pwd, String fieldArr) {
-	return getFirstData("select " + fieldArr + " from users where id='" + id + "' and pwd='" + pwd + "'", fieldArr);
+	return getFirstData("select " + fieldArr + " from users where id='" + id + "' and pwd='" + pwd + "' and isvip=1", fieldArr);
     }
 
     public void batDel(String[] s) {
@@ -102,53 +102,67 @@ public class UsersDao extends AbstractDao {
 
     public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store) throws SQLException {
 	System.out.println("开始新增用户");
-	System.out.println(uname);
-	System.out.println(password);
-	System.out.println(parentid);
-	System.out.println(cardid);
-	System.out.println(bankcard);
-	System.out.println(tel);
-	System.out.println(id);
-	
-	
 	Connection conn = null;
-	Statement ps = null;
-	boolean returnValue = true;
+	PreparedStatement ps = null;
+	boolean returnValue = false;
 	try {
 	    conn = DBUtils.getConnection();
 	    conn.setAutoCommit(false);
-	    ps = conn.createStatement();
-	    StringBuffer sql = new StringBuffer("insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(");
-	    sql.append("'"+uname).append("','").append(password).append("',").append(id).append(",'");
-	    sql.append(cardid).append("','").append(bankcard).append("','").append(tel).append("',").append(parentid);
-	    if(nick!=null){
-		sql.append(",'").append(store).append("'");
-	    }
-	    sql.append(")");
-	    System.out.println(sql.toString());
+	    
+	    String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(?,?,?,?,?,?,?,?,?)";
 	    ps = conn.prepareStatement(sql.toString());
-	    ps.addBatch(sql.toString());
-
-	    // if (ps.executeUpdate() != 1) {
-	    // returnValue = false;
-	    // }
-	    // 开始新增资产财富表信息
-	    String tsql = "insert into assets(id) values("+parentid+")";
-	    ps.addBatch(tsql);
-
-	    // 开始记录代理信息
-	    tsql = "insert into agency(id,agencyid) values("+parentid+","+id+")";
-	    ps.addBatch(tsql);
-	    int[] value = ps.executeBatch();
-	    if (value.length == 3) {
-		return true;
+	    ps.setString(1,uname);
+	    ps.setString(2,password);
+	    ps.setString(3,id);
+	    ps.setString(4,cardid);
+	    ps.setString(5,bankcard);
+	    ps.setString(6,tel);
+	    ps.setString(7,parentid);
+	    ps.setString(8,nick);
+	    ps.setString(9,store);
+	    if (ps.executeUpdate() != 1) {
+		returnValue = true;
 	    }
+	    System.out.println(sql);
+	    
+	    // 开始记录代理信息
+	    System.out.println("开始记录代理信息");
+	    Map<String,String> agency = new HashMap<String,String>();
+	    agency.put("uid", id);
+	    agency.put("parentid", parentid);
+	    returnValue = DaoFactory.getAgencyDao().add(agency, conn);
+	    if(!returnValue){
+		return returnValue;
+	    }
+	    System.out.println("记录代理信息结束");
+	    
+	    // 开始新增资产财富表信息
+	    System.out.println("开始新增资产财富表信息");
+	    returnValue =  DaoFactory.getAssetsDao().add(id, conn);
+	    if(!returnValue){
+		return returnValue;
+	    }
+	    System.out.println("新增资产财富表信息结束");
+	    try {
+		//开始更新会员号库存表
+		DaoFactory.getuCodeDao().update(id,conn);
+	    } catch (ObjectNotFoundException e) {
+		e.printStackTrace();
+	    } catch (DatabaseException e) {
+		e.printStackTrace();
+	    }finally{
+		DBUtils.closeStatement(ps);
+		DBUtils.closeConnection(conn);
+	    }
+	    //提交所有操作
+	    conn.commit();
+	    System.out.println("新增用户结束");
 	} catch (SQLException e) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
-	    return false;
+	    return returnValue;
 	} finally {
-	    ps.close();
+	    DBUtils.closeStatement(ps);
 	    DBUtils.closeConnection(conn);
 	}
 	return returnValue;
@@ -178,7 +192,7 @@ public class UsersDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
@@ -227,7 +241,7 @@ public class UsersDao extends AbstractDao {
 		userList.add(users);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
@@ -255,7 +269,7 @@ public class UsersDao extends AbstractDao {
 	    ps.setString(1, uid);
 	    ps.executeUpdate();
 	} catch (SQLException e) {
-	    Logger.getLogger(UsersDao.class.getName()).log(Level.SEVERE, null, e);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	} finally {
 	    DBUtils.closePrepareStatement(ps);
@@ -273,14 +287,9 @@ public class UsersDao extends AbstractDao {
      * @throws ObjectNotFoundException
      */
     public boolean validate(String id) throws SQLException, ObjectNotFoundException, DatabaseException {
-	DataField cdf = getFirstData("select ucode from ucode where ucode=" + id, "ucode");
-	if (cdf == null || cdf.getString("ucode") == null) {
+	DataField udf = getFirstData("select id from users where id=" + id, "id");
+	if (udf != null && udf.getString("id") != null) {
 	    return false;
-	} else {
-	    DataField udf = getFirstData("select id from users where id=" + id, "id");
-	    if (udf != null && udf.getString("id") != null) {
-		return false;
-	    }
 	}
 	return true;
     }
