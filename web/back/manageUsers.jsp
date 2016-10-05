@@ -14,7 +14,8 @@
 	int totalPage = 0;
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
-		currentpage = RequestUtil.getString(request, "currentpage") == null
+		currentpage = RequestUtil.getString(request, "currentpage") == null 
+			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getUserDao().getTotalCount();
@@ -121,7 +122,7 @@
 						</c:forEach>
 					</table>
 					<div class="list-page">
-						第<%=currentpage%>页（共<%=totalPage%>页） <br> <a
+						第<%=currentpage%>页（共<%=totalPage==0?currentpage:totalPage%>页） <br> <a
 							href="manageUsers.jsp?currentpage=1">首页</a> <a
 							href="manageUsers.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a

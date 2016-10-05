@@ -14,7 +14,9 @@
 	int totalPage = 0;
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
-		currentpage = RequestUtil.getString(request, "currentpage") == null? currentpage : RequestUtil.getInt(request, "currentpage");
+		currentpage = RequestUtil.getString(request, "currentpage") == null
+			|| RequestUtil.getString(request, "currentpage").equals("")
+			? currentpage : RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getProductDao().getTotalCount();
 		List<Map<String, String>> productsList = DaoFactory.getProductDao().get_Limit(currentpage, pagesize,null);
 		request.setAttribute("productsList", productsList);

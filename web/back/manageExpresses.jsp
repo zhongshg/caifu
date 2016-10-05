@@ -15,6 +15,7 @@
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
 		currentpage = RequestUtil.getString(request, "currentpage") == null
+			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getOrdersDao().getTotalCount();
@@ -107,9 +108,9 @@
 								<td>${orderMap.ostatus}</td>
 								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
-									href="express.jsp?act=ok&oid=${orderMap.oid}">发货</a> <a
+									href="manageExpress.jsp?act=ok&oid=${orderMap.oid}">发货</a> <a
 									class="link-del"
-									href="express.jsp?act=cancel&oid=${orderMap.oid}">取消</a></td>
+									href="manageExpress.jsp?act=cancel&oid=${orderMap.oid}">取消</a></td>
 							</tr>
 						</c:forEach>
 					</table>

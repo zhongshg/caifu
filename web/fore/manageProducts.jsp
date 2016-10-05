@@ -16,7 +16,9 @@
 	int totalPage = 0;
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
-		currentpage = RequestUtil.getString(request, "currentpage") == null? currentpage : RequestUtil.getInt(request, "currentpage");
+		currentpage = RequestUtil.getString(request, "currentpage") == null
+			|| RequestUtil.getString(request, "currentpage").equals("")
+			? currentpage : RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getProductDao().getTotalCount();
 		List<Map<String, String>> productsList = DaoFactory.getProductDao().get_Limit(currentpage, pagesize,null);
 		request.setAttribute("productsList", productsList);
@@ -72,11 +74,6 @@
 		</div>
 		<div class="result-wrap">
 			<form name="myform" id="myform" method="post">
-				<div class="result-title">
-					<div class="result-list">
-						<a href="manageProduct.jsp?rm=add"><i class="icon-font"></i>新增商品</a>
-					</div>
-				</div>
 				<div class="result-content">
 					<table class="result-tab" width="100%">
 						<tr>

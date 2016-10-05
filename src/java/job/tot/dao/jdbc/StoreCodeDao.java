@@ -30,7 +30,7 @@ public class StoreCodeDao extends AbstractDao {
     public void createCode() throws SQLException {
 	List<String> codeList = new ArrayList<String>();
 	CodeUtils codeTool = new CodeUtils();
-	for (int i = 5; i < 9; i++) {
+	for (int i = 4; i < 7; i++) {
 	    codeList.addAll(codeTool.generate(i, 100));
 	}
 	String sqlStr = "insert into storecode(scode) values(?)";

@@ -8,30 +8,30 @@
 <script type="text/javascript" src="js/libs/modernizr.min.js"></script>
 <%@ include file="../inc/common.jsp"%>
 <%
-	int currentpage = 1;
+    int currentpage = 1;
 	int pagesize = 10;
 	int totalCount = 0;
 	int totalPage = 0;
-    String sr = RequestUtil.getString(request, "sr");
+	String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
-		currentpage = RequestUtil.getString(request, "currentpage") == null
-				? currentpage
-				: RequestUtil.getInt(request, "currentpage");
+		currentpage = RequestUtil.getString(request, "currentpage") == null  
+			|| RequestUtil.getString(request, "currentpage").equals("")?
+			currentpage: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getOrdersDao().getTotalCount();
-		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,null);
+		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize, null);
 		request.setAttribute("orderList", orderList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
 			out.print("<script>alert(\"删除成功\");  </script>");
 		} else if (msg != null && msg.equals("suce")) {
 			out.print("<script>alert(\"修改成功\");  </script>");
-		} 
+		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
+				String where = SearchUtil.orderSearchMap.get(search) + " like '%" + value + "%'  ";
 				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
 				request.setAttribute("orderList", orderList);
 				currentpage = 1;
@@ -59,9 +59,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-							<%
-							out.print(SearchUtil.getOrdersSelect("1"));
-							%>
+								<%
+								    out.print(SearchUtil.getOrdersSelect("1"));
+								%>
 						</select></td>
 						<th width="70">关键字:</th>
 						<td><input class="common-text" name="keywords" value=""
@@ -74,8 +74,7 @@
 		</div>
 		<div class="result-wrap">
 			<form name="myform" id="myform" method="post">
-				<div class="result-title">
-				</div>
+				<div class="result-title"></div>
 				<div class="result-content">
 					<table class="result-tab" width="100%">
 						<tr>
@@ -114,8 +113,8 @@
 						</c:forEach>
 					</table>
 					<div class="list-page">
-						第<%=currentpage%>页（共<%=totalPage%>页） <br> <a
-							href="manageOrders.jsp?currentpage=1">首页</a> <a
+						第<%=currentpage%>页（共<%=totalPage == 0 ? currentpage : totalPage%>页） <br>
+						<a href="manageOrders.jsp?currentpage=1">首页</a> <a
 							href="manageOrders.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a
 							href="manageOrders.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>

@@ -15,6 +15,7 @@
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
 		currentpage = RequestUtil.getString(request, "currentpage") == null
+			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getOrdersDao().getTotalCount();
