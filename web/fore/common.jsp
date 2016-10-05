@@ -8,6 +8,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.util.Forward" %>
+<%@ page import="job.tot.global.GlobalEnum" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page pageEncoding="UTF-8" language="java"

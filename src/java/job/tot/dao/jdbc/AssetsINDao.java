@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,10 +28,10 @@ import job.tot.util.DbConn;
 
 /**
  * @author zhongshg
- * @since 2016年9月21日 15:51:19 资产数据库操作DAO类
+ * @since 2016年9月21日 15:51:19 资产收入数据库操作DAO类
  */
-public class AssetsDao extends AbstractDao {
-    private static Log log = LogFactory.getLog(AssetsDao.class);
+public class AssetsINDao extends AbstractDao {
+    private static Logger log = Logger.getLogger(AssetsINDao.class.getName());
 
     /**
      * @param col
@@ -43,19 +42,19 @@ public class AssetsDao extends AbstractDao {
      *            要查询的字段
      */
     public DataField getByCol(String where) {
-	String fieldArr = "id,assets,balance,wealth";
-	return getFirstData("select " + fieldArr + " from assets where " + where, fieldArr);
+	String fieldArr = "id,assets_in,balance,wealth";
+	return getFirstData("select " + fieldArr + " from assets_in where " + where, fieldArr);
     }
 
     public List<Map<String, String>> searchBywhere(String where) {
-	String fieldArr = "id,assets,balance,wealth";
+	String fieldArr = "id,assets_in,balance,wealth";
 	StringBuffer sql = new StringBuffer("select ");
 	sql.append(fieldArr);
-	sql.append(" from assets  ");
+	sql.append(" from assets_in  ");
 	if (where != null && where != "") {
 	    sql.append("where " + where);
 	}
-	List<Map<String, String>> assetsList = new ArrayList<Map<String, String>>();
+	List<Map<String, String>> assets_inList = new ArrayList<Map<String, String>>();
 	Connection conn = DbConn.getConn();
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
@@ -63,38 +62,42 @@ public class AssetsDao extends AbstractDao {
 	    ptst = conn.prepareStatement(sql.toString());
 	    rs = ptst.executeQuery();
 	    while (rs.next()) {
-		// id,assets,balance,wealth
-		Map<String, String> assets = new HashMap<String, String>();
-		assets.put("id", rs.getString("id"));
-		assets.put("assets", rs.getString("assets"));
-		assets.put("balance", rs.getString("balance"));
-		assets.put("wealth", rs.getString("wealth"));
-		assetsList.add(assets);
+		// id,assets_in,balance,wealth
+		Map<String, String> assets_in = new HashMap<String, String>();
+		assets_in.put("uid", rs.getString("uid"));
+		assets_in.put("amount", rs.getString("amount"));
+		assets_in.put("type", rs.getString("type"));
+		assets_in.put("oid", rs.getString("oid"));
+		assets_in.put("ts", rs.getString("ts"));
+		assets_inList.add(assets_in);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(AssetsDao.class.getName()).log(Level.SEVERE, null, ex);
+	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
 	}
-	return assetsList;
+	return assets_inList;
     }
 
-    public boolean add(String id, Connection conn) {
+    public boolean add(Map<String,String> assets_in, Connection conn) {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
-	// id,assets,balance,wealth
-	String sql = "insert into assets(id) values(?)";
+	// id,assets_in,balance,wealth
+	String sql = "insert into assets_in(uid,amount,type,oid) values(?,?,?,?)";
 	try {
 	    ps = conn.prepareStatement(sql);
-	    ps.setString(1, id);
+	    ps.setString(1, assets_in.get("uid"));
+	    ps.setString(2, assets_in.get("amount"));
+	    ps.setString(3, assets_in.get("type"));
+	    ps.setString(4, assets_in.get("oid"));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
 	    DBUtils.closePrepareStatement(ps);
 	    DBUtils.closeConnection(conn);
-	    Logger.getLogger(AssetsDao.class.getName()).log(Level.SEVERE, null, e);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    returnValue = false;
 	    return returnValue;
@@ -105,37 +108,24 @@ public class AssetsDao extends AbstractDao {
     }
 
     public boolean del(String id) throws ObjectNotFoundException, DatabaseException {
-	return exe("delete from assets where id=" + id);
+	return exe("delete from assets_in where id=" + id);
     }
 
-    public boolean update(Connection conn,Map<String, String> assets) throws ObjectNotFoundException, DatabaseException {
+    public boolean update(Map<String, String> assets_in) throws ObjectNotFoundException, DatabaseException {
 	try {
-	    String sql = "update assets set ";
-	    for (String key : assets.keySet()) {
-		sql += key;
+	    String sql = "update assets_in set ";
+	    for (String key : assets_in.keySet()) {
+		sql +=key;
 		sql += "=";
-		sql += assets.get(key);
+		sql += assets_in.get(key);
 		sql += ",";
 	    }
-	    sql = sql.substring(0, sql.length() - 1);
-	    sql += " where id=" + assets.get("id");
-	    Statement stmt = null;
-	    boolean returnValue = false;
-	    try {
-		conn = DBUtils.getConnection();
-		stmt = conn.createStatement();
-		if (stmt.executeUpdate(sql.toString()) != 0) {
-		    returnValue = true;
-		} else {
-		    returnValue = false;
-		}
-	    } catch (SQLException e) {
-		log.error("Sql Exception Error:", e);
-		throw new DatabaseException("Got Exception on Call Medthod exe in tot.dao.AbstractDao");
-	    } finally {
-		DBUtils.closeStatement(stmt);
-	    }
-	    return returnValue;
+	    sql =  sql.substring(0, sql.length() - 1);
+	    sql +=" where id=" + assets_in.get("id");
+	    System.out.println(sql.toString());
+	    return exe(sql.toString());
+	} catch (ObjectNotFoundException e) {
+	    e.printStackTrace();
 	} catch (DatabaseException e) {
 	    e.printStackTrace();
 	}

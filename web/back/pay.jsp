@@ -1,13 +1,25 @@
 <%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"%>
 <%@ include file="../inc/common.jsp"%>
+<%@page import="job.tot.db.DBUtils" %>
 <%
     String id = RequestUtil.getString(request, "id");
 	String money = RequestUtil.getString(request, "money");
+	boolean flag = false;
 	if(money!=null && money.length() > 0){
 		Map<String,String> assets = new HashMap<String,String>();
 		assets.put("id", id);
 		assets.put("assets", money);
-		boolean flag = DaoFactory.getAssetsDao().update(assets);
+		Connection conn = DBUtils.getConnection();
+		//更新用户资产
+		flag = DaoFactory.getAssetsDao().update(conn,assets);
+		//新增资产收入
+		Map<String,String> assets_in = new HashMap<String,String>();
+		//uid,amount,type,oid
+		assets_in.put("uid", id);
+		assets_in.put("amount", money);
+		assets_in.put("type", "4");//充值
+		assets_in.put("oid", "");
+		DaoFactory.getAssetsINDao().add(assets_in, conn);
 		if(flag){
 			response.sendRedirect("manageUsers.jsp?msg=suct");
 		}else{

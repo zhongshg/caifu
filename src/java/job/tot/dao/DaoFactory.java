@@ -13,6 +13,8 @@ import job.tot.dao.jdbc.AddressDaoImplJDBC;
 import job.tot.dao.jdbc.AgencyDao;
 import job.tot.dao.jdbc.AreaDaoImplJDBC;
 import job.tot.dao.jdbc.AssetsDao;
+import job.tot.dao.jdbc.AssetsINDao;
+import job.tot.dao.jdbc.AssetsOUTDao;
 import job.tot.dao.jdbc.BasketDaoImplJDBC;
 import job.tot.dao.jdbc.CategoryDaoImplJDBC;
 import job.tot.dao.jdbc.CourierDaoImplJDBC;
@@ -52,6 +54,8 @@ public class DaoFactory {
     private static OrdersDao ordersDao = null;
     private static AgencyDao agencyDao = null;
     private static AssetsDao assetsDao = null;
+    private static AssetsINDao assetsINDao = null;
+    private static AssetsOUTDao assetsOUTDao = null;
 
     public static void setOrdersDao(OrdersDao ordersDao) {
 	DaoFactory.ordersDao = ordersDao;
@@ -62,9 +66,7 @@ public class DaoFactory {
     }
 
     public static MysqlDaoImplJDBC getMysqlDao() {
-
 	return MysqlDao;
-
     }
 
     public static CategoryDaoImplJDBC getCategoryDAO() {
@@ -147,4 +149,15 @@ public class DaoFactory {
 	assetsDao = new AssetsDao();
 	return assetsDao;
     }
+
+    public static AssetsINDao getAssetsINDao() {
+	assetsINDao = new AssetsINDao();
+	return assetsINDao;
+    }
+
+    public static AssetsOUTDao getAssetsOUTDao() {
+	assetsOUTDao = new AssetsOUTDao();
+	return assetsOUTDao;
+    }
+
 }

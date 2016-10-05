@@ -42,12 +42,12 @@ public class OrdersDao extends AbstractDao {
      *            要查询的字段
      */
     public DataField getByCol(String where) {
-	String fieldArr = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark";
+	String fieldArr = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark,pname";
 	return getFirstData("select " + fieldArr + " from orders where " + where, fieldArr);
     }
 
     public List<Map<String, String>> searchBywhere(String where) {
-	String fieldArr = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark";
+	String fieldArr = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark,pname";
 	StringBuffer sql = new StringBuffer("select ");
 	sql.append(fieldArr);
 	sql.append(" from orders  ");
@@ -66,9 +66,9 @@ public class OrdersDao extends AbstractDao {
 		Map<String, String> orders = new HashMap<String, String>();
 		orders.put("oid", rs.getString("oid"));
 		orders.put("otitle", rs.getString("otitle"));
-		orders.put("odt", rs.getString("odt"));
-		orders.put("osenddt", rs.getString("osenddt"));
-		orders.put("olastupdatedt", rs.getString("olastupdatedt"));
+		orders.put("odt", rs.getString("odt").substring(0, 19));
+		orders.put("osenddt", rs.getString("osenddt").substring(0, 19));
+		orders.put("olastupdatedt", rs.getString("olastupdatedt").substring(0, 19));
 		orders.put("ostatus", rs.getString("ostatus"));
 		orders.put("onum", rs.getString("onum"));
 		orders.put("ocount", rs.getString("ocount"));
@@ -76,6 +76,7 @@ public class OrdersDao extends AbstractDao {
 		orders.put("oprice", rs.getString("oprice"));
 		orders.put("ouserid", rs.getString("ouserid"));
 		orders.put("ousername", rs.getString("ousername"));
+		orders.put("pname", rs.getString("pname"));
 		orderList.add(orders);
 	    }
 	} catch (SQLException ex) {
@@ -173,7 +174,7 @@ public class OrdersDao extends AbstractDao {
     }
 
     public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
-	String str = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark";
+	String str = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark,pname";
 	StringBuilder sql = new StringBuilder("select ");
 	sql.append(str);
 	sql.append(" from orders ");
@@ -195,9 +196,9 @@ public class OrdersDao extends AbstractDao {
 		//oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark
 		orders.put("oid", rs.getString("oid"));
 		orders.put("otitle", rs.getString("otitle"));
-		orders.put("odt", rs.getString("odt"));
-		orders.put("osenddt", rs.getString("osenddt"));
-		orders.put("olastupdatedt", rs.getString("olastupdatedt"));
+		orders.put("odt", rs.getString("odt")!=null?rs.getString("odt").substring(0, 19):null);
+		orders.put("osenddt", rs.getString("osenddt")!=null?rs.getString("osenddt").substring(0, 19):null);
+		orders.put("olastupdatedt", rs.getString("olastupdatedt")!=null?rs.getString("olastupdatedt").substring(0, 19):null);
 		orders.put("ostatus", rs.getString("ostatus"));
 		orders.put("onum", rs.getString("onum"));
 		orders.put("ocount", rs.getString("ocount"));
@@ -205,6 +206,7 @@ public class OrdersDao extends AbstractDao {
 		orders.put("oprice", rs.getString("oprice"));
 		orders.put("ouserid", rs.getString("ouserid"));
 		orders.put("ousername", rs.getString("ousername"));
+		orders.put("pname", rs.getString("pname"));
 		orderList.add(orders);
 	    }
 	} catch (SQLException ex) {

@@ -82,15 +82,17 @@
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
 							<th>订单号</th>
-							<th>下单人</th>
-							<th>商品价格</th>
+							<th style="display:none">会员名称</th>
+							<th>会员号</th>
+							<th style="display:none">商品编号</th>
 							<th>商品名称</th>
+							<th>商品价格</th>
 							<th>商品数量</th>
 							<th>订单总额</th>
 							<th>下单时间</th>
 							<th>发货时间</th>
 							<th>订单状态</th>
-							<th>完成时间</th>
+							<th>最后状态时间</th>
 							<th>操作</th>
 						</tr>
 						<c:forEach items="${orderList}" var="orderMap">
@@ -98,15 +100,17 @@
 								<td class="tc"><input name="id[]" value="${orderMap.oid}"
 									type="checkbox"></td>
 								<td>${orderMap.onum}</td>
-								<td>${orderMap.oUserName}</td>
-								<td>${orderMap.oprice}</td>
+								<td style="display:none">${orderMap.oUserName}</td>
 								<td>${orderMap.ouserid}</td>
+								<td style="display:none">${orderMap.pid}</td>
+								<td>${orderMap.pname}</td>
+								<td>${orderMap.oprice}</td>
 								<td>${orderMap.ocount}</td>
 								<td>${orderMap.oamountmoney}</td>
-								<td>${fn:substring(orderMap.odt,0,19)}</td>
-								<td>${fn:substring(orderMap.osenddt,0,19)}</td>
+								<td>${orderMap.odt}</td>
+								<td>${orderMap.osenddt}</td>
 								<td>${orderMap.ostatus}</td>
-								<td>${fn:substring(orderMap.olastupdatedt,0,19)}</td>
+								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
 									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
 									class="link-del"
