@@ -230,9 +230,9 @@ public class ProductDao extends AbstractDao {
      */
     public String getNewProcode(){
 	//获取精确到秒的当前时间,保证编码永远不会重复
-	String date = DateUtil.getStringDate().replace("-", "").replace(":","").replace(" ", "").trim();
-	//生成八位随机数
-	List<String> code = new CodeUtils().generate(8, 1);
+	String date = DateUtil.getStringDate().split(" ")[1].replace(":", "").trim();
+	//生成四位随机数
+	List<String> code = new CodeUtils().generate(4, 1);
 	String proCode = date+code.get(0);
 	return proCode;
     }

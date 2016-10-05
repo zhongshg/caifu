@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -52,8 +51,8 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">订单管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">订单查询</span>
+				<i class="icon-font"></i><a href="#">资金管理</a><span
+					class="crumb-step">&gt;</span><span class="crumb-name">交易明细</span>
 			</div>
 		</div>
 		<div class="search-wrap">
@@ -105,10 +104,10 @@
 								<td>${orderMap.oprice}</td>
 								<td>${orderMap.ocount}</td>
 								<td>${orderMap.oamountmoney}</td>
-								<td>${fn:substring(orderMap.odt,0,19)}</td>
-								<td>${fn:substring(orderMap.osenddt,0,19)}</td>
+								<td>${orderMap.odt}</td>
+								<td>${orderMap.osenddt}</td>
 								<td>${orderMap.ostatus}</td>
-								<td>${fn:substring(orderMap.olastupdatedt,0,19)}</td>
+								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
 									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
 									class="link-del"

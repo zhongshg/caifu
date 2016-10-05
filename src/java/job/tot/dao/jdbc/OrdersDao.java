@@ -1,12 +1,12 @@
 package job.tot.dao.jdbc;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
-import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
@@ -106,22 +105,20 @@ public class OrdersDao extends AbstractDao {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	//oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark
-	String sql = "insert into orders(oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	String sql = "insert into orders(odt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid) values(?,?,?,?,?,?,?,?,?,?)";
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sql);
-	    ps.setInt(0,Integer.parseInt(orders.get("oId")));
-	    ps.setString(1,orders.get("oTitle"));
-	    ps.setTimestamp(2,Timestamp.valueOf(orders.get("oDt")));
-	    ps.setTimestamp(3,Timestamp.valueOf(orders.get("oSendDt")));
-	    ps.setTimestamp(4,Timestamp.valueOf(orders.get("oLastUpdateDt")));
-	    ps.setInt(5,Integer.parseInt(orders.get("oStatus")));
-	    ps.setString(6,orders.get("oNum"));
-	    ps.setInt(7,Integer.parseInt(orders.get("oCount")));
-	    ps.setFloat(8,Float.parseFloat(orders.get("oAmountMoney")));
-	    ps.setFloat(9,Float.parseFloat(orders.get("oPrice")));
-	    ps.setInt(10,Integer.parseInt(orders.get("ouserid")));
-	    ps.setString(11,orders.get("ousername"));
+	    ps.setString(1,orders.get("oDt"));
+	    ps.setString(2,orders.get("oLastUpdateDt"));
+	    ps.setInt(3,Integer.parseInt(orders.get("oStatus")));
+	    ps.setString(4,orders.get("oNum"));
+	    ps.setInt(5,Integer.parseInt(orders.get("oCount")));
+	    ps.setFloat(6,Float.parseFloat(orders.get("oAmountMoney")));
+	    ps.setFloat(7,Float.parseFloat(orders.get("oPrice")));
+	    ps.setInt(8,Integer.parseInt(orders.get("ouserid")));
+	    ps.setString(9,orders.get("ousername"));
+	    ps.setString(10,orders.get("pid"));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }

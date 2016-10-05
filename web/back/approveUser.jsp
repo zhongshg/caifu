@@ -11,7 +11,7 @@
 			Map<String, String> user = new HashMap<String, String>();
 			user.put("isvip","1");
 			DaoFactory.getUserDao().update(id, user);
-			response.sendRedirect("manageUsers.jsp?msg=suce");
+			response.sendRedirect("approveUsers.jsp?msg=suce");
 		} 
 	} 
 %>

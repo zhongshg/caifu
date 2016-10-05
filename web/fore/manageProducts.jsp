@@ -23,8 +23,8 @@
 		List<Map<String, String>> productsList = DaoFactory.getProductDao().get_Limit(currentpage, pagesize,null);
 		request.setAttribute("productsList", productsList);
 		String msg = RequestUtil.getString(request, "msg");
-		if (msg != null && msg.equals("suce")) {
-			out.print("<script>alert(\"修改成功\");  </script>");
+		if (msg != null && msg.equals("suca")) {
+			out.print("<script>alert(\"购买成功\");  </script>");
 		} else if(msg != null && msg.equals("error")){
 		    out.print("<script>alert(\"购买失败,请稍后重试\");  </script>");
 		}
@@ -97,12 +97,12 @@
 								<td>${productMap.price}</td>
 								<td>${productMap.stock}</td>
 								<td><span class="li_hd"></span>  
-        <a class="num_oper num_min" href="javascript:reduce('#J_Amount');">-</a>  
-        <input name="J_Amount" id="J_Amount" class="input_txt" style="width:50px;" type="text" maxlength="6" value="1" onkeyup="modify('#J_Amount');"/>  
-        <a class="num_oper num_plus"  href="javascript:add('#J_Amount')">+</a>  
-        <input id="nAmount" type="hidden" value="10"/> </td>
+        <a class="num_oper num_min" href="javascript:reduce('#J_Amount${productMap.id}');">-</a>  
+        <input name="J_Amount${productMap.id}" id="J_Amount${productMap.id}" class="input_txt" style="width:50px;" type="text" maxlength="6" value="1" onkeyup="modify('#J_Amount${productMap.id}');"/>  
+        <a class="num_oper num_plus"  href="javascript:add('#J_Amount${productMap.id}')">+</a>  
+        <input id="nAmount" type="hidden" value="3000"/> </td>
 								<td><a class="link-update"
-									href="javascript:buy(${productMap.id});">购买</a></td>
+									href="javascript:buy(J_Amount${productMap.id},${productMap.id});">购买</a></td>
 							</tr>
 						</c:forEach>
 					</table>

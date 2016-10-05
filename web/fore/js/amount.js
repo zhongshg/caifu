@@ -43,8 +43,8 @@ function search() {
 			+ value;
 	window.location.href = encodeURI(encodeURI(src_to));
 };
-function buy(pid){
-	var amount = $('#J_Amount').val();
-	alert("manageProduct.jsp?rm=buy&pid="+pid+"&amount="+amount);
+
+function buy(id,pid){
+	var amount = $(id).val();
 	window.location.href = "manageProduct.jsp?rm=buy&pid="+pid+"&amount="+amount;
-}
+};

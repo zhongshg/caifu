@@ -59,17 +59,23 @@
 </body>
 <script>
 	function balanceout(){
+		var balance = document.getElementById("balance").value;
+		if(balance <= 0.00){
+			alert("可取现总额为0.00");
+			return;
+		}
+		//校验可取现额度
 		var balanceout = document.getElementById("balanceout").value;
 		if(balanceout==null || balanceout==""){
 			alert("请输入取现额度");
 			return;
 		}
-		var balance = document.getElementById("balance").value;
 		if(balance < balanceout){
 			alert("取现额度高于可取现额度");
 			return;
 		}
 		//进行取现操作
+		
 	}
 </script>
 </html>

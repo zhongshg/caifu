@@ -18,24 +18,26 @@
 			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
-		totalCount = DaoFactory.getUserDao().getTotalCount();
-		String where = " isvip = 0 ";
-		List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize,where);
-		request.setAttribute("usersList", usersList);
+		totalCount = DaoFactory.getOrdersDao().getTotalCount();
+		String where = "ouserid="+user_id;
+		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,where);
+		request.setAttribute("orderList", orderList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
-			out.print("<script>alert(\"审批成功\");  </script>");
-		}
+			out.print("<script>alert(\"删除成功\");  </script>");
+		} else if (msg != null && msg.equals("suce")) {
+			out.print("<script>alert(\"修改成功\");  </script>");
+		} 
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.userSearchMap.get(search) + " like '%" + value + "%' and isvip=0 ";
-				List<Map<String, String>> usersList = DaoFactory.getUserDao().searchBywhere(where, null);
-				request.setAttribute("usersList", usersList);
+				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
+				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
+				request.setAttribute("orderList", orderList);
 				currentpage = 1;
-				pagesize = usersList.size();
+				pagesize = orderList.size();
 				if (pagesize > 50) {
 					out.print("<script>alert(\"数据量太大,请精确查询条件\");  </script>");
 					return;
@@ -49,8 +51,8 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">会员管理</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">会员审批</span>
+				<i class="icon-font"></i><a href="#">数据统计</a><span
+					class="crumb-step">&gt;</span><span class="crumb-name">收入明细</span>
 			</div>
 		</div>
 		<div class="search-wrap">
@@ -59,17 +61,9 @@
 					<tr>
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
-								<option value="1">会员号</option>
-								<option value="2">用户名</option>
-								<option value="3">会员等级</option>
-								<option value="4">身份证号</option>
-								<option value="5">银行卡号</option>
-								<option value="6">手机号</option>
-								<option value="7">上级会员号</option>
-								<option value="8">加入时间</option>
-								<option value="9">角色</option>
-								<option value="10">昵称</option>
-								<option value="11">店铺号</option>
+							<%
+							out.print(SearchUtil.getOrdersSelect("1"));
+							%>
 						</select></td>
 						<th width="70">关键字:</th>
 						<td><input class="common-text" name="keywords" value=""
@@ -89,45 +83,45 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>会员号</th>
-							<th>用户名</th>
-							<th>会员等级</th>
-							<th>身份证号</th>
-							<th>银行卡号</th>
-							<th>手机号</th>
-							<th>上级会员号</th>
-							<th>加入时间</th>
-							<th>角色</th>
-							<th>操作</th>
+							<th>订单号</th>
+							<th>下单人</th>
+							<th>商品价格</th>
+							<th>商品名称</th>
+							<th>商品数量</th>
+							<th>订单总额</th>
+							<th>下单时间</th>
+							<th>发货时间</th>
+							<th>订单状态</th>
+							<th>完成时间</th>
 						</tr>
-						<c:forEach items="${usersList}" var="userMap">
+						<c:forEach items="${orderList}" var="orderMap">
 							<tr>
-								<td class="tc"><input name="id[]" value="${userMap.id}"
+								<td class="tc"><input name="id[]" value="${orderMap.oid}"
 									type="checkbox"></td>
-								<td>${userMap.id}</td>
-								<td>${userMap.name}</td>
-								<td>${userMap.viplvl}</td>
-								<td>${userMap.cardid}</td>
-								<td>${userMap.bankcard}</td>
-								<td>${userMap.phone}</td>
-								<td>${userMap.parentid}</td>
-								<td>${userMap.ts}</td>
-								<td><c:if test="${userMap.roleid=='0'}">普通用户</c:if>
-								<c:if test="${userMap.roleid=='1'}">管理员</c:if></td>
+								<td>${orderMap.onum}</td>
+								<td>${orderMap.oUserName}</td>
+								<td>${orderMap.ouserid}</td>
+								<td>${orderMap.oprice}</td>
+								<td>${orderMap.ocount}</td>
+								<td>${orderMap.oamountmoney}</td>
+								<td>${orderMap.odt}</td>
+								<td>${orderMap.osenddt}</td>
+								<td>${orderMap.ostatus}</td>
+								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
-									href="approveUser.jsp?rmr=approve&id=${userMap.id}">审批</a> <a
+									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
 									class="link-del"
-									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
+									href="manageOrder.jsp?rmr=del&oid=${orderMap.oid}">删除</a></td>
 							</tr>
 						</c:forEach>
 					</table>
 					<div class="list-page">
 						第<%=currentpage%>页（共<%=totalPage!=0?totalPage:currentpage%>页） <br> <a
-							href="manageUsers.jsp?currentpage=1">首页</a> <a
-							href="manageUsers.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
+							href="manageOrders.jsp?currentpage=1">首页</a> <a
+							href="manageOrders.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a
-							href="manageUsers.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>
-						<a href="manageUsers.jsp?currentpage=<%=totalPage%>">末页</a>
+							href="manageOrders.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>
+						<a href="manageOrders.jsp?currentpage=<%=totalPage%>">末页</a>
 						<!-- 通过表单提交用户想要显示的页数 -->
 						<form action="#" method="get">
 							跳转到第<input type="text" name="currentpage" size="4">页 <input
@@ -143,7 +137,7 @@
 	function search() {
 		var search = document.getElementById("search-sort").value;
 		var value = document.getElementById("keywords").value;
-		var src_to = "approveUsers.jsp?sr=search&search=" + search + "&value="
+		var src_to = "manageOrders.jsp?sr=search&search=" + search + "&value="
 				+ value;
 		window.location.href = encodeURI(encodeURI(src_to));
 	}

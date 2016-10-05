@@ -9,7 +9,7 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="job.tot.dao.DaoFactory"%>
 <%@ page import="job.tot.bean.DataField"%>
-<%@ include file="common.jsp"%>
+<%@ include file="../inc/common.jsp"%>
 <%
 	String act = RequestUtil.getString(request, "act");
 	String oid = RequestUtil.getString(request, "oid");
