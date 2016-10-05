@@ -106,4 +106,25 @@ public class AssetsDao extends AbstractDao {
     public boolean del(String id) throws ObjectNotFoundException, DatabaseException {
 	return exe("delete from assets where id=" + id);
     }
+
+    public boolean update(Map<String, String> assets) throws ObjectNotFoundException, DatabaseException {
+	try {
+	    String sql = "update assets set ";
+	    for (String key : assets.keySet()) {
+		sql +=key;
+		sql += "=";
+		sql += assets.get(key);
+		sql += ",";
+	    }
+	    sql =  sql.substring(0, sql.length() - 1);
+	    sql +=" where id=" + assets.get("id");
+	    System.out.println(sql.toString());
+	    return exe(sql.toString());
+	} catch (ObjectNotFoundException e) {
+	    e.printStackTrace();
+	} catch (DatabaseException e) {
+	    e.printStackTrace();
+	}
+	return false;
+    }
 }

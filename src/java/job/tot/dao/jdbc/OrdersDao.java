@@ -105,7 +105,7 @@ public class OrdersDao extends AbstractDao {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	//oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark
-	String sql = "insert into orders(odt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid) values(?,?,?,?,?,?,?,?,?,?)";
+	String sql = "insert into orders(odt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,pName) values(?,?,?,?,?,?,?,?,?,?,?)";
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sql);
@@ -119,6 +119,7 @@ public class OrdersDao extends AbstractDao {
 	    ps.setInt(8,Integer.parseInt(orders.get("ouserid")));
 	    ps.setString(9,orders.get("ousername"));
 	    ps.setString(10,orders.get("pid"));
+	    ps.setString(11,orders.get("pName"));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }

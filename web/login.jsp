@@ -133,12 +133,6 @@ body {
 					</tr>
 					<tr>
 						<td height="35">&nbsp;</td>
-						<td><a href="registed.jsp">注册用户</a>
-							<a href="editpwd.jsp">忘记密码</a>
-						</td> 
-					</tr>
-					<tr>
-						<td height="35">&nbsp;</td>
 						<td><input name="Submit2" type="submit"
 							class="right-button01" value="确认登陆"
 							onclick="javascript:formsubmit();" /> <input name="Submit232"

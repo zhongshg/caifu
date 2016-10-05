@@ -44,11 +44,11 @@
 						name="balance" disabled="disabled">
 				</div>
 				<div class="row"></div>
-				<hr style="border:1px solid gray" >
+				<hr style="border:1px solid #B2DFEE" >
 				<div class="row">
 					<input type="text"
 						value="" class="input-text-user noPic input-click" id="balanceout"
-						name="balanceout" style="border:1px solid blue" >
+						name="balanceout" style="border:1px solid #9370DB" >
 				</div>
 				<div class="row btnArea">
 					<a class="login-btn" id="submit" onclick="balanceout();">取现</a>

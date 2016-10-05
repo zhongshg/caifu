@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="../inc/common.jsp"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,7 +7,6 @@
 <link rel="stylesheet" type="text/css" href="css/common.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <script type="text/javascript" src="js/libs/modernizr.min.js"></script>
-<%@ include file="../inc/common.jsp"%>
 <%
     int currentpage = 1;
 	int pagesize = 10;
@@ -14,9 +14,10 @@
 	int totalPage = 0;
 	String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
-		currentpage = RequestUtil.getString(request, "currentpage") == null  
-			|| RequestUtil.getString(request, "currentpage").equals("")?
-			currentpage: RequestUtil.getInt(request, "currentpage");
+		currentpage = RequestUtil.getString(request, "currentpage") == null
+				|| RequestUtil.getString(request, "currentpage").equals("")
+						? currentpage
+						: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getOrdersDao().getTotalCount();
 		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize, null);
 		request.setAttribute("orderList", orderList);
@@ -90,6 +91,7 @@
 							<th>发货时间</th>
 							<th>订单状态</th>
 							<th>完成时间</th>
+							<th>操作</th>
 						</tr>
 						<c:forEach items="${orderList}" var="orderMap">
 							<tr>
@@ -97,14 +99,14 @@
 									type="checkbox"></td>
 								<td>${orderMap.onum}</td>
 								<td>${orderMap.oUserName}</td>
-								<td>${orderMap.ouserid}</td>
 								<td>${orderMap.oprice}</td>
+								<td>${orderMap.ouserid}</td>
 								<td>${orderMap.ocount}</td>
 								<td>${orderMap.oamountmoney}</td>
-								<td>${orderMap.odt}</td>
-								<td>${orderMap.osenddt}</td>
+								<td>${fn:substring(orderMap.odt,0,19)}</td>
+								<td>${fn:substring(orderMap.osenddt,0,19)}</td>
 								<td>${orderMap.ostatus}</td>
-								<td>${orderMap.olastupdatedt}</td>
+								<td>${fn:substring(orderMap.olastupdatedt,0,19)}</td>
 								<td><a class="link-update"
 									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
 									class="link-del"
@@ -113,8 +115,8 @@
 						</c:forEach>
 					</table>
 					<div class="list-page">
-						第<%=currentpage%>页（共<%=totalPage == 0 ? currentpage : totalPage%>页） <br>
-						<a href="manageOrders.jsp?currentpage=1">首页</a> <a
+						第<%=currentpage%>页（共<%=totalPage == 0 ? currentpage : totalPage%>页）
+						<br> <a href="manageOrders.jsp?currentpage=1">首页</a> <a
 							href="manageOrders.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a
 							href="manageOrders.jsp?currentpage=<%=currentpage < totalPage ? currentpage + 1 : currentpage%>">下一页</a>

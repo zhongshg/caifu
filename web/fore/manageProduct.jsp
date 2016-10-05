@@ -16,6 +16,7 @@
 		    orders.put("pid", pid);//商品id
 		    orders.put("ouserid", user_id);//用户id即会员号
 		    orders.put("ousername", user_name);
+		    orders.put("pName",pdf.getString("pname"));
 		    orders.put("oPrice", pdf.getString("price"));
 		    orders.put("oNum", onum);
 		    orders.put("oCount", amount);

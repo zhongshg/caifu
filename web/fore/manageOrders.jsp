@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -94,6 +93,7 @@
 							<th>发货时间</th>
 							<th>订单状态</th>
 							<th>完成时间</th>
+							<th>操作</th>
 						</tr>
 						<c:forEach items="${orderList}" var="orderMap">
 							<tr>

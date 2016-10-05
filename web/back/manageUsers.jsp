@@ -29,6 +29,10 @@
 			out.print("<script>alert(\"修改成功\");  </script>");
 		} else if (msg != null && msg.equals("sucr")) {
 			out.print("<script>alert(\"新增用户成功\");  </script>");
+		}else if (msg != null && msg.equals("suct")) {
+			out.print("<script>alert(\"充值成功\");  </script>");
+		}else if (msg != null && msg.equals("suc")) {
+			out.print("<script>alert(\"充值失败,请稍候尝试!\");  </script>");
 		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
@@ -114,7 +118,10 @@
 								<td><c:if test="${userMap.roleid=='0'}">普通用户</c:if>
 								<c:if test="${userMap.roleid=='1'}">管理员</c:if>
 								</td>
-								<td><a class="link-update"
+								<td>
+								<a class="link-update"
+									href="pay.jsp?id=${userMap.id}">充值</a>
+								<a class="link-update"
 									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
 									class="link-del"
 									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
