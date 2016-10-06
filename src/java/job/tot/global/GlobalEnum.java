@@ -8,22 +8,31 @@ import java.util.Map;
  * 包含了整个系统中所有的固定值
  * */
 public class GlobalEnum {
-    private static Map<String,String> ASSETS_IN = new HashMap<String,String>();
-    private static Map<String,String> ASSETS_OUT = new HashMap<String,String>();
-    private static Map<String,String> ORDERSTATUS = new HashMap<String,String>();
-    private static Map<String,String> VIPLVL = new HashMap<String,String>();
-    
+    /**
+     * 11-佣金收入
+     * 12-福利收入
+     * 13-转账收入
+     * 14-充值收入
+     * 21-佣金支出
+     * 22-福利支出
+     * 23-提现支出
+     * 24-商品支出
+     * 25-转账支出
+     * */
+    public static Map<String,String> ASSETS = new HashMap<String,String>();
+    public static Map<String,String> ORDERSTATUS = new HashMap<String,String>();
+    public static Map<String,String> VIPLVL = new HashMap<String,String>();
+    public static Map<String,String> ASSETS_FLAG = new HashMap<String,String>();
     static{
-	ASSETS_IN.put("1", "佣金收入");
-	ASSETS_IN.put("2", "福利收入");
-	ASSETS_IN.put("3", "转账收入");
-	ASSETS_IN.put("4", "充值收入");
-	
-	ASSETS_OUT.put("1", "佣金支出");
-	ASSETS_OUT.put("2", "福利支出");
-	ASSETS_OUT.put("3", "提现支出");
-	ASSETS_OUT.put("4", "商品支出");
-	ASSETS_OUT.put("5", "转账支出");
+	ASSETS.put("11", "佣金收入");
+	ASSETS.put("12", "福利收入");
+	ASSETS.put("13", "转账收入");
+	ASSETS.put("14", "充值收入");
+	ASSETS.put("21", "佣金支出");
+	ASSETS.put("22", "福利支出");
+	ASSETS.put("23", "提现支出");
+	ASSETS.put("24", "商品支出");
+	ASSETS.put("25", "转账支出");
 	
 	ORDERSTATUS.put("-2", "订单删除");
 	ORDERSTATUS.put("-1", "订单取消");
@@ -37,5 +46,9 @@ public class GlobalEnum {
 	VIPLVL.put("2", "银级会员");
 	VIPLVL.put("3", "金级会员");
 	VIPLVL.put("4", "钻级会员");
+	
+	ASSETS_FLAG.put("0", "交易处理中");
+	ASSETS_FLAG.put("1", "交易成功");
+	ASSETS_FLAG.put("2", "交易失败");
     }
 }

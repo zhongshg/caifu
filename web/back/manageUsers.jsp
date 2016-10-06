@@ -31,7 +31,7 @@
 			out.print("<script>alert(\"新增用户成功\");  </script>");
 		}else if (msg != null && msg.equals("suct")) {
 			out.print("<script>alert(\"充值成功\");  </script>");
-		}else if (msg != null && msg.equals("suc")) {
+		}else if (msg != null && msg.equals("sucf")) {
 			out.print("<script>alert(\"充值失败,请稍候尝试!\");  </script>");
 		}
 	} else {

@@ -13,7 +13,7 @@ public class Test {
 
     private void generateTest() {
 	CodeUtils cu = new CodeUtils();
-	cu.generate(6, 20);
+	cu.generate_list(6, 20);
     }
 
     private static void createCodeTest() throws SQLException {

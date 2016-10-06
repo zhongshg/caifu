@@ -22,6 +22,7 @@ import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
+import job.tot.global.GlobalEnum;
 import job.tot.util.CodeUtils;
 import job.tot.util.DateUtil;
 import job.tot.util.DbConn;
@@ -42,12 +43,12 @@ public class AssetsINDao extends AbstractDao {
      *            要查询的字段
      */
     public DataField getByCol(String where) {
-	String fieldArr = "id,assets_in,balance,wealth";
+	String fieldArr = "id,uid,amount,type,ts,oid";
 	return getFirstData("select " + fieldArr + " from assets_in where " + where, fieldArr);
     }
 
     public List<Map<String, String>> searchBywhere(String where) {
-	String fieldArr = "id,assets_in,balance,wealth";
+	String fieldArr = "id,uid,amount,type,ts,oid";
 	StringBuffer sql = new StringBuffer("select ");
 	sql.append(fieldArr);
 	sql.append(" from assets_in  ");
@@ -64,6 +65,7 @@ public class AssetsINDao extends AbstractDao {
 	    while (rs.next()) {
 		// id,assets_in,balance,wealth
 		Map<String, String> assets_in = new HashMap<String, String>();
+		assets_in.put("id", rs.getString("id"));
 		assets_in.put("uid", rs.getString("uid"));
 		assets_in.put("amount", rs.getString("amount"));
 		assets_in.put("type", rs.getString("type"));
@@ -80,22 +82,22 @@ public class AssetsINDao extends AbstractDao {
 	return assets_inList;
     }
 
-    public boolean add(Map<String,String> assets_in, Connection conn) {
+    public boolean add(Map<String, String> assets_in, Connection conn) {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	// id,assets_in,balance,wealth
-	String sql = "insert into assets_in(uid,amount,type,oid) values(?,?,?,?)";
+	String sql = "insert into assets_in(uid,amount,type,oid,dr) values(?,?,?,?,?)";
 	try {
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1, assets_in.get("uid"));
 	    ps.setString(2, assets_in.get("amount"));
 	    ps.setString(3, assets_in.get("type"));
 	    ps.setString(4, assets_in.get("oid"));
+	    ps.setString(5, assets_in.get("dr"));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    DBUtils.closePrepareStatement(ps);
 	    DBUtils.closeConnection(conn);
 	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
@@ -107,21 +109,24 @@ public class AssetsINDao extends AbstractDao {
 	return returnValue;
     }
 
-    public boolean del(String id) throws ObjectNotFoundException, DatabaseException {
-	return exe("delete from assets_in where id=" + id);
-    }
+//    public boolean del(String id) throws ObjectNotFoundException, DatabaseException {
+//	return exe("delete from assets_in where id=" + id);
+//    }
 
     public boolean update(Map<String, String> assets_in) throws ObjectNotFoundException, DatabaseException {
 	try {
 	    String sql = "update assets_in set ";
 	    for (String key : assets_in.keySet()) {
-		sql +=key;
+		if (key.equals("id")) {
+		    continue;
+		}
+		sql += key;
 		sql += "=";
 		sql += assets_in.get(key);
 		sql += ",";
 	    }
-	    sql =  sql.substring(0, sql.length() - 1);
-	    sql +=" where id=" + assets_in.get("id");
+	    sql = sql.substring(0, sql.length() - 1);
+	    sql += " where id=" + assets_in.get("id");
 	    System.out.println(sql.toString());
 	    return exe(sql.toString());
 	} catch (ObjectNotFoundException e) {
@@ -130,5 +135,47 @@ public class AssetsINDao extends AbstractDao {
 	    e.printStackTrace();
 	}
 	return false;
+    }
+
+    public int getTotalCount(String uid) {
+	return getDataCount("select count(1) from assets_in where id=" + uid);
+    }
+
+    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
+	String str = "id,amount,type,dr,ts,oid";
+	StringBuilder sql = new StringBuilder("select ");
+	sql.append(str);
+	sql.append(" from assets_in ");
+	if (where != null && where != "") {
+	    sql.append(" where " + where);
+	}
+	sql.append(" order by ts ");
+	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
+	sql.append(" limit " + offset + "," + pagesize);
+	List<Map<String, String>> assets_inList = new ArrayList<Map<String, String>>();
+	Connection conn = DbConn.getConn();
+	PreparedStatement ptst = null;
+	ResultSet rs = null;
+	try {
+	    ptst = conn.prepareStatement(sql.toString());
+	    rs = ptst.executeQuery();
+	    while (rs.next()) {
+		Map<String, String> assets_in = new HashMap<String, String>();
+		// id,uid,amount,type,remark,dr,ts,oid
+		assets_in.put("id", rs.getString("id"));
+		assets_in.put("amount", rs.getString("amount"));
+		assets_in.put("type", GlobalEnum.ASSETS.get(rs.getString("type")));
+		assets_in.put("dr", GlobalEnum.ASSETS_FLAG.get(rs.getString("dr")));
+		assets_in.put("ts", rs.getString("ts").substring(0, 19));
+		assets_in.put("oid", rs.getString("oid"));
+		assets_inList.add(assets_in);
+	    }
+	} catch (SQLException ex) {
+	    log.log(Level.SEVERE, null, ex);
+	    ex.printStackTrace();
+	} finally {
+	    DbConn.getAllClose(conn, ptst, rs);
+	}
+	return assets_inList;
     }
 }

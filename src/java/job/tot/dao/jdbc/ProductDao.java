@@ -223,17 +223,16 @@ public class ProductDao extends AbstractDao {
     }
 
     /**
-     * 生成新产品号
-     * 如果存在就删除重新获取 如果不存在就就返回
+     * 生成新商品号
      * @throws  
      * 
      */
     public String getNewProcode(){
 	//获取精确到秒的当前时间,保证编码永远不会重复
-	String date = DateUtil.getStringDate().split(" ")[1].replace(":", "").trim();
+	String date = DateUtil.getStringDateShort().replace("-", "").trim();
 	//生成四位随机数
-	List<String> code = new CodeUtils().generate(4, 1);
-	String proCode = date+code.get(0);
+	List<String> code = new CodeUtils().generate_list(6, 1);
+	String proCode = date + code.get(0);
 	return proCode;
     }
 }

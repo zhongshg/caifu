@@ -23,6 +23,7 @@ import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
+import job.tot.global.GlobalEnum;
 import job.tot.util.CodeUtils;
 import job.tot.util.DateUtil;
 import job.tot.util.DbConn;
@@ -32,7 +33,7 @@ import job.tot.util.DbConn;
  * @since 2016年9月21日 15:51:19 资产数据库操作DAO类
  */
 public class AssetsDao extends AbstractDao {
-    private static Log log = LogFactory.getLog(AssetsDao.class);
+    private static Logger log = Logger.getLogger(AssetsDao.class.getName());
 
     /**
      * @param col
@@ -112,6 +113,9 @@ public class AssetsDao extends AbstractDao {
 	try {
 	    String sql = "update assets set ";
 	    for (String key : assets.keySet()) {
+		if("id".equals(key)){
+		    continue;
+		}
 		sql += key;
 		sql += "=";
 		sql += assets.get(key);
@@ -130,7 +134,7 @@ public class AssetsDao extends AbstractDao {
 		    returnValue = false;
 		}
 	    } catch (SQLException e) {
-		log.error("Sql Exception Error:", e);
+		log.log(Level.SEVERE, "Sql Exception Error:", e);
 		throw new DatabaseException("Got Exception on Call Medthod exe in tot.dao.AbstractDao");
 	    } finally {
 		DBUtils.closeStatement(stmt);
@@ -140,5 +144,60 @@ public class AssetsDao extends AbstractDao {
 	    e.printStackTrace();
 	}
 	return false;
+    }
+    
+    public List<Map<String, String>> get_Limit(int currentpage, int pagesize,String uid) {
+ 	String str = "t.id,t.amount,t.type,t.dr,t.ts,t.oid";
+ 	String ostr = "id,amount,type,dr,ts,oid";
+ 	StringBuilder sql = new StringBuilder("select ");
+ 	sql.append(str);
+ 	sql.append(" from (select ").append(ostr);
+ 	sql.append(" from assets_in where uid=").append(uid);
+ 	sql.append(" union all ");
+ 	sql.append(" select ").append(ostr);
+ 	sql.append(" from assets_out where uid=").append(uid).append(") t");
+ 	sql.append(" order by t.ts ");
+ 	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
+ 	sql.append(" limit " + offset + "," + pagesize);
+ 	System.out.println(sql.toString());
+ 	List<Map<String, String>> assets_inList = new ArrayList<Map<String, String>>();
+ 	Connection conn = DbConn.getConn();
+ 	PreparedStatement ptst = null;
+ 	ResultSet rs = null;
+ 	try {
+ 	    ptst = conn.prepareStatement(sql.toString());
+ 	    rs = ptst.executeQuery();
+ 	    while (rs.next()) {
+ 		Map<String, String> assets_in = new HashMap<String, String>();
+ 		// id,uid,amount,type,remark,dr,ts,oid
+ 		assets_in.put("id", rs.getString("id"));
+ 		assets_in.put("amount", rs.getString("amount"));
+ 		String type = rs.getString("type");
+ 		assets_in.put("type", GlobalEnum.ASSETS.get(type));
+ 		assets_in.put("dr", GlobalEnum.ASSETS_FLAG.get(rs.getString("dr")));
+ 		assets_in.put("ts", rs.getString("ts").substring(0, 19));
+ 		assets_in.put("oid", rs.getString("oid"));
+ 		assets_inList.add(assets_in);
+ 	    }
+ 	} catch (SQLException ex) {
+ 	    log.log(Level.SEVERE, null, ex);
+ 	    ex.printStackTrace();
+ 	} finally {
+ 	    DbConn.getAllClose(conn, ptst, rs);
+ 	}
+ 	return assets_inList;
+     }
+    
+    
+    public int getTotalCount(String uid){
+	String str = "count(1)";
+ 	String ostr = "id";
+ 	StringBuilder sql = new StringBuilder("select count(1)");
+ 	sql.append(" from (select id ");
+ 	sql.append(" from assets_in where uid=").append(uid);
+ 	sql.append(" uinion all ");
+ 	sql.append(" select id");
+ 	sql.append(" from assets_out where uid=").append(uid).append(") t");
+ 	return getDataCount(sql.toString());
     }
 }

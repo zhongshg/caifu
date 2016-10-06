@@ -23,10 +23,14 @@
 		List<Map<String, String>> productsList = DaoFactory.getProductDao().get_Limit(currentpage, pagesize,null);
 		request.setAttribute("productsList", productsList);
 		String msg = RequestUtil.getString(request, "msg");
-		if (msg != null && msg.equals("suca")) {
-			out.print("<script>alert(\"购买成功\");  </script>");
-		} else if(msg != null && msg.equals("error")){
-		    out.print("<script>alert(\"购买失败,请稍后重试\");  </script>");
+		if(msg != null){
+			if (msg.equals("suca")) {
+				out.print("<script>alert(\"购买成功\");  </script>");
+			} else if(msg.equals("error")){
+			    out.print("<script>alert(\"购买失败,请稍后重试\");  </script>");
+			}else if(msg.equals("NOMny")){
+			    out.print("<script>alert(\"购买失败,余额不足,请充值!\");  </script>");
+			}
 		}
 	} else {
 		String search = RequestUtil.getString(request, "search");

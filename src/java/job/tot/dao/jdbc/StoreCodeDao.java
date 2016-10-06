@@ -31,7 +31,7 @@ public class StoreCodeDao extends AbstractDao {
 	List<String> codeList = new ArrayList<String>();
 	CodeUtils codeTool = new CodeUtils();
 	for (int i = 4; i < 7; i++) {
-	    codeList.addAll(codeTool.generate(i, 100));
+	    codeList.addAll(codeTool.generate_list(i, 100));
 	}
 	String sqlStr = "insert into storecode(scode) values(?)";
 	this.bat_list(sqlStr, codeList);

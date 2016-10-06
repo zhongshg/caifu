@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -235,14 +236,36 @@ public class AbstractDao {
 	}
     }
 
-    public void bat_list(String sqlStr, List<String> codeList) {
+    public void bat_list(String sqlStr, List<String> List) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	try {
 	    conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sqlStr);
-	    for (int i = 0; i < codeList.size(); i++) {
-		ps.setString(1, String.valueOf(codeList.get(i)));
+	    for (int i = 0; i < List.size(); i++) {
+		ps.setString(1, String.valueOf(List.get(i)));
+		ps.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    log.error("Sql Exception Error:", e);
+	} finally {
+	    DBUtils.closePrepareStatement(ps);
+	    DBUtils.closeConnection(conn);
+	}
+    }
+    
+    public void bat_map(String sqlStr, Map<Integer,Integer> map) {
+	Connection conn = null;
+	PreparedStatement ps = null;
+	try {
+	    conn = DBUtils.getConnection();
+	    ps = conn.prepareStatement(sqlStr);
+//	    for (int i = 0; i < codeList.size(); i++) {
+//		ps.setString(1, String.valueOf(codeList.get(i)));
+//		ps.executeUpdate();
+//	    }
+	    for (Integer key:map.keySet()) {
+		ps.setString(1, String.valueOf(key));
 		ps.executeUpdate();
 	    }
 	} catch (SQLException e) {

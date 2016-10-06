@@ -18,10 +18,9 @@
 			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
-		totalCount = DaoFactory.getOrdersDao().getTotalCount();
-		String where = "ouserid="+user_id;
-		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,where);
-		request.setAttribute("orderList", orderList);
+		totalCount = DaoFactory.getAssetsDao().getTotalCount(user_id);
+		List<Map<String, String>> assetsList = DaoFactory.getAssetsDao().get_Limit(currentpage, pagesize,user_id);
+		request.setAttribute("assetsList", assetsList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
 			out.print("<script>alert(\"删除成功\");  </script>");
@@ -34,10 +33,10 @@
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
 				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
-				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
-				request.setAttribute("orderList", orderList);
+				List<Map<String, String>> assetsList = DaoFactory.getOrdersDao().searchBywhere(where);
+				request.setAttribute("assetsList", assetsList);
 				currentpage = 1;
-				pagesize = orderList.size();
+				pagesize = assetsList.size();
 				if (pagesize > 50) {
 					out.print("<script>alert(\"数据量太大,请精确查询条件\");  </script>");
 					return;
@@ -62,7 +61,7 @@
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
 							<%
-							out.print(SearchUtil.getOrdersSelect("1"));
+								out.print(SearchUtil.getOrdersSelect("1"));
 							%>
 						</select></td>
 						<th width="70">关键字:</th>
@@ -83,40 +82,25 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>订单号</th>
-							<th style="display:none">会员名称</th>
-							<th>会员号</th>
-							<th style="display:none">商品编号</th>
-							<th>商品名称</th>
-							<th>商品价格</th>
-							<th>商品数量</th>
-							<th>订单总额</th>
-							<th>下单时间</th>
-							<th>发货时间</th>
-							<th>订单状态</th>
-							<th>最后状态时间</th>
+								<!-- id,amount,type,dr,ts,oid -->
+							<th>ID</th>
+							<th>金额</th>
+							<th>类型</th>
+							<th>交易时间</th>
+							<th>交易状态</th>
 							<th>操作</th>
 						</tr>
-						<c:forEach items="${orderList}" var="orderMap">
+						<c:forEach items="${assetsList}" var="assetsMap">
 							<tr>
-								<td class="tc"><input name="id[]" value="${orderMap.oid}"
+								<td class="tc"><input name="id[]" value="${assetsMap.id}"
 									type="checkbox"></td>
-								<td>${orderMap.onum}</td>
-								<td style="display:none">${orderMap.oUserName}</td>
-								<td>${orderMap.ouserid}</td>
-								<td style="display:none">${orderMap.pid}</td>
-								<td>${orderMap.pname}</td>
-								<td>${orderMap.oprice}</td>
-								<td>${orderMap.ocount}</td>
-								<td>${orderMap.oamountmoney}</td>
-								<td>${orderMap.odt}</td>
-								<td>${orderMap.osenddt}</td>
-								<td>${orderMap.ostatus}</td>
-								<td>${orderMap.olastupdatedt}</td>
+								<td>${assetsMap.id}</td>
+								<td>${assetsMap.amount}</td>
+								<td>${assetsMap.type}</td>
+								<td>${assetsMap.ts}</td>
+								<td>${assetsMap.dr}</td>
 								<td><a class="link-update"
-									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
-									class="link-del"
-									href="manageOrder.jsp?rmr=del&oid=${orderMap.oid}">删除</a></td>
+									href="tradeDetailView.jsp?rm=view&id=${assetsMap.id}">查看</a> </td>
 							</tr>
 						</c:forEach>
 					</table>

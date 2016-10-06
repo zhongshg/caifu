@@ -3,8 +3,8 @@ package job.tot.dao.jdbc;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
@@ -64,14 +64,15 @@ public class UCodeDao extends AbstractDao {
      * 生成code
      */
     public void createCode() throws SQLException {
-	List<String> codeList = new ArrayList<String>();
+	Map<Integer,Integer> codeMap = new HashMap<Integer,Integer>();
 	CodeUtils codeTool = new CodeUtils();
 	//i=5 i<9 表示生成 5-8位的数字
 	for (int i = 5; i < 9; i++) {
-	    codeList.addAll(codeTool.generate(i, 100));
+	    codeMap.putAll(codeTool.generate_map(i, 3000));
+	   // codeList.addAll(codeTool.generate(i, 100));
 	}
 	String sqlStr = "insert into ucode(ucode) values(?)";
-	this.bat_list(sqlStr, codeList);
+	this.bat_map(sqlStr, codeMap);
     }
     
 }

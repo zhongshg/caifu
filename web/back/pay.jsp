@@ -10,16 +10,23 @@
 		assets.put("id", id);
 		assets.put("assets", money);
 		Connection conn = DBUtils.getConnection();
-		//更新用户资产
-		flag = DaoFactory.getAssetsDao().update(conn,assets);
-		//新增资产收入
-		Map<String,String> assets_in = new HashMap<String,String>();
-		//uid,amount,type,oid
-		assets_in.put("uid", id);
-		assets_in.put("amount", money);
-		assets_in.put("type", "4");//充值
-		assets_in.put("oid", "");
-		DaoFactory.getAssetsINDao().add(assets_in, conn);
+		try{
+			//更新用户资产
+			flag = DaoFactory.getAssetsDao().update(conn,assets);
+			//新增资产收入
+			Map<String,String> assets_in = new HashMap<String,String>();
+			//uid,amount,type,oid
+			assets_in.put("uid", id);
+			assets_in.put("amount", money);
+			assets_in.put("type", "14");//充值
+			assets_in.put("oid", null);
+			assets_in.put("dr", "1");
+			DaoFactory.getAssetsINDao().add(assets_in, conn);
+		}catch(Exception e){
+		    e.printStackTrace();
+		}finally{
+		    DBUtils.closeConnection(conn);
+		}
 		if(flag){
 			response.sendRedirect("manageUsers.jsp?msg=suct");
 		}else{

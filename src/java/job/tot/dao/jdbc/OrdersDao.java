@@ -31,7 +31,7 @@ import job.tot.util.DbConn;
  * 订单数据库操作DAO类
  */
 public class OrdersDao extends AbstractDao {
-    private static Log log = LogFactory.getLog(OrdersDao.class);
+    private static Logger log = Logger.getLogger(OrdersDao.class.getName());
 
     /**
      * @param col
@@ -80,7 +80,7 @@ public class OrdersDao extends AbstractDao {
 		orderList.add(orders);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(OrdersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
@@ -101,14 +101,14 @@ public class OrdersDao extends AbstractDao {
 	return getDataCount("select max(oid) from orders");
     }
 
-    public boolean add(Map<String,String> orders) {
-	Connection conn = null;
+    public boolean add(Connection conn,Map<String,String> orders) {
+	//Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	//oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark
 	String sql = "insert into orders(odt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,pName) values(?,?,?,?,?,?,?,?,?,?,?)";
 	try {
-	    conn = DBUtils.getConnection();
+	   // conn = DBUtils.getConnection();
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1,orders.get("oDt"));
 	    ps.setString(2,orders.get("oLastUpdateDt"));
@@ -125,12 +125,12 @@ public class OrdersDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    Logger.getLogger(OrdersDao.class.getName()).log(Level.SEVERE, null, e);
+	    DBUtils.closeConnection(conn);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
 	    DBUtils.closePrepareStatement(ps);
-	    DBUtils.closeConnection(conn);
 	}
 	return returnValue;
     }
@@ -159,7 +159,7 @@ public class OrdersDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    Logger.getLogger(OrdersDao.class.getName()).log(Level.SEVERE, null, e);
+	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
@@ -210,7 +210,7 @@ public class OrdersDao extends AbstractDao {
 		orderList.add(orders);
 	    }
 	} catch (SQLException ex) {
-	    Logger.getLogger(OrdersDao.class.getName()).log(Level.SEVERE, null, ex);
+	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
 	    DbConn.getAllClose(conn, ptst, rs);
@@ -223,13 +223,15 @@ public class OrdersDao extends AbstractDao {
     }
     
     /**
-     * 
+     * 获取新订单编码
+     * 格式为
+     * 当前时间(精确到秒)+随机4位号码
      */
     public String getNewProcode(){
 	//获取精确到秒的当前时间,保证编码永远不会重复
 	String date = DateUtil.getStringDate().replace("-", "").replace(":","").replace(" ", "").trim();
 	//生成八位随机数
-	List<String> code = new CodeUtils().generate(4, 1);
+	List<String> code = new CodeUtils().generate_list(4, 1);
 	String proCode = date+code.get(0);
 	return proCode;
     }
