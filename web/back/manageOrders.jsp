@@ -113,9 +113,10 @@
 								<td>${orderMap.ostatus}</td>
 								<td>${orderMap.olastupdatedt}</td>
 								<td><a class="link-update"
+									href="manageOrder.jsp?rm=view&id=${orderMap.oid}">查看</a><!-- <a class="link-update"
 									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
 									class="link-del"
-									href="manageOrder.jsp?rmr=del&oid=${orderMap.oid}">删除</a></td>
+									href="manageOrder.jsp?rmr=del&oid=${orderMap.oid}">删除</a> --></td>
 							</tr>
 						</c:forEach>
 					</table>

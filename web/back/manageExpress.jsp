@@ -28,7 +28,7 @@
 			}
 		} else if (act.equals("cancel")) {//取消订单
 		    Map<String, String> orders = new HashMap<String, String>();
-			orders.put("ostatus", "1");//订单取消
+			orders.put("ostatus", "-1");//订单取消
 			orders.put("olastupdatedt", DateUtil.getStringDate());//修改最后一次的状态
 			boolean flag = DaoFactory.getOrdersDao().update(oid, orders);
 			if(flag){

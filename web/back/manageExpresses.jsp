@@ -27,13 +27,13 @@
 			out.print("<script>alert(\"取消订单成功\");  </script>");
 		} else if (msg != null && msg.equals("suce")) {
 			out.print("<script>alert(\"发货成功\");  </script>");
-		} 
+		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
 			if (sr.equals("search")) {//查询订单信息
-				String where = SearchUtil.orderSearchMap.get(search).split("#")[0] +" like '%" + value + "%'  "; 
+				String where = "ostatus=0 and "+SearchUtil.orderSearchMap.get(search).split("#")[0] +" like '%" + value + "%' "; 
 				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
 				request.setAttribute("orderList", orderList);
 				currentpage = 1;

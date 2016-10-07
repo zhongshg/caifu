@@ -88,10 +88,10 @@ public class UsersDao extends AbstractDao {
 	return getFirstData("select " + fieldArr + " from users where id=" + id + " and pwd='" + pwd + "' and isvip=1", fieldArr);
     }
 
-    public DataField getById(String id,String fieldArr) {
-  	return getFirstData("select " + fieldArr + " from users where id=" + id + " and isvip=1", fieldArr);
-      }
-    
+    public DataField getById(String id, String fieldArr) {
+	return getFirstData("select " + fieldArr + " from users where id=" + id + " and isvip=1", fieldArr);
+    }
+
     public void batDel(String[] s) {
 	this.bat("delete from users where id=?", s);
     }
@@ -105,61 +105,72 @@ public class UsersDao extends AbstractDao {
 	return getDataCount("select max(id) from users");
     }
 
-    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store,Map<String,String> orders) throws SQLException {
+    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store, Map<String, String> orders)
+	    throws SQLException {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = false;
 	try {
 	    conn = DBUtils.getConnection();
 	    conn.setAutoCommit(false);
-	    
+
 	    String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store,viplvl,isvip) values(?,?,?,?,?,?,?,?,?,?,?)";
 	    ps = conn.prepareStatement(sql.toString());
-	    ps.setString(1,uname);
-	    ps.setString(2,password);
-	    ps.setString(3,id);
-	    ps.setString(4,cardid);
-	    ps.setString(5,bankcard);
-	    ps.setString(6,tel);
-	    ps.setString(7,parentid);
-	    ps.setString(8,nick);
-	    ps.setString(9,store);
-	    ps.setInt(10,1);
+	    ps.setString(1, uname);
+	    ps.setString(2, password);
+	    ps.setString(3, id);
+	    ps.setString(4, cardid);
+	    ps.setString(5, bankcard);
+	    ps.setString(6, tel);
+	    ps.setString(7, parentid);
+	    ps.setString(8, nick);
+	    ps.setString(9, store);
+	    ps.setInt(10, 1);
 	    ps.setInt(11, 1);
 	    if (ps.executeUpdate() != 1) {
 		returnValue = true;
 	    }
-	    
+
 	    // 开始记录代理信息
-	    Map<String,String> agency = new HashMap<String,String>();
+	    Map<String, String> agency = new HashMap<String, String>();
 	    agency.put("uid", id);
 	    agency.put("parentid", parentid);
 	    returnValue = DaoFactory.getAgencyDao().add(agency, conn);
-	    if(!returnValue){
+	    if (!returnValue) {
 		return returnValue;
 	    }
-	    
+
 	    // 开始新增资产财富表信息
-	    returnValue =  DaoFactory.getAssetsDao().add(id, conn);
-	    if(!returnValue){
+	    returnValue = DaoFactory.getAssetsDao().add(id, conn);
+	    if (!returnValue) {
 		return returnValue;
 	    }
+	    // 开始新增订单信息
 	    returnValue = DaoFactory.getOrdersDao().add(conn, orders);
-	    if(!returnValue){
+	    if (!returnValue) {
 		return returnValue;
 	    }
+	    // 开始新增资产支出信息
+	    Map<String, String> assets_out = new HashMap<String, String>();
+	    assets_out.put("uid", parentid);
+	    assets_out.put("amount", orders.get("oAmountMoney"));
+	    assets_out.put("type", "24");// 商品支出
+	    assets_out.put("oid", orders.get("oNum"));
+	    assets_out.put("dr", "1");
+	    DaoFactory.getAssetsOUTDao().add(assets_out, conn);
+
 	    try {
-		//开始更新会员号库存表
-		returnValue = DaoFactory.getuCodeDao().update(id,conn);
+		// 开始更新会员号库存表
+		returnValue = DaoFactory.getuCodeDao().update(id, conn);
 	    } catch (ObjectNotFoundException e) {
 		e.printStackTrace();
 	    } catch (DatabaseException e) {
 		e.printStackTrace();
-	    }finally{
+	    } finally {
 		DBUtils.closeStatement(ps);
 		DBUtils.closeConnection(conn);
 	    }
-	    //提交所有操作
+	    // 提交所有操作
 	    conn.commit();
 	} catch (SQLException e) {
 	    log.log(Level.SEVERE, null, e);
@@ -179,7 +190,7 @@ public class UsersDao extends AbstractDao {
 	String sql = "update users set ";
 	List<String> values = new ArrayList<String>();
 	for (String key : users.keySet()) {
-	    if(key.equals("id")){
+	    if (key.equals("id")) {
 		continue;
 	    }
 	    sql += key + "=?,";

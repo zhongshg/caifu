@@ -24,7 +24,7 @@
 			</div>
 			<div class="top-info-wrap">
 				<ul class="top-info-list clearfix">
-					<li><a href="#"><%=session.getAttribute("admin_name") %></a></li>
+					<li><a href="manageUser.jsp?rm=edit&id=<%=session.getAttribute("admin_id") %>" target="mainFrame"><%=session.getAttribute("admin_name") %></a></li>
 					<li><a href="../login.jsp?act=exit" target="_top">退出</a></li>
 				</ul>
 			</div>

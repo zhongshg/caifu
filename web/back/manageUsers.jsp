@@ -124,7 +124,7 @@
 								<a class="link-update"
 									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
 									class="link-del"
-									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
+									href="javascript:del(${userMap.id});">删除</a></td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -153,6 +153,15 @@
 		var src_to = "manageUsers.jsp?sr=search&search=" + search + "&value="
 				+ value;
 		window.location.href = encodeURI(encodeURI(src_to));
+	}
+	function del(id){
+		if("88888"==id){
+			alert("管理员无法删除");
+			return;
+		}
+		if(confirm("确定删除会员"+id+"吗？")){
+			window.location.href="manageUser.jsp?rmr=del&uid="+id;
+		}
 	}
 </script>
 </html>

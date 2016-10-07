@@ -42,12 +42,12 @@ public class GlobalEnum {
 	ASSETS.put("24", "商品支出");
 	ASSETS.put("25", "转账支出");
 	
-	ORDERSTATUS.put("-2", "订单删除");
-	ORDERSTATUS.put("-1", "订单取消");
+	ORDERSTATUS.put("-2", "已删除");
+	ORDERSTATUS.put("-1", "已取消");
 	ORDERSTATUS.put("0", "未处理");
-	ORDERSTATUS.put("1", "订单确认");
-	ORDERSTATUS.put("2", "订单发货");
-	ORDERSTATUS.put("3", "订单完成");
+	ORDERSTATUS.put("1", "已确认");
+	ORDERSTATUS.put("2", "已发货");
+	ORDERSTATUS.put("3", "已完成");
 	
 	VIPLVL.put("0", "非会员");
 	VIPLVL.put("1", "普通会员");

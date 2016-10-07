@@ -30,6 +30,7 @@
 
     try {
 		String parentid = String.valueOf(session.getAttribute("user_id"));
+		String parengname = String.valueOf(session.getAttribute("user_name"));
 		DataField assetsDF = DaoFactory.getAssetsDao().getByCol("id=" + parentid);
 		Float balance = assetsDF.getFloat("balance");
 		Float old_assets = assetsDF.getFloat("assets");
@@ -61,8 +62,8 @@
 							orders.put("oPrice", allPrice);
 							orders.put("oCount", allVAL);
 							orders.put("oAmountMoney", sum);
-							orders.put("ouserid", uid);
-							orders.put("ousername", uname);
+							orders.put("ouserid", parentid);
+							orders.put("ousername", parengname);
 							orders.put("pid",allid);
 							orders.put("pName", allName);
 						    flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, uid, nick, store,orders);

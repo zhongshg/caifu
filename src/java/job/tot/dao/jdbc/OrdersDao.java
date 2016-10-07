@@ -1,20 +1,15 @@
 package job.tot.dao.jdbc;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
@@ -233,7 +228,7 @@ public class OrdersDao extends AbstractDao {
      */
     public String getNewProcode(){
 	//获取精确到秒的当前时间,保证编码永远不会重复
-	String date = DateUtil.getStringDate().replace("-", "").replace(":","").replace(" ", "").trim();
+	String date = DateUtil.getStringDate().split(" ")[1].replace(":", "");
 	//生成八位随机数
 	List<String> code = new CodeUtils().generate_list(4, 1);
 	String proCode = date+code.get(0);

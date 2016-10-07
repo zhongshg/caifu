@@ -14,6 +14,7 @@
 	String osenddt = null;
 	String ostatus = null;
 	String olastupdatedt = null;
+	String pName = null;
 	String rmr = RequestUtil.getString(request, "rmr");
 	if (rmr != null) {
 		onum = RequestUtil.getString(request, "onum");
@@ -90,8 +91,8 @@
 			    response.sendRedirect("manageOrders.jsp?msg=error");
 			}
 		}
-	}else if (rm != null && rm.equals("edit")) {
-		DataField order = DaoFactory.getOrdersDao().getByCol("oid=" + id);
+	}else if (rm != null && rm.equals("view")) {
+	    DataField order = DaoFactory.getOrdersDao().getByCol("oid=" + id);
 		onum = order.getString("onum");
 		oUserName = order.getString("oUserName");
 		ocount = order.getString("ocount");
@@ -101,6 +102,7 @@
 		osenddt = order.getString("osenddt");
 		ostatus = order.getString("ostatus");
 		olastupdatedt = order.getString("olastupdatedt");
+		pName = order.getString("pName");
 	}
 %>
 <!DOCTYPE html>
@@ -121,51 +123,58 @@
 				<div class="row">
 					<label class="field" for="onum">订单编号</label> <input type="text"
 						value="<%=onum==null?"":onum%>" class="input-text-password noPic input-click"
-						id="onum" name="onum" placeholder="如果为空则自动生成订单编号">
+						id="onum" name="onum" placeholder="如果为空则自动生成订单编号" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="oUserName">下单人</label> <input type="text"
 						value="<%=oUserName==null?"":oUserName%>" class="input-text-password noPic input-click"
-						id="oUserName" name="oUserName">
+						id="oUserName" name="oUserName" disabled="disabled">
+				</div>
+				<div class="row">
+					<label class="field" for="pName">商品名称</label> <input type="text"
+						value="<%=pName==null?"":pName%>" class="input-text-user noPic input-click"
+						id="pName" name="pName" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="oprice">商品价格</label> <input type="text"
 						value="<%=oprice==null?"":oprice%>" class="input-text-user noPic input-click"
-						id="oprice" name="oprice">
+						id="oprice" name="oprice" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="ocount">商品数量</label> <input type="text"
 						value="<%=ocount==null?"":ocount%>" class="input-text-user noPic input-click"
-						id="ocount" name="ocount">
+						id="ocount" name="ocount" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="oamountmoney">订单总额</label> <input type="text"
 						value="<%=oamountmoney==null?"":oamountmoney%>" class="input-text-user noPic input-click"
-						id="oamountmoney" name="oamountmoney">
+						id="oamountmoney" name="oamountmoney" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="odt">下单时间</label> <input type="text"
 						value="<%=odt==null?"":odt%>" class="input-text-user noPic input-click"
-						id="odt" name="odt">
+						id="odt" name="odt" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="osenddt">发货时间</label> <input type="text"
 						value="<%=osenddt==null?"":osenddt%>" class="input-text-user noPic input-click"
-						id="osenddt" name="osenddt">
+						id="osenddt" name="osenddt" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="ostatus">订单状态</label> <input type="text"
 						value="<%=ostatus==null?"":ostatus%>" class="input-text-user noPic input-click"
-						id="ostatus" name="ostatus">
+						id="ostatus" name="ostatus" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="olastupdatedt">完成时间</label> <input type="text"
 						value="<%=olastupdatedt==null?"":olastupdatedt%>" class="input-text-user noPic input-click"
-						id="olastupdatedt" name="olastupdatedt">
+						id="olastupdatedt" name="olastupdatedt" disabled="disabled">
 				</div>
+				<!-- 
 				<div class="row btnArea">
 					<a class="login-btn" id="submit" onclick="manageOrder();">提交</a>
 				</div>
+				 -->
 			</div>
 		</div>
 	</div>

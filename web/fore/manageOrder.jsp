@@ -12,6 +12,7 @@
 	String osenddt = null;
 	String ostatus = null;
 	String olastupdatedt = null;
+	String pName = null;
 	if (rm != null && rm.equals("view")) {
 		DataField order = DaoFactory.getOrdersDao().getByCol("oid=" + id);
 		onum = order.getString("onum");
@@ -23,6 +24,7 @@
 		osenddt = order.getString("osenddt");
 		ostatus = order.getString("ostatus");
 		olastupdatedt = order.getString("olastupdatedt");
+		pName = order.getString("pName");
 	}
 %>
 <!DOCTYPE html>
@@ -49,6 +51,11 @@
 					<label class="field" for="oUserName">下单人</label> <input type="text"
 						value="<%=oUserName==null?"":oUserName%>" class="input-text-password noPic input-click"
 						id="oUserName" name="oUserName" disabled="disabled">
+				</div>
+				<div class="row">
+					<label class="field" for="pName">商品名称</label> <input type="text"
+						value="<%=pName==null?"":pName%>" class="input-text-user noPic input-click"
+						id="pName" name="pName" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="oprice">商品价格</label> <input type="text"
