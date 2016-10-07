@@ -23,8 +23,12 @@
 		List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize,where);
 		request.setAttribute("usersList", usersList);
 		String msg = RequestUtil.getString(request, "msg");
-		if (msg != null && msg.equals("suce")) {
-			out.print("<script>alert(\"审批成功\");  </script>");
+		if (msg != null ) {
+		    if(msg.equals("suce")){
+				out.print("<script>alert(\"审批成功\");  </script>");
+		    }else{
+				out.print("<script>alert(\"审批失败\");  </script>");
+		    }
 		}
 	} else {
 		String search = RequestUtil.getString(request, "search");

@@ -19,13 +19,16 @@
 	rel="Shortcut Icon">
 <title>后台管理系统</title>
 </head>
-<frameset rows="10%,*" border="1" framespacing="0" id="mainset"
+
+
+<frameset cols="70%,30%" border="1" framespacing="0" id="mainset"
 	name="mainset">
-	<frame src="top.jsp" id="topFrame" name="topFrame">
-	<frameset cols="230,*">
-		<frame src="left.jsp?act=login" name="leftFrame" id="leftFrame"
-			crolling="no" noresize="noresize" title="leftFrame"">
-		<frame src="../report/report.jsp" name="mainFrame" id="mainFrame"
-			scrolling="yes" title="mainFrame">
+	<frame src="mainReport.jsp" id="topFrame" name="topFrame">
+	<frameset rows="50%,*">
+		<frame src="weather.jsp" name="leftFrame" id="leftFrame" crolling="no"
+			noresize="noresize" title="leftFrame"">
+		<frame src="logininfo.jsp" name="mainFrame" id="mainFrame"
+			scrolling="no" title="mainFrame">
 	</frameset>
+</frameset>
 </html>

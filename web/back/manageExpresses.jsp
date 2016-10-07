@@ -19,7 +19,8 @@
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
 		totalCount = DaoFactory.getOrdersDao().getTotalCount();
-		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,null);
+		String where = "ostatus=0";
+		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,where);
 		request.setAttribute("orderList", orderList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
@@ -31,8 +32,8 @@
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
-			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
+			if (sr.equals("search")) {//查询订单信息
+				String where = SearchUtil.orderSearchMap.get(search).split("#")[0] +" like '%" + value + "%'  "; 
 				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
 				request.setAttribute("orderList", orderList);
 				currentpage = 1;

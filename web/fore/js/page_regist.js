@@ -22,10 +22,36 @@ $(document).ready(function() {
 		});
 
 	};
-
 	// ajax提交注册信息
 	$("#submit").bind("click", function() {
-		regist();
+		var sum = parseInt($("#spanMoney").html());
+		if(sum < 3000){
+			$(".login-error").show();
+			$(".login-error").html("所选商品总额不足3000");
+			return;
+		}
+		var allID = "";
+		$("input:checkbox:checked").map(function(index,elem) {
+			var id = $(elem).val();
+			allID += id+",";
+	    })
+	    allID = allID.substring(0,allID.length-1);
+		var allName = "";
+		var allVAL = "";
+		var allPrice = "";
+		var idArr = allID.split(',');
+		for(var i=0;i<idArr.length;i++)
+		{
+			allVAL += $("#pro"+idArr[i]).val()+",";
+			allPrice += $("#price"+idArr[i]).val() +",";
+			allName += $("#pname"+idArr[i]).val() +","; 
+		}
+		allVAL = allVAL.substring(0,allVAL.length-1);
+		allPrice = allPrice.substring(0,allPrice.length-1);
+		allName = allName.substring(0,allName.length-1);
+		//alert(allVAL+"---"+allPrice);
+	    //alert(allID);
+	    regist(allID,allVAL,allPrice,allName);
 	});
 
 	$("body").each(function() {
@@ -38,7 +64,7 @@ $(document).ready(function() {
 
 });
 
-function regist() {
+function regist(allID,allVAL,allPrice,allName) {
 	// 校验uname, password，校验如果失败的话不提交
 	$.ajax({
 		url : "./validate.jsp",
@@ -51,7 +77,12 @@ function regist() {
 			bankcard : $("#bankcard").val(),
 			tel : $("#tel").val(),
 			storecode : $("#storecode").val(),
-			nick:$("#nick").val()
+			nick : $("#nick").val(),
+			allid : allID,
+			allVAL : allVAL,
+			allPrice : allPrice,
+			allName : allName,
+			sum: $("#spanMoney").html()
 		},
 		dataType : "json",
 		beforeSend : function() {
@@ -71,11 +102,7 @@ function regist() {
 					// 参数传递失败
 					$(".login-error").show();
 					$(".login-error").html("会员号、用户名、密码、身份证号以及银行卡号不能为空");
-				} else if(data.code == 7){
-					// 非法会员号
-					$(".login-error").show();
-					$(".login-error").html("非法会员号");
-				}else if (data.code == 3) {
+				} else if (data.code == 3) {
 					// 银行卡号已经被注册
 					$("#bankcard").addClass("error");
 					$("#bankcard").after(registError);
@@ -97,7 +124,11 @@ function regist() {
 					// 新增用户失败
 					$(".login-error").show();
 					$(".login-error").html("会员号已经被注册!");
-				}else {
+				}else if(data.code == 7){
+					// 可用余额不足
+					$(".login-error").show();
+					$(".login-error").html("可用余额不足");
+				}else{
 					// 系统错误
 					$(".login-error").show();
 					$(".login-error").html("系统错误");
@@ -105,4 +136,27 @@ function regist() {
 			}
 		},
 	});
+};
+
+function selectPro(id){
+	var selectp = $("#pro"+id).val();
+	var price = $("#price"+id).val();
+	var cur_money = $("#spanMoney").html();
+	var sum = parseInt(cur_money) + selectp*price;
+	$("#spanMoney").html(sum);
+};
+
+function check(id){
+	if($("#check"+id).is(":checked")){
+		$("#pro"+id).show();
+	}else{
+		var selectp = $("#pro"+id).val();
+		var price = $("#price"+id).val();
+		var cur_money = $("#spanMoney").html();
+		var sum = parseInt(cur_money) - selectp*price;
+		$("#spanMoney").html(sum);
+		$("#pro"+id).val("");
+		$("#pro"+id).hide();
+	}
+	
 }

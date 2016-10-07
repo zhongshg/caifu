@@ -67,6 +67,8 @@
 						<th width="70">关键字:</th>
 						<td><input class="common-text" name="keywords" value=""
 							id="keywords" type="text"></td>
+							<th width="50">日期:</th>
+							<td><input type="date" value="<%=DateUtil.getStringDateShort()%>"/></td>
 						<td><input class="btn btn-primary btn2" name="query"
 							value="查询" type="submit" onclick="javascript:search()"></td>
 					</tr>

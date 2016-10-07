@@ -31,8 +31,9 @@
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
 		if (sr != null) {
-			if (sr.equals("search")) {//查询用户信息
-				String where = SearchUtil.orderSearchMap.get(search) + " like '%" + value + "%'  ";
+			if (sr.equals("search")) {//查询订单信息
+				String where = SearchUtil.orderSearchMap.get(search).split("#")[0] + " like '%" + value + "%'  ";
+				System.out.println(where);
 				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
 				request.setAttribute("orderList", orderList);
 				currentpage = 1;

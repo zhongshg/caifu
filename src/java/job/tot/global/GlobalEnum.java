@@ -20,6 +20,14 @@ public class GlobalEnum {
      * 25-转账支出
      * */
     public static Map<String,String> ASSETS = new HashMap<String,String>();
+    /**
+     * -2-订单删除
+     * -1-订单取消
+     * 0-未处理
+     * 1-订单确认
+     * 2-订单发货
+     * 3-订单完成
+     * */
     public static Map<String,String> ORDERSTATUS = new HashMap<String,String>();
     public static Map<String,String> VIPLVL = new HashMap<String,String>();
     public static Map<String,String> ASSETS_FLAG = new HashMap<String,String>();

@@ -4,9 +4,10 @@
     Author     : Administrator
 --%>
 
-<%@page import="job.tot.util.CodeUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
+<%@page import="job.tot.util.CodeUtils"%>
+<%@page import="job.tot.util.DateUtil"%>
 <%@ page import="java.util.*"%>
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.db.DBUtils"%>
@@ -27,6 +28,11 @@
     String tel = RequestUtil.getString(request, "tel");
     String nick = RequestUtil.getString(request, "nick");
     String store = RequestUtil.getString(request, "store");
+    String allid = RequestUtil.getString(request, "allid");
+    String allVAL = RequestUtil.getString(request, "allVAL");
+    String allPrice = RequestUtil.getString(request, "allPrice");
+    String allName = RequestUtil.getString(request, "allName");
+    String sum = RequestUtil.getString(request, "sum");
     int code = -1;
 
     try {
@@ -53,8 +59,22 @@
 					    id = DaoFactory.getuCodeDao().getNewCode();
 					} */
 					password = new MD5().getMD5of32(password);
-					//管理员账户添加的会员上级都为88888
-					flag = DaoFactory.getUserDao().add(uname, password, "88888", cardid, bankcard, tel, uid, nick, store);
+					
+					String oNum = DaoFactory.getOrdersDao().getNewProcode();
+					Map<String,String> orders = new HashMap<String,String>();
+					orders.put("oDt", DateUtil.getStringDate());
+					orders.put("oLastUpdateDt", DateUtil.getStringDate());
+					orders.put("oNum", oNum);
+					orders.put("oPrice", allPrice);
+					orders.put("oCount", allVAL);
+					orders.put("oAmountMoney", sum);
+					orders.put("ouserid", uid);
+					orders.put("ousername", uname);
+					orders.put("pid",allid);
+					orders.put("pName", allName);
+					//管理员账户添加的会员上级都为-1 管理员添加顶级用户，0代表无上级
+					flag = DaoFactory.getUserDao().add(uname, password, "0", cardid, bankcard, tel, uid, nick, store,orders);
+					//下订单
 					if (flag) {
 					    code = 0;
 					} else {

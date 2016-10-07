@@ -15,6 +15,7 @@
 <%@ page import="job.tot.util.Forward"%>
 <%
 	String newCode = DaoFactory.getuCodeDao().getNewCode();
+	List<Map<String,String>> products = DaoFactory.getProductDao().searchBywhere(null, null);
 %>
 <!DOCTYPE html>
 <html>
@@ -46,7 +47,7 @@
 				<input type="text" value="" class="input-text-user noPic input-click" name="nick" id="nick">
 			</div>
 			<div class="row">
-				<label class="field" for="uname">姓名</label>
+				<label class="field" for="uname" maxlength="20">姓名</label>
 				<input type="text" value="" class="input-text-user noPic input-click" name="uname" id="uname">
 			</div>
 			<div class="row">
@@ -59,21 +60,36 @@
 			</div>
 			<div class="row">
 				<label class="field" for="storecode">专卖店号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="storecode" id="storecode">
+				<input type="text" value="" class="input-text-user noPic input-click" name="storecode" id="storecode" maxlength="6">
 			</div>
 			<div class="row">
 				<label class="field" for="cardid">身份证号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="cardid" id="cardid">
+				<input type="text" value="" class="input-text-user noPic input-click" name="cardid" id="cardid" maxlength="18">
 			</div>
 			<div class="row">
 				<label class="field" for="bankcard">银行卡号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="bankcard" id="bankcard">
+				<input type="text" value="" class="input-text-user noPic input-click" name="bankcard" id="bankcard" maxlength="18">
 			</div>
 			<div class="row">
 				<label class="field" for="tel">手机号</label>
-				<input type="text" value="" class="input-text-user noPic input-click" name="tel" id="tel">
+				<input type="text" value="" class="input-text-user noPic input-click" name="tel" id="tel" maxlength="11">
 			</div>
-			
+			<div class="row">
+			<label class="field" for="pronum">选择商品</label>
+			</div>
+			<% for(Map<String,String> product:products){%>
+			<div class="row">
+				<input type="checkbox" onchange="check(<%=product.get("id") %>);" id="check<%=product.get("id") %>"
+				value="<%=product.get("id") %>"><%=product.get("proname")+"(单价:"+product.get("price")+")" %>
+				<input type="hidden" id="price<%=product.get("id") %>" value="<%=product.get("price")%>">
+				<input type="hidden" id="pname<%=product.get("id") %>" value="<%=product.get("proname")%>">
+				<input type="text" style="display:none;height:30px;width:60px;" maxlength="4" value="" class="input-text" 
+				name="pro<%=product.get("id")%>" id="pro<%=product.get("id")%>" placeholder="输入数量" onchange="selectPro(<%=product.get("id")%>);">
+			</div>
+			<% } %>
+			<div class="row">
+			总金额：<b><span id="spanMoney" style=" font-size: 18px; color: red;">0</span></b>&nbsp;元
+			</div>
 			<div class="row btnArea">
 				<a class="login-btn" id="submit">注册</a>
 			</div>

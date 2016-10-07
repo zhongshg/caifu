@@ -20,6 +20,7 @@ import job.tot.dao.DaoFactory;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
+import job.tot.global.GlobalEnum;
 import job.tot.util.DbConn;
 
 /**
@@ -62,7 +63,7 @@ public class UsersDao extends AbstractDao {
 		Map<String, String> users = new HashMap<String, String>();
 		users.put("id", rs.getString("id"));
 		users.put("name", rs.getString("name"));
-		users.put("viplvl", rs.getString("viplvl"));
+		users.put("viplvl", GlobalEnum.VIPLVL.get(rs.getString("viplvl")));
 		users.put("cardid", rs.getString("cardid"));
 		users.put("bankcard", rs.getString("bankcard"));
 		users.put("phone", rs.getString("phone"));
@@ -84,9 +85,13 @@ public class UsersDao extends AbstractDao {
     }
 
     public DataField getByIdAndPwd(String id, String pwd, String fieldArr) {
-	return getFirstData("select " + fieldArr + " from users where id='" + id + "' and pwd='" + pwd + "' and isvip=1", fieldArr);
+	return getFirstData("select " + fieldArr + " from users where id=" + id + " and pwd='" + pwd + "' and isvip=1", fieldArr);
     }
 
+    public DataField getById(String id,String fieldArr) {
+  	return getFirstData("select " + fieldArr + " from users where id=" + id + " and isvip=1", fieldArr);
+      }
+    
     public void batDel(String[] s) {
 	this.bat("delete from users where id=?", s);
     }
@@ -100,8 +105,7 @@ public class UsersDao extends AbstractDao {
 	return getDataCount("select max(id) from users");
     }
 
-    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store) throws SQLException {
-	System.out.println("开始新增用户");
+    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store,Map<String,String> orders) throws SQLException {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = false;
@@ -109,7 +113,7 @@ public class UsersDao extends AbstractDao {
 	    conn = DBUtils.getConnection();
 	    conn.setAutoCommit(false);
 	    
-	    String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store) values(?,?,?,?,?,?,?,?,?)";
+	    String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store,viplvl,isvip) values(?,?,?,?,?,?,?,?,?,?,?)";
 	    ps = conn.prepareStatement(sql.toString());
 	    ps.setString(1,uname);
 	    ps.setString(2,password);
@@ -120,13 +124,13 @@ public class UsersDao extends AbstractDao {
 	    ps.setString(7,parentid);
 	    ps.setString(8,nick);
 	    ps.setString(9,store);
+	    ps.setInt(10,1);
+	    ps.setInt(11, 1);
 	    if (ps.executeUpdate() != 1) {
 		returnValue = true;
 	    }
-	    System.out.println(sql);
 	    
 	    // 开始记录代理信息
-	    System.out.println("开始记录代理信息");
 	    Map<String,String> agency = new HashMap<String,String>();
 	    agency.put("uid", id);
 	    agency.put("parentid", parentid);
@@ -134,18 +138,19 @@ public class UsersDao extends AbstractDao {
 	    if(!returnValue){
 		return returnValue;
 	    }
-	    System.out.println("记录代理信息结束");
 	    
 	    // 开始新增资产财富表信息
-	    System.out.println("开始新增资产财富表信息");
 	    returnValue =  DaoFactory.getAssetsDao().add(id, conn);
 	    if(!returnValue){
 		return returnValue;
 	    }
-	    System.out.println("新增资产财富表信息结束");
+	    returnValue = DaoFactory.getOrdersDao().add(conn, orders);
+	    if(!returnValue){
+		return returnValue;
+	    }
 	    try {
 		//开始更新会员号库存表
-		DaoFactory.getuCodeDao().update(id,conn);
+		returnValue = DaoFactory.getuCodeDao().update(id,conn);
 	    } catch (ObjectNotFoundException e) {
 		e.printStackTrace();
 	    } catch (DatabaseException e) {
@@ -156,11 +161,10 @@ public class UsersDao extends AbstractDao {
 	    }
 	    //提交所有操作
 	    conn.commit();
-	    System.out.println("新增用户结束");
 	} catch (SQLException e) {
 	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
-	    return returnValue;
+	    return false;
 	} finally {
 	    DBUtils.closeStatement(ps);
 	    DBUtils.closeConnection(conn);
@@ -175,6 +179,9 @@ public class UsersDao extends AbstractDao {
 	String sql = "update users set ";
 	List<String> values = new ArrayList<String>();
 	for (String key : users.keySet()) {
+	    if(key.equals("id")){
+		continue;
+	    }
 	    sql += key + "=?,";
 	    values.add(users.get(key));
 	}
@@ -228,7 +235,7 @@ public class UsersDao extends AbstractDao {
 		Map<String, String> users = new HashMap<String, String>();
 		users.put("id", rs.getString("id"));
 		users.put("name", rs.getString("name"));
-		users.put("viplvl", rs.getString("viplvl"));
+		users.put("viplvl", GlobalEnum.VIPLVL.get(rs.getString("viplvl")));
 		users.put("cardid", rs.getString("cardid"));
 		users.put("bankcard", rs.getString("bankcard"));
 		users.put("phone", rs.getString("phone"));

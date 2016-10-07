@@ -18,10 +18,9 @@
 			|| RequestUtil.getString(request, "currentpage").equals("")
 				? currentpage
 				: RequestUtil.getInt(request, "currentpage");
-		totalCount = DaoFactory.getOrdersDao().getTotalCount();
-		String where = "ouserid="+user_id;
-		List<Map<String, String>> orderList = DaoFactory.getOrdersDao().get_Limit(currentpage, pagesize,where);
-		request.setAttribute("orderList", orderList);
+		totalCount = DaoFactory.getAssetsDao().getTotalCount(user_id);
+		List<Map<String, String>> assetsINList = DaoFactory.getAssetsINDao().get_Limit(currentpage, pagesize,user_id);
+		request.setAttribute("assetsINList", assetsINList);
 		String msg = RequestUtil.getString(request, "msg");
 		if (msg != null && msg.equals("sucd")) {
 			out.print("<script>alert(\"删除成功\");  </script>");
@@ -34,10 +33,10 @@
 		if (sr != null) {
 			if (sr.equals("search")) {//查询用户信息
 				String where = SearchUtil.orderSearchMap.get(search) +" like '%" + value + "%'  "; 
-				List<Map<String, String>> orderList = DaoFactory.getOrdersDao().searchBywhere(where);
-				request.setAttribute("orderList", orderList);
+				List<Map<String, String>> assetsINList = DaoFactory.getOrdersDao().searchBywhere(where);
+				request.setAttribute("assetsINList", assetsINList);
 				currentpage = 1;
-				pagesize = orderList.size();
+				pagesize = assetsINList.size();
 				if (pagesize > 50) {
 					out.print("<script>alert(\"数据量太大,请精确查询条件\");  </script>");
 					return;
@@ -51,8 +50,8 @@
 	<div class="main-wrap">
 		<div class="crumb-wrap">
 			<div class="crumb-list">
-				<i class="icon-font"></i><a href="#">数据统计</a><span
-					class="crumb-step">&gt;</span><span class="crumb-name">收入明细</span>
+				<i class="icon-font"></i><a href="#">资金管理</a><span
+					class="crumb-step">&gt;</span><span class="crumb-name">交易明细</span>
 			</div>
 		</div>
 		<div class="search-wrap">
@@ -62,12 +61,14 @@
 						<th width="120">选择类型:</th>
 						<td><select name="search-sort" id="search-sort">
 							<%
-							out.print(SearchUtil.getOrdersSelect("1"));
+								out.print(SearchUtil.getOrdersSelect("1"));
 							%>
 						</select></td>
 						<th width="70">关键字:</th>
 						<td><input class="common-text" name="keywords" value=""
 							id="keywords" type="text"></td>
+						<th width="50">日期:</th>
+						<td><input type="date" value="<%=DateUtil.getStringDateShort()%>"/></td>
 						<td><input class="btn btn-primary btn2" name="query"
 							value="查询" type="submit" onclick="javascript:search()"></td>
 					</tr>
@@ -83,40 +84,25 @@
 						<tr>
 							<th class="tc" width="5%"><input class="allChoose" name=""
 								type="checkbox"></th>
-							<th>订单号</th>
-							<th style="display:none">会员名称</th>
-							<th>会员号</th>
-							<th style="display:none">商品编号</th>
-							<th>商品名称</th>
-							<th>商品价格</th>
-							<th>商品数量</th>
-							<th>订单总额</th>
-							<th>下单时间</th>
-							<th>发货时间</th>
-							<th>订单状态</th>
-							<th>最后状态时间</th>
+								<!-- id,amount,type,dr,ts,oid -->
+							<th>ID</th>
+							<th>金额</th>
+							<th>类型</th>
+							<th>交易时间</th>
+							<th>交易状态</th>
 							<th>操作</th>
 						</tr>
-						<c:forEach items="${orderList}" var="orderMap">
+						<c:forEach items="${assetsINList}" var="assetsINMap">
 							<tr>
-								<td class="tc"><input name="id[]" value="${orderMap.oid}"
+								<td class="tc"><input name="id[]" value="${assetsINMap.id}"
 									type="checkbox"></td>
-								<td>${orderMap.onum}</td>
-								<td style="display:none">${orderMap.oUserName}</td>
-								<td>${orderMap.ouserid}</td>
-								<td style="display:none">${orderMap.pid}</td>
-								<td>${orderMap.pname}</td>
-								<td>${orderMap.oprice}</td>
-								<td>${orderMap.ocount}</td>
-								<td>${orderMap.oamountmoney}</td>
-								<td>${orderMap.odt}</td>
-								<td>${orderMap.osenddt}</td>
-								<td>${orderMap.ostatus}</td>
-								<td>${orderMap.olastupdatedt}</td>
+								<td>${assetsINMap.id}</td>
+								<td>${assetsINMap.amount}</td>
+								<td>${assetsINMap.type}</td>
+								<td>${assetsINMap.ts}</td>
+								<td>${assetsINMap.dr}</td>
 								<td><a class="link-update"
-									href="manageOrder.jsp?rm=edit&id=${orderMap.oid}">修改</a> <a
-									class="link-del"
-									href="manageOrder.jsp?rmr=del&oid=${orderMap.oid}">删除</a></td>
+									href="tradeDetailView.jsp?rm=view&id=${assetsINMap.id}">查看</a> </td>
 							</tr>
 						</c:forEach>
 					</table>

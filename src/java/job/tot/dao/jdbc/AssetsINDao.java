@@ -68,7 +68,8 @@ public class AssetsINDao extends AbstractDao {
 		assets_in.put("id", rs.getString("id"));
 		assets_in.put("uid", rs.getString("uid"));
 		assets_in.put("amount", rs.getString("amount"));
-		assets_in.put("type", rs.getString("type"));
+		assets_in.put("type", GlobalEnum.ASSETS.get(rs.getString("type")));
+		assets_in.put("dr", GlobalEnum.ASSETS_FLAG.get(rs.getString("dr")));
 		assets_in.put("oid", rs.getString("oid"));
 		assets_in.put("ts", rs.getString("ts"));
 		assets_inList.add(assets_in);
@@ -141,14 +142,12 @@ public class AssetsINDao extends AbstractDao {
 	return getDataCount("select count(1) from assets_in where id=" + uid);
     }
 
-    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
+    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String uid) {
 	String str = "id,amount,type,dr,ts,oid";
 	StringBuilder sql = new StringBuilder("select ");
 	sql.append(str);
 	sql.append(" from assets_in ");
-	if (where != null && where != "") {
-	    sql.append(" where " + where);
-	}
+	sql.append(" where uid=" + uid);
 	sql.append(" order by ts ");
 	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
 	sql.append(" limit " + offset + "," + pagesize);

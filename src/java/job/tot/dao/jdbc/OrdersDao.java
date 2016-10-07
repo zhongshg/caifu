@@ -21,6 +21,7 @@ import job.tot.dao.AbstractDao;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
+import job.tot.global.GlobalEnum;
 import job.tot.util.CodeUtils;
 import job.tot.util.DateUtil;
 import job.tot.util.DbConn;
@@ -67,9 +68,9 @@ public class OrdersDao extends AbstractDao {
 		orders.put("oid", rs.getString("oid"));
 		orders.put("otitle", rs.getString("otitle"));
 		orders.put("odt", rs.getString("odt").substring(0, 19));
-		orders.put("osenddt", rs.getString("osenddt").substring(0, 19));
+		orders.put("osenddt", rs.getString("osenddt")==null?"":rs.getString("osenddt").substring(0, 19));
 		orders.put("olastupdatedt", rs.getString("olastupdatedt").substring(0, 19));
-		orders.put("ostatus", rs.getString("ostatus"));
+		orders.put("ostatus", GlobalEnum.ORDERSTATUS.get(rs.getString("ostatus")));
 		orders.put("onum", rs.getString("onum"));
 		orders.put("ocount", rs.getString("ocount"));
 		orders.put("oamountmoney", rs.getString("oamountmoney"));
@@ -101,7 +102,10 @@ public class OrdersDao extends AbstractDao {
 	return getDataCount("select max(oid) from orders");
     }
 
-    public boolean add(Connection conn,Map<String,String> orders) {
+    public boolean add(Connection conn,Map<String,String> orders) throws SQLException {
+	if(conn==null){
+	    conn = DBUtils.getConnection();
+	}
 	//Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
@@ -112,11 +116,11 @@ public class OrdersDao extends AbstractDao {
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1,orders.get("oDt"));
 	    ps.setString(2,orders.get("oLastUpdateDt"));
-	    ps.setInt(3,Integer.parseInt(orders.get("oStatus")));
+	    ps.setInt(3,0);
 	    ps.setString(4,orders.get("oNum"));
-	    ps.setInt(5,Integer.parseInt(orders.get("oCount")));
+	    ps.setString(5,orders.get("oCount"));
 	    ps.setFloat(6,Float.parseFloat(orders.get("oAmountMoney")));
-	    ps.setFloat(7,Float.parseFloat(orders.get("oPrice")));
+	    ps.setString(7,orders.get("oPrice"));
 	    ps.setInt(8,Integer.parseInt(orders.get("ouserid")));
 	    ps.setString(9,orders.get("ousername"));
 	    ps.setString(10,orders.get("pid"));
@@ -199,7 +203,7 @@ public class OrdersDao extends AbstractDao {
 		orders.put("odt", rs.getString("odt")!=null?rs.getString("odt").substring(0, 19):null);
 		orders.put("osenddt", rs.getString("osenddt")!=null?rs.getString("osenddt").substring(0, 19):null);
 		orders.put("olastupdatedt", rs.getString("olastupdatedt")!=null?rs.getString("olastupdatedt").substring(0, 19):null);
-		orders.put("ostatus", rs.getString("ostatus"));
+		orders.put("ostatus", GlobalEnum.ORDERSTATUS.get(rs.getString("ostatus")));
 		orders.put("onum", rs.getString("onum"));
 		orders.put("ocount", rs.getString("ocount"));
 		orders.put("oamountmoney", rs.getString("oamountmoney"));

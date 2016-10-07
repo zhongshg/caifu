@@ -70,17 +70,17 @@ public class ProductDao extends AbstractDao {
 	    rs = ptst.executeQuery();
 	    while (rs.next()) {
 		//id,procode,proname,propertys,picpath,ts
-		Map<String, String> users = new HashMap<String, String>();
-		users.put("id", rs.getString("id"));
-		users.put("procode", rs.getString("procode"));
-		users.put("proname", rs.getString("proname"));
-		users.put("propertys", rs.getString("propertys"));
-		users.put("picpath", rs.getString("picpath"));
-		users.put("price", rs.getString("price"));
-		users.put("endtime", rs.getString("endtime"));
-		users.put("stock", rs.getString("stock"));
-		users.put("ts", rs.getString("ts"));
-		userList.add(users);
+		Map<String, String> products = new HashMap<String, String>();
+		products.put("id", rs.getString("id"));
+		products.put("procode", rs.getString("procode"));
+		products.put("proname", rs.getString("proname"));
+		products.put("propertys", rs.getString("propertys"));
+		products.put("picpath", rs.getString("picpath"));
+		products.put("price", rs.getString("price"));
+		products.put("endtime", rs.getString("endtime"));
+		products.put("stock", rs.getString("stock"));
+		products.put("ts", rs.getString("ts"));
+		userList.add(products);
 	    }
 	} catch (SQLException ex) {
 	    log.log(Level.SEVERE, null, ex);
@@ -139,15 +139,15 @@ public class ProductDao extends AbstractDao {
 	return returnValue;
     }
 
-    public boolean update(String id, Map<String, String> users) {
+    public boolean update(String id, Map<String, String> products) {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	String sql = "update product set ";
 	List<String> values = new ArrayList<String>();
-	for (String key : users.keySet()) {
+	for (String key : products.keySet()) {
 	    sql += key + "=?,";
-	    values.add(users.get(key));
+	    values.add(products.get(key));
 	}
 	sql = sql.substring(0, sql.length() - 1);
 
@@ -197,17 +197,17 @@ public class ProductDao extends AbstractDao {
 	    rs = ptst.executeQuery();
 	    while (rs.next()) {
 		//procode,proname,propertys,picpath,starttime,endtime,price,stock
-		Map<String, String> users = new HashMap<String, String>();
-		users.put("id", rs.getString("id"));
-		users.put("procode", rs.getString("procode"));
-		users.put("proname", rs.getString("proname"));
-		users.put("propertys", rs.getString("propertys"));
-		users.put("picpath", rs.getString("picpath"));
-		users.put("price", rs.getString("price"));
-		users.put("endtime", rs.getString("endtime"));
-		users.put("stock", rs.getString("stock"));
-		users.put("ts", rs.getString("ts"));
-		userList.add(users);
+		Map<String, String> products = new HashMap<String, String>();
+		products.put("id", rs.getString("id"));
+		products.put("procode", rs.getString("procode"));
+		products.put("proname", rs.getString("proname"));
+		products.put("propertys", rs.getString("propertys"));
+		products.put("picpath", rs.getString("picpath"));
+		products.put("price", rs.getString("price"));
+		products.put("endtime", rs.getString("endtime"));
+		products.put("stock", rs.getString("stock"));
+		products.put("ts", rs.getString("ts"));
+		userList.add(products);
 	    }
 	} catch (SQLException ex) {
 	    log.log(Level.SEVERE, null, ex);

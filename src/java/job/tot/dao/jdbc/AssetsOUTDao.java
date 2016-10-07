@@ -59,7 +59,8 @@ public class AssetsOUTDao extends AbstractDao {
 		Map<String, String> assets_out = new HashMap<String, String>();
 		assets_out.put("uid", rs.getString("uid"));
 		assets_out.put("amount", rs.getString("amount"));
-		assets_out.put("type", rs.getString("type"));
+		assets_out.put("type", GlobalEnum.ASSETS.get(rs.getString("type")));
+		assets_out.put("dr", GlobalEnum.ASSETS_FLAG.get(rs.getString("dr")));
 		assets_out.put("oid", rs.getString("oid"));
 		assets_out.put("ts", rs.getString("ts"));
 		assetsList.add(assets_out);

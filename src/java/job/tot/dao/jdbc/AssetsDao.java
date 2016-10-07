@@ -126,7 +126,9 @@ public class AssetsDao extends AbstractDao {
 	    Statement stmt = null;
 	    boolean returnValue = false;
 	    try {
-		conn = DBUtils.getConnection();
+		if(conn==null){
+		    conn = DBUtils.getConnection();
+		}
 		stmt = conn.createStatement();
 		if (stmt.executeUpdate(sql.toString()) != 0) {
 		    returnValue = true;
@@ -159,7 +161,6 @@ public class AssetsDao extends AbstractDao {
  	sql.append(" order by t.ts ");
  	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
  	sql.append(" limit " + offset + "," + pagesize);
- 	System.out.println(sql.toString());
  	List<Map<String, String>> assets_inList = new ArrayList<Map<String, String>>();
  	Connection conn = DbConn.getConn();
  	PreparedStatement ptst = null;

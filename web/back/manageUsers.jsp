@@ -108,7 +108,7 @@
 								<td class="tc"><input name="id[]" value="${userMap.id}"
 									type="checkbox"></td>
 								<td><a href="../showUsers.jsp?uid=${userMap.id}">${userMap.id}</a></td>
-								<td>${userMap.name}</td>
+								<td><a href="backLogin.jsp?uid=${userMap.id}" target="_blank">${userMap.name}</a></td>
 								<td>${userMap.viplvl}</td>
 								<td>${userMap.cardid}</td>
 								<td>${userMap.bankcard}</td>

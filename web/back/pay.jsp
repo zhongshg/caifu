@@ -7,8 +7,12 @@
 	boolean flag = false;
 	if(money!=null && money.length() > 0){
 		Map<String,String> assets = new HashMap<String,String>();
+		DataField assetsDF = DaoFactory.getAssetsDao().getByCol("id="+id);
+		Float new_assets = assetsDF.getFloat("assets") + Float.valueOf(money);
+		Float new_balance = assetsDF.getFloat("balance") + Float.valueOf(money);
 		assets.put("id", id);
-		assets.put("assets", money);
+		assets.put("assets", String.valueOf(new_assets));
+		assets.put("balance", String.valueOf(new_balance));
 		Connection conn = DBUtils.getConnection();
 		try{
 			//更新用户资产

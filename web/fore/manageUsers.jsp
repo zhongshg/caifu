@@ -22,14 +22,6 @@
 		String where = " isvip=1 and parentid= "+user_id;
 		List<Map<String, String>> usersList = DaoFactory.getUserDao().get_Limit(currentpage, pagesize,where);
 		request.setAttribute("usersList", usersList);
-		String msg = RequestUtil.getString(request, "msg");
-		if (msg != null && msg.equals("sucd")) {
-			out.print("<script>alert(\"删除成功\");  </script>");
-		} else if (msg != null && msg.equals("suce")) {
-			out.print("<script>alert(\"修改成功\");  </script>");
-		} else if (msg != null && msg.equals("sucr")) {
-			out.print("<script>alert(\"新增用户成功\");  </script>");
-		}
 	} else {
 		String search = RequestUtil.getString(request, "search");
 		String value = RequestUtil.getString(request, "value");
@@ -42,9 +34,22 @@
 				pagesize = usersList.size();
 				if (pagesize > 50) {
 					out.print("<script>alert(\"数据量太大,请精确查询条件\");  </script>");
+					request.setAttribute("usersList", null);
 					return;
 				}
 			}
+		}
+	}
+	String msg = RequestUtil.getString(request, "msg");
+	if(msg != null ){
+		if (msg.equals("sucd")) {
+			out.print("<script>alert(\"删除成功\");  </script>");
+		} else if (msg.equals("suce")) {
+			out.print("<script>alert(\"修改成功\");  </script>");
+		} else if (msg.equals("sucr")) {
+			out.print("<script>alert(\"新增用户成功\");  </script>");
+		}else if(msg.equals("noMny")){
+		    out.print("<script>alert(\"可用余额不足,请及时充值!\");  </script>");
 		}
 	}
 %>

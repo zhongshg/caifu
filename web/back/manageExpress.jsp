@@ -15,7 +15,7 @@
 	String oid = RequestUtil.getString(request, "oid");
 	if (act != null && oid != null) {
 	    DataField order = DaoFactory.getOrdersDao().getByCol("oid=" + oid);
-		if (act.equals("ok")) {//修改订单
+		if (act.equals("ok")) {//发货
 			Map<String, String> orders = new HashMap<String, String>();
 			orders.put("osenddt", DateUtil.getStringDate());//发货时间
 			orders.put("ostatus", "2");//发货

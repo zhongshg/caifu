@@ -1,3 +1,4 @@
+<%@page import="job.tot.db.DBUtils"%>
 <%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"%>
 <%@ include file="../inc/common.jsp"%>
 <%
@@ -44,8 +45,9 @@
 			orders.put("osenddt", osenddt);
 			orders.put("ostatus", ostatus);
 			orders.put("olastupdatedt", olastupdatedt);
-			
-			boolean flag = DaoFactory.getOrdersDao().add(orders);
+			Connection conn = DbConn.getConn();
+			boolean flag = DaoFactory.getOrdersDao().add(conn,orders);
+			DBUtils.closeConnection(conn);
 			if(flag){
 			    response.sendRedirect("manageOrders.jsp?msg=suca");
 				//Forward.forward(request, response, "manageOrders.jsp?msg=suca");
