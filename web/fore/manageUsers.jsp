@@ -119,9 +119,11 @@
 								<td><c:if test="${userMap.roleid=='0'}">普通用户</c:if>
 								<c:if test="${userMap.roleid=='1'}">管理员</c:if></td>
 								<td><a class="link-update"
+									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a>
+								<!-- <a class="link-update"
 									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
 									class="link-del"
-									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a></td>
+									href="manageUser.jsp?rmr=del&uid=${userMap.id}">删除</a> --></td>
 							</tr>
 						</c:forEach>
 					</table>

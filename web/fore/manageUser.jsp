@@ -43,7 +43,7 @@
 			user.put("roleid", roleid);
 			//user.put("isvip",isvip);
 			user.put("address",address);
-			DaoFactory.getUserDao().update(uid, user);
+			DaoFactory.getUserDao().update(null,uid, user);
 			response.sendRedirect("manageUsers.jsp?msg=suce");
 		} else if (rmr.equals("del")) {//删除会员
 			DaoFactory.getUserDao().del(uid);

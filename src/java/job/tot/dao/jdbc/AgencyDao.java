@@ -82,10 +82,9 @@ public class AgencyDao extends AbstractDao {
 	// 查询上级代理的上9级代理的parentid
 	int count = 1;// 记录代理级别
 	PreparedStatement ptst = null;
+	ResultSet rs = null;
 	try {
 	    String qsql = "select parentid from agency where uid=" + parentid[0] + " and agencylvl in (1,2,3,4,5,6,7,8,9) order by agencylvl asc";
-	    ResultSet rs = null;
-	    System.out.println(qsql);
 	    ptst = conn.prepareStatement(qsql);
 	    rs = ptst.executeQuery();
 	    while (rs.next()) {
@@ -98,7 +97,8 @@ public class AgencyDao extends AbstractDao {
 	    returnValue = false;
 	    return returnValue;
 	}finally{
-	    DBUtils.closeStatement(ptst);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closePrepareStatement(ptst);
 	}
 	// 准备SQL
 	// parentid,agencylvl,uid

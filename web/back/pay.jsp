@@ -54,6 +54,12 @@
 				</div>
 				<div class="login-error"></div>
 				<div class="row">
+					<label class="field" for="uid">会员号</label> <input type="text"
+						value="<%=id %>"
+						class="input-text-password noPic input-click" id="uid"
+						name="uid" disabled="disabled">
+				</div>
+				<div class="row">
 					<label class="field" for="money">充值额度</label> <input type="text"
 						value=""
 						class="input-text-password noPic input-click" id="money"

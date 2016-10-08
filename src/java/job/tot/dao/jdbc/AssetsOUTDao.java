@@ -82,18 +82,18 @@ public class AssetsOUTDao extends AbstractDao {
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	// id,uid,amount,type,ts,oid
-	String sql = "insert into assets_out(uid,amount,type,oid) values(?,?,?,?)";
+	String sql = "insert into assets_out(uid,amount,type,oid,dr) values(?,?,?,?,?)";
 	try {
 	    ps = conn.prepareStatement(sql);
 	    ps.setString(1, assets_out.get("uid"));
 	    ps.setString(2, assets_out.get("amount"));
 	    ps.setString(3, assets_out.get("type"));
 	    ps.setString(4, assets_out.get("oid"));
+	    ps.setInt(5, Integer.parseInt(assets_out.get("dr")));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    DBUtils.closePrepareStatement(ps);
 	    DBUtils.closeConnection(conn);
 	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();

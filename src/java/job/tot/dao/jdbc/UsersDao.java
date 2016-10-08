@@ -4,15 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import job.tot.bean.DataField;
 import job.tot.dao.AbstractDao;
@@ -21,7 +19,9 @@ import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
 import job.tot.global.GlobalEnum;
+import job.tot.util.DateUtil;
 import job.tot.util.DbConn;
+import job.tot.util.MD5;
 
 /**
  * @author zhongshg
@@ -105,43 +105,43 @@ public class UsersDao extends AbstractDao {
 	return getDataCount("select max(id) from users");
     }
 
-    public boolean add(String uname, String password, String parentid, String cardid, String bankcard, String tel, String id, String nick, String store, Map<String, String> orders)
-	    throws SQLException {
-	Connection conn = null;
+    public boolean add(Connection conn, Map<String, String> users, Map<String, String> orders) throws SQLException {
+	// Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = false;
 	try {
-	    conn = DBUtils.getConnection();
-	    conn.setAutoCommit(false);
-
+	    if (conn == null) {
+		conn = DBUtils.getConnection();
+	    }
 	    String sql = "insert into users(name,pwd,id,cardid,bankcard,phone,parentid,nick,store,viplvl,isvip) values(?,?,?,?,?,?,?,?,?,?,?)";
 	    ps = conn.prepareStatement(sql.toString());
-	    ps.setString(1, uname);
-	    ps.setString(2, password);
-	    ps.setString(3, id);
-	    ps.setString(4, cardid);
-	    ps.setString(5, bankcard);
-	    ps.setString(6, tel);
-	    ps.setString(7, parentid);
-	    ps.setString(8, nick);
-	    ps.setString(9, store);
+	    ps.setString(1, users.get("uname"));
+	    ps.setString(2, users.get("password"));
+	    ps.setString(3, users.get("uid"));
+	    ps.setString(4, users.get("cardid"));
+	    ps.setString(5, users.get("bankcard"));
+	    ps.setString(6, users.get("tel"));
+	    ps.setString(7, users.get("parentid"));
+	    ps.setString(8, users.get("nick"));
+	    ps.setString(9, users.get("store"));
 	    ps.setInt(10, 1);
 	    ps.setInt(11, 1);
 	    if (ps.executeUpdate() != 1) {
 		returnValue = true;
 	    }
-
-	    // 开始记录代理信息
-	    Map<String, String> agency = new HashMap<String, String>();
-	    agency.put("uid", id);
-	    agency.put("parentid", parentid);
-	    returnValue = DaoFactory.getAgencyDao().add(agency, conn);
-	    if (!returnValue) {
-		return returnValue;
+	    // 判断上级是否为管理员，如果是管理员不能参与上下级记录
+	    if ("1".equals(users.get("proleid"))) {
+		// 开始记录代理信息
+		Map<String, String> agency = new HashMap<String, String>();
+		agency.put("uid", users.get("uid"));
+		agency.put("parentid", users.get("parentid"));
+		returnValue = DaoFactory.getAgencyDao().add(agency, conn);
+		if (!returnValue) {
+		    return returnValue;
+		}
 	    }
-
 	    // 开始新增资产财富表信息
-	    returnValue = DaoFactory.getAssetsDao().add(id, conn);
+	    returnValue = DaoFactory.getAssetsDao().add(users.get("uid"), conn);
 	    if (!returnValue) {
 		return returnValue;
 	    }
@@ -152,39 +152,37 @@ public class UsersDao extends AbstractDao {
 	    }
 	    // 开始新增资产支出信息
 	    Map<String, String> assets_out = new HashMap<String, String>();
-	    assets_out.put("uid", parentid);
+	    assets_out.put("uid", users.get("parentid"));
 	    assets_out.put("amount", orders.get("oAmountMoney"));
-	    assets_out.put("type", "24");// 商品支出
+	    assets_out.put("type", "26");// 注册支出
 	    assets_out.put("oid", orders.get("oNum"));
 	    assets_out.put("dr", "1");
 	    DaoFactory.getAssetsOUTDao().add(assets_out, conn);
-
+	    
+	    //开始新增用户报单佣金信息
+	    
+	    
 	    try {
 		// 开始更新会员号库存表
-		returnValue = DaoFactory.getuCodeDao().update(id, conn);
+		returnValue = DaoFactory.getuCodeDao().update(users.get("uid"), conn);
 	    } catch (ObjectNotFoundException e) {
 		e.printStackTrace();
 	    } catch (DatabaseException e) {
 		e.printStackTrace();
-	    } finally {
-		DBUtils.closeStatement(ps);
-		DBUtils.closeConnection(conn);
 	    }
-	    // 提交所有操作
-	    conn.commit();
 	} catch (SQLException e) {
+	    DBUtils.closeConnection(conn);
 	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
 	    DBUtils.closeStatement(ps);
-	    DBUtils.closeConnection(conn);
 	}
 	return returnValue;
     }
 
-    public boolean update(String id, Map<String, String> users) {
-	Connection conn = null;
+    public boolean update(Connection conn, String id, Map<String, String> users) {
+	// Connection conn = null;
 	PreparedStatement ps = null;
 	boolean returnValue = true;
 	String sql = "update users set ";
@@ -200,22 +198,27 @@ public class UsersDao extends AbstractDao {
 
 	sql += "  where id=?";
 	try {
-	    conn = DBUtils.getConnection();
+	    if (conn == null) {
+		conn = DBUtils.getConnection();
+	    }
+	    System.out.println(sql);
 	    ps = conn.prepareStatement(sql);
 	    for (int i = 0; i < values.size(); i++) {
 		ps.setString(i + 1, values.get(i));
+		System.out.println(values);
 	    }
 	    ps.setInt(values.size() + 1, Integer.parseInt(id));
+	    System.out.println(Integer.parseInt(id));
 	    if (ps.executeUpdate() != 1) {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
+	    DBUtils.closeConnection(conn);
 	    log.log(Level.SEVERE, null, e);
 	    e.printStackTrace();
 	    return false;
 	} finally {
 	    DBUtils.closePrepareStatement(ps);
-	    DBUtils.closeConnection(conn);
 	}
 	return returnValue;
     }
@@ -310,5 +313,120 @@ public class UsersDao extends AbstractDao {
 	    return false;
 	}
 	return true;
+    }
+
+    public int validate(Connection conn, Map<String, String> users) throws SQLException {
+	int code = -1;
+	boolean flag = false;
+	String newsql = "";
+	String sql = "select id from users where ";
+	try {
+	    if (conn == null) {
+		conn = DBUtils.getConnection();
+	    }
+	    // 开始校验手机号
+	    newsql = sql + "phone=" + users.get("tel");
+	    String field = "id";
+	    DataField df = this.execute(newsql, field);
+	    if (df != null && df.getInt("id") > 0) {
+		code = 4;
+	    } else {
+		newsql = sql + "cardid=" + users.get("cardid");
+		df = this.execute(newsql, field);
+		if (df != null && df.getInt("id") > 0) {
+		    code = 3;
+		} else {
+		    newsql = sql + "bankcard=" + users.get("bankcard");
+		    df = this.execute(newsql, field);
+		    if (df != null && df.getInt("id") > 0) {
+			code = 5;
+		    } else {
+			String oNum = DaoFactory.getOrdersDao().getNewProcode();
+			// 拼接订单信息
+			Map<String, String> orders = new HashMap<String, String>();
+			orders.put("oDt", DateUtil.getStringDate());
+			orders.put("oLastUpdateDt", DateUtil.getStringDate());
+			orders.put("oNum", oNum);
+			orders.put("oPrice", users.get("allPrice"));
+			orders.put("oCount", users.get("allVAL"));
+			orders.put("oAmountMoney", users.get("sum"));
+			orders.put("ouserid", users.get("parentid"));
+			orders.put("ousername", users.get("parengname"));
+			orders.put("pid", users.get("allid"));
+			orders.put("pName", users.get("allName"));
+			flag = DaoFactory.getUserDao().add(conn, users, orders);
+			
+			System.out.println("flag by add:"+flag);
+			// 更新资产信息
+			if (flag && "1".equals(users.get("proleid"))) {
+			    Float new_assets = Float.valueOf(users.get("old_assets")) - Float.valueOf(users.get("sum"));
+			    Float new_balance = Float.valueOf(users.get("old_balance")) - Float.valueOf(users.get("sum"));
+			    Map<String, String> assets = new HashMap<String, String>();
+			    assets.put("assets", String.valueOf(new_assets));
+			    assets.put("balance", String.valueOf(new_balance));
+			    assets.put("id", users.get("parentid"));
+			    flag = DaoFactory.getAssetsDao().update(conn, assets);
+			}
+			if (flag) {
+			    int viplvl = Integer.parseInt(users.get("user_viplvl").toString());
+			    if (viplvl != 4) {// 如果还不是钻级会员
+				List<DataField> dfList = DaoFactory.getAgencyDao().getByCol("parentid=" + users.get("parentid"));
+				int number = dfList.size();
+				Map<String, String> old_users = new HashMap<String, String>();
+				String user_id = users.get("parentid");
+				if (number >= 5) {// 升级为钻级会员
+				    old_users.put("viplvl", "4");
+				} else if (number >= 3) {// 升级为金级会员
+				    old_users.put("viplvl", "3");
+				} else {// 升级为银级会员
+				    old_users.put("viplvl", "2");
+				}
+				flag = DaoFactory.getUserDao().update(conn, user_id, old_users);
+				System.out.println("flag by update:"+flag);
+			    }
+			}
+			if(flag){
+			    code=0;
+			}else{//系统错误
+			    code=-1;
+			}
+		    }
+		}
+	    }
+	} catch (ObjectNotFoundException e) {
+	    e.printStackTrace();
+	} catch (DatabaseException e) {
+	    e.printStackTrace();
+	}
+	return code;
+    }
+
+    public DataField execute(String sqlStr, String fieldArr) throws ObjectNotFoundException, DatabaseException {
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	DataField df = null;
+	if (fieldArr == null) {
+	    fieldArr = "id,name,pwd,age,viplvl,cardid,bankcard,phone,roleid,parentid,dr,ts,nick,store,isvip";
+	}
+	try {
+	    conn = DBUtils.getConnection();
+	    stmt = conn.createStatement();
+	    rs = stmt.executeQuery(sqlStr);
+	    String[] splitStr = fieldArr.split(",");
+	    if (rs.next()) {
+		df = new DataField();
+		for (int i = 0; i < splitStr.length; i++) {
+		    df.setField(splitStr[i], rs.getString(i + 1), 0);
+		}
+	    }
+	} catch (SQLException e) {
+	    // log.error("Sql Exception Error:", e);
+	} finally {
+	    DBUtils.closeConnection(conn);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closeStatement(stmt);
+	}
+	return df;
     }
 }

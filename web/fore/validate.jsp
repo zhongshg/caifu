@@ -1,3 +1,5 @@
+<%@page import="sun.security.pkcs11.Secmod.DbMode"%>
+<%@page import="job.tot.util.DbConn"%>
 <%@page import="job.tot.util.CodeUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
@@ -11,6 +13,7 @@
 <%@ page import="job.tot.bean.DataField"%>
 <%@ page import="job.tot.util.MD5"%>
 <%@page import="job.tot.util.DateUtil"%>
+<%@ page import="java.sql.Connection"%>
 <%
     // 返回json数据根据code判断是否成功
     String uname = RequestUtil.getString(request, "uname");
@@ -27,83 +30,56 @@
     String allName = RequestUtil.getString(request, "allName");
     String sum = RequestUtil.getString(request, "sum");
     int code = -1;
-
+    boolean flag = false;
     try {
 		String parentid = String.valueOf(session.getAttribute("user_id"));
 		String parengname = String.valueOf(session.getAttribute("user_name"));
 		DataField assetsDF = DaoFactory.getAssetsDao().getByCol("id=" + parentid);
-		Float balance = assetsDF.getFloat("balance");
+		Float old_balance = assetsDF.getFloat("balance");
 		Float old_assets = assetsDF.getFloat("assets");
-		if(balance < Float.valueOf(sum)){
+		if (old_balance < Float.valueOf(sum)) {
 		    code = 7;
-		}else if (uname == null || password == null || uid == null || bankcard == null || cardid == null) {
+		} else if (uname == null || password == null || uid == null || bankcard == null || cardid == null) {
 		    code = 2;
 		} else {
-		    boolean flag = DaoFactory.getUserDao().validate(uid);
-		    if (flag) {
-				DataField count = DaoFactory.getUserDao().getByCol("phone=" + tel, "id");
-				if (count != null && count.getInt("id") > 0) {
-				    code = 4;
-				} else {
-				    DataField bcCount = DaoFactory.getUserDao().getByCol("cardid=" + cardid, "id");
-				    if (bcCount != null && bcCount.getInt("id") > 0) {
-					code = 3;
-				    } else {
-						DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard=" + bankcard, "id");
-						if (identityCount != null && identityCount.getInt("id") > 0) {
-						    code = 5;
-						} else {
-						    password = new MD5().getMD5of32(password);
-						    String oNum = DaoFactory.getOrdersDao().getNewProcode();
-							Map<String,String> orders = new HashMap<String,String>();
-							orders.put("oDt", DateUtil.getStringDate());
-							orders.put("oLastUpdateDt", DateUtil.getStringDate());
-							orders.put("oNum", oNum);
-							orders.put("oPrice", allPrice);
-							orders.put("oCount", allVAL);
-							orders.put("oAmountMoney", sum);
-							orders.put("ouserid", parentid);
-							orders.put("ousername", parengname);
-							orders.put("pid",allid);
-							orders.put("pName", allName);
-						    flag = DaoFactory.getUserDao().add(uname, password, parentid, cardid, bankcard, tel, uid, nick, store,orders);
-						   
-						    if(flag){
-							    Float new_assets = old_assets - Float.valueOf(sum);
-							    Float new_balance = balance - Float.valueOf(sum);
-							    Map<String,String> assets = new HashMap<String,String>();
-							    assets.put("assets", String.valueOf(new_assets));
-							    assets.put("balance", String.valueOf(new_balance));
-							    assets.put("id", parentid);
-								flag = DaoFactory.getAssetsDao().update(null, assets);
-						    }
-						    if(flag && assetsDF.getString("viplvl")!=null){
-								int viplvl = Integer.parseInt(session.getAttribute("user_viplvl").toString());
-								if(viplvl!=4){//金级会员
-								    List<DataField> dfList = DaoFactory.getAgencyDao().getByCol("parentid="+session.getAttribute("user_id"));
-								    int number = dfList.size();	
-								    Map<String,String> users = new HashMap<String,String>();
-									String user_id = session.getAttribute("user_id").toString();
-									if(number >= 5){//升级为钻级会员
-										users.put("viplvl", "4");
-									}else if(number >= 3){
-									    users.put("viplvl", "3");
-									}else if(number >= 1){
-									    users.put("viplvl", "2");
-									}
-								    flag = DaoFactory.getUserDao().update(user_id, users);
-								}
-						    }
-						    if (flag) {
-								//DaoFactory.getuCodeDao().del(uid);
-								code = 0;
-						    } 
-						}
-				    }
-				}
-			 }else{
-			     code = 6;
-			 }
+		    password = new MD5().getMD5of32(password);
+		    //拼接用户信息
+		    Map<String, String> new_users = new HashMap<String, String>();
+		    new_users.put("uname", uname);
+		    new_users.put("password", password);
+		    new_users.put("parentid", parentid);
+		    new_users.put("cardid", cardid);
+		    new_users.put("bankcard", bankcard);
+		    new_users.put("tel", tel);
+		    new_users.put("uid", uid);
+		    new_users.put("nick", nick);
+		    new_users.put("store", store);
+		    new_users.put("proleid", "1");//上级会员为普通用户
+
+		    //填充额外信息
+		    new_users.put("allid", allid);
+		    new_users.put("allVAL", allVAL);
+		    new_users.put("allPrice", allPrice);
+		    new_users.put("allName", allName);
+		    new_users.put("sum", sum);
+		    new_users.put("user_viplvl", String.valueOf(session.getAttribute("user_viplvl")));
+		    new_users.put("old_balance", String.valueOf(old_balance));
+		    new_users.put("old_assets", String.valueOf(old_assets));
+		    Connection conn = DBUtils.getConnection();
+		    conn.setAutoCommit(false);
+		    try {
+				code = DaoFactory.getUserDao().validate(conn, new_users);
+				if(code==0){
+					// 提交所有操作
+					conn.commit();
+			    }else{
+					conn.rollback();
+			    }
+		    } catch (Exception e) {
+				e.printStackTrace();
+		    }finally{
+				DBUtils.closeConnection(conn);
+		    }
 		}
 
 		// 返回json数据根据code判断是否成功

@@ -10,7 +10,7 @@
 			String id = RequestUtil.getString(request, "id");
 			Map<String, String> user = new HashMap<String, String>();
 			user.put("isvip","1");
-			boolean flag = DaoFactory.getUserDao().update(id, user);
+			boolean flag = DaoFactory.getUserDao().update(null,id, user);
 			if(flag){
 				response.sendRedirect("approveUsers.jsp?msg=suce");
 			}else{

@@ -18,6 +18,7 @@ public class GlobalEnum {
      * 23-提现支出
      * 24-商品支出
      * 25-转账支出
+     * 26-注册支出
      * */
     public static Map<String,String> ASSETS = new HashMap<String,String>();
     /**
@@ -41,6 +42,7 @@ public class GlobalEnum {
 	ASSETS.put("23", "提现支出");
 	ASSETS.put("24", "商品支出");
 	ASSETS.put("25", "转账支出");
+	ASSETS.put("26", "注册支出");
 	
 	ORDERSTATUS.put("-2", "已删除");
 	ORDERSTATUS.put("-1", "已取消");
@@ -55,8 +57,8 @@ public class GlobalEnum {
 	VIPLVL.put("3", "金级会员");
 	VIPLVL.put("4", "钻级会员");
 	
-	ASSETS_FLAG.put("0", "交易处理中");
-	ASSETS_FLAG.put("1", "交易成功");
-	ASSETS_FLAG.put("2", "交易失败");
+	ASSETS_FLAG.put("0", "处理中");
+	ASSETS_FLAG.put("1", "成功");
+	ASSETS_FLAG.put("2", "失败");
     }
 }

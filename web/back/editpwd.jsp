@@ -27,7 +27,7 @@
 		users.put("pwd", newpwd1);
 		boolean flag = false;
 		try {
-		    flag = DaoFactory.getUserDao().update(admin_id, users);
+		    flag = DaoFactory.getUserDao().update(null,admin_id, users);
 		} catch (Exception e) {
 		    e.printStackTrace();
 		    out.println("修改密码失败" + e.getMessage());

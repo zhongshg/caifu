@@ -11,7 +11,7 @@
 	int currentpage = 1;
 	int pagesize = 10;
 	int totalCount = 0;
-	int totalPage = 0;
+	int totalPage = 1;
     String sr = RequestUtil.getString(request, "sr");
 	if (sr == null) {
 		currentpage = RequestUtil.getString(request, "currentpage") == null 
@@ -129,7 +129,7 @@
 						</c:forEach>
 					</table>
 					<div class="list-page">
-						第<%=currentpage%>页（共<%=totalPage==0?currentpage:totalPage%>页） <br> <a
+						第<%=currentpage%>页（共<%=totalPage%>页） <br> <a
 							href="manageUsers.jsp?currentpage=1">首页</a> <a
 							href="manageUsers.jsp?currentpage=<%=currentpage > 1 ? currentpage - 1 : currentpage%>">上一页</a>
 						<a

@@ -136,6 +136,7 @@ public class AssetsDao extends AbstractDao {
 		    returnValue = false;
 		}
 	    } catch (SQLException e) {
+		DBUtils.closeConnection(conn);
 		log.log(Level.SEVERE, "Sql Exception Error:", e);
 		throw new DatabaseException("Got Exception on Call Medthod exe in tot.dao.AbstractDao");
 	    } finally {

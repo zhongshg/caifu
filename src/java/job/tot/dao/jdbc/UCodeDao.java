@@ -21,7 +21,7 @@ public class UCodeDao extends AbstractDao {
 	//如果号码已经被取完，重新生成新号码再取
 	if(df==null || df.getField("ucode")==null){
 	    createCode();
-	    getNewCode();
+	    df = getFirstData(sql, "ucode");
 	}
 	String code =  df.getString("ucode");
 	//校验号码是否已经被注册
@@ -30,9 +30,9 @@ public class UCodeDao extends AbstractDao {
 	    return df.getString("ucode");
 	}else{//如果已经号码已经被注册  就删除重新获取
 	    update(code,null);
-	    getNewCode();
+	    code = getNewCode();
 	}
-	return df.getString("ucode");
+	return code;
     }
 
     public boolean del(String ucode) throws ObjectNotFoundException, DatabaseException {
@@ -54,10 +54,11 @@ public class UCodeDao extends AbstractDao {
 		returnValue = false;
 	    }
 	} catch (SQLException e) {
-	    DBUtils.closeStatement(stmt);
 	    DBUtils.closeConnection(conn);
 	    throw new DatabaseException("Got Exception on Call Medthod exe in tot.dao.AbstractDao");
-	} 
+	} finally{
+	    DBUtils.closeStatement(stmt);
+	}
 	return returnValue;
     }   
     /**

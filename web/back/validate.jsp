@@ -1,13 +1,8 @@
-<%-- 
-    Document   : index
-    Created on : 2014-7-7, 9:30:55
-    Author     : Administrator
---%>
-
+<%@page import="sun.security.pkcs11.Secmod.DbMode"%>
+<%@page import="job.tot.util.DbConn"%>
+<%@page import="job.tot.util.CodeUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
-<%@page import="job.tot.util.CodeUtils"%>
-<%@page import="job.tot.util.DateUtil"%>
 <%@ page import="java.util.*"%>
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.db.DBUtils"%>
@@ -17,7 +12,8 @@
 <%@ page import="job.tot.dao.DaoFactory"%>
 <%@ page import="job.tot.bean.DataField"%>
 <%@ page import="job.tot.util.MD5"%>
-
+<%@page import="job.tot.util.DateUtil"%>
+<%@ page import="java.sql.Connection"%>
 <%
     // 返回json数据根据code判断是否成功
     String uname = RequestUtil.getString(request, "uname");
@@ -34,57 +30,42 @@
     String allName = RequestUtil.getString(request, "allName");
     String sum = RequestUtil.getString(request, "sum");
     int code = -1;
-
+    boolean flag = false;
     try {
+		String parentid = String.valueOf(session.getAttribute("admin_id"));
+		String parengname = String.valueOf(session.getAttribute("admin_name"));
 		if (uname == null || password == null || uid == null || bankcard == null || cardid == null) {
 		    code = 2;
 		} else {
-		    boolean flag = DaoFactory.getUserDao().validate(uid);
-		    if(flag){
-			    DataField count = DaoFactory.getUserDao().getByCol("phone=" + tel, "id");
-			    if (count != null && count.getInt("id") > 0) {
-				code = 4;
-			    } else {
-				DataField bcCount = DaoFactory.getUserDao().getByCol("cardid=" + cardid, "id");
-				if (bcCount != null && bcCount.getInt("id") > 0) {
-				    code = 3;
-				} else {
-				    DataField identityCount = DaoFactory.getUserDao().getByCol("bankcard=" + bankcard, "id");
-				    if (identityCount != null && identityCount.getInt("id") > 0) {
-					code = 5;
-				    } else {
-					/* String id = DaoFactory.getuCodeDao().getNewCode();
-					if (id == null) {
-					    DaoFactory.getuCodeDao().createCode();
-					    id = DaoFactory.getuCodeDao().getNewCode();
-					} */
-					password = new MD5().getMD5of32(password);
-					
-					String oNum = DaoFactory.getOrdersDao().getNewProcode();
-					Map<String,String> orders = new HashMap<String,String>();
-					orders.put("oDt", DateUtil.getStringDate());
-					orders.put("oLastUpdateDt", DateUtil.getStringDate());
-					orders.put("oNum", oNum);
-					orders.put("oPrice", allPrice);
-					orders.put("oCount", allVAL);
-					orders.put("oAmountMoney", sum);
-					orders.put("ouserid", uid);
-					orders.put("ousername", uname);
-					orders.put("pid",allid);
-					orders.put("pName", allName);
-					//管理员账户添加的会员上级都为-1 管理员添加顶级用户，0代表无上级
-					flag = DaoFactory.getUserDao().add(uname, password, "0", cardid, bankcard, tel, uid, nick, store,orders);
-					//下订单
-					if (flag) {
-					    code = 0;
-					} else {
-					    code = 6;
-					}
-				    }
-				}
-			    }
-		    }else{
-				code = 7;
+		    password = new MD5().getMD5of32(password);
+		    //拼接用户信息
+		    Map<String, String> new_users = new HashMap<String, String>();
+		    new_users.put("uname", uname);
+		    new_users.put("password", password);
+		    new_users.put("parentid", "0");
+		    new_users.put("cardid", cardid);
+		    new_users.put("bankcard", bankcard);
+		    new_users.put("tel", tel);
+		    new_users.put("uid", uid);
+		    new_users.put("nick", nick);
+		    new_users.put("store", store);
+		    new_users.put("proleid", "0");//上级会员为普通用户
+
+		    //填充额外信息
+		    new_users.put("allid", allid);
+		    new_users.put("allVAL", allVAL);
+		    new_users.put("allPrice", allPrice);
+		    new_users.put("allName", allName);
+		    new_users.put("sum", sum);
+		    new_users.put("user_viplvl", String.valueOf(session.getAttribute("admin_viplvl")));
+		    Connection conn = DBUtils.getConnection();
+		    try {
+				code = DaoFactory.getUserDao().validate(conn, new_users);
+		    } catch (Exception e) {
+				e.printStackTrace();
+				code = -1;
+		    } finally {
+			DBUtils.closeConnection(conn);
 		    }
 		}
 
