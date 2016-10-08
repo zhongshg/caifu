@@ -1,4 +1,3 @@
-<%@page import="sun.security.pkcs11.Secmod.DbMode"%>
 <%@page import="job.tot.util.DbConn"%>
 <%@page import="job.tot.util.CodeUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"

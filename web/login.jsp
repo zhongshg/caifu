@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <%@ page import="job.tot.exception.*"%>
 <%@ page import="job.tot.util.*" %>
 <%@ page import="job.tot.bean.*" %>
@@ -9,7 +10,6 @@
 <%@ page import="job.tot.global.Sysconfig" %>
 <%@ page import="job.tot.util.Forward" %>
 <%@ page import="job.tot.dao.jdbc.UsersDao" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" language="java" errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>

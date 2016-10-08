@@ -1,8 +1,7 @@
-<%@page import="sun.security.pkcs11.Secmod.DbMode"%>
-<%@page import="job.tot.util.DbConn"%>
-<%@page import="job.tot.util.CodeUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" language="java"
 	errorPage="error.jsp"%>
+<%@page import="job.tot.util.DbConn"%>
+<%@page import="job.tot.util.CodeUtils"%>
 <%@ page import="java.util.*"%>
 <%@ page import="job.tot.global.Sysconfig"%>
 <%@ page import="job.tot.db.DBUtils"%>

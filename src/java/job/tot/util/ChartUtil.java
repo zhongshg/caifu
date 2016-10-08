@@ -1,7 +1,7 @@
 /*
  * VoteChart.java
  *
- * Created on 2006锟斤拷3锟斤拷7锟斤拷, 锟斤拷锟斤拷5:14
+ * Created on 2006閿熸枻鎷�3閿熸枻鎷�7閿熸枻鎷�, 閿熸枻鎷烽敓鏂ゆ嫹5:14
  *
  * To change this template, choose Tools | Options and locate the template under
  * the Source Creation and Management node. Right-click the template and choose
@@ -48,9 +48,9 @@ public class ChartUtil {
     public String generatePieChart(String title, HttpSession session, PrintWriter pw, String url) {
         String filename = null;
         try {
-            //锟斤拷锟斤拷chart锟斤拷锟斤拷
+            //閿熸枻鎷烽敓鏂ゆ嫹chart閿熸枻鎷烽敓鏂ゆ嫹
             PiePlot plot = new PiePlot(piedata);
-            //锟斤拷统锟斤拷图片锟较斤拷l锟斤拷
+            //閿熸枻鎷风粺閿熸枻鎷峰浘鐗囬敓杈冩枻鎷穕閿熸枻鎷�
             //plot.setURLGenerator(new StandardPieURLGenerator(url,"category"));
             plot.setToolTipGenerator(new StandardPieToolTipGenerator());
             plot.setNoDataMessage("No data available");
@@ -58,15 +58,15 @@ public class ChartUtil {
             plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} ({2})"));
             JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
 
-            chart.setBackgroundPaint(java.awt.Color.white);//锟斤拷锟斤拷图片锟侥憋拷锟斤拷色
+            chart.setBackgroundPaint(java.awt.Color.white);//閿熸枻鎷烽敓鏂ゆ嫹鍥剧墖閿熶茎鎲嬫嫹閿熸枻鎷疯壊
 
-            Font font = new Font("锟斤拷锟斤拷", Font.CENTER_BASELINE, 20);//锟斤拷锟斤拷图片锟斤拷锟斤拷锟斤拷锟斤拷锟酵达拷小            
+            Font font = new Font("閿熸枻鎷烽敓鏂ゆ嫹", Font.CENTER_BASELINE, 20);//閿熸枻鎷烽敓鏂ゆ嫹鍥剧墖閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閿熼叺杈炬嫹灏�            
             TextTitle _title = new TextTitle(title);
             _title.setFont(font);
             chart.setTitle(_title);
-            //锟斤拷锟斤拷傻锟酵计?拷诺锟斤拷锟绞蹦匡拷?
+            //閿熸枻鎷烽敓鏂ゆ嫹鍌婚敓閰佃?鎷疯閿熸枻鎷烽敓缁炶功鍖℃嫹?
             ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-            //500锟斤拷图片锟斤拷锟饺ｏ拷300锟斤拷图片锟竭讹拷
+            //500閿熸枻鎷峰浘鐗囬敓鏂ゆ嫹閿熼ズ锝忔嫹300閿熸枻鎷峰浘鐗囬敓绔鎷�
             filename = ServletUtilities.saveChartAsPNG(chart, 500, 300, info, session);
             ChartUtilities.writeImageMap(pw, filename, info, true);
             pw.flush();
@@ -81,30 +81,30 @@ public class ChartUtil {
     public String generate3dPieChart(String title, HttpSession session, PrintWriter pw, String url) {
         String filename = null;
         try {
-            //锟斤拷锟斤拷chart锟斤拷锟斤拷
+            //閿熸枻鎷烽敓鏂ゆ嫹chart閿熸枻鎷烽敓鏂ゆ嫹
             PiePlot plot = new PiePlot(piedata);
-            //锟斤拷统锟斤拷图片锟较斤拷l锟斤拷
+            //閿熸枻鎷风粺閿熸枻鎷峰浘鐗囬敓杈冩枻鎷穕閿熸枻鎷�
             plot.setURLGenerator(new StandardPieURLGenerator(url, "category"));
             plot.setToolTipGenerator(new StandardPieToolTipGenerator());
             //JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT,plot, true);
             JFreeChart chart = ChartFactory.createPieChart3D("", piedata, true, false, false);
             PiePlot pie = (PiePlot) chart.getPlot();
-            //锟借定锟劫分憋拷锟斤拷示锟斤拷式
+            //閿熷�熷畾閿熷姭鍒嗘唻鎷烽敓鏂ゆ嫹绀洪敓鏂ゆ嫹寮�
             pie.setBackgroundPaint(Color.white);
-            //锟借定锟斤拷锟斤拷透锟斤拷龋锟?-1.0之锟戒）
+            //閿熷�熷畾閿熸枻鎷烽敓鏂ゆ嫹閫忛敓鏂ゆ嫹榫嬮敓?-1.0涔嬮敓鎴掞級
             pie.setBackgroundAlpha(0.6f);
             pie.setForegroundAlpha(0.90f);
 
-            chart.setBackgroundPaint(java.awt.Color.white);//锟斤拷锟斤拷图片锟侥憋拷锟斤拷色
+            chart.setBackgroundPaint(java.awt.Color.white);//閿熸枻鎷烽敓鏂ゆ嫹鍥剧墖閿熶茎鎲嬫嫹閿熸枻鎷疯壊
 
-            Font font = new Font("锟斤拷锟斤拷", Font.CENTER_BASELINE, 20);//锟斤拷锟斤拷图片锟斤拷锟斤拷锟斤拷锟斤拷锟酵达拷小
+            Font font = new Font("閿熸枻鎷烽敓鏂ゆ嫹", Font.CENTER_BASELINE, 20);//閿熸枻鎷烽敓鏂ゆ嫹鍥剧墖閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閿熼叺杈炬嫹灏�
             TextTitle _title = new TextTitle(title);
             _title.setFont(font);
             chart.setTitle(_title);
 
-            //锟斤拷锟斤拷傻锟酵计?锟脚碉拷锟斤拷时目锟??
+            //閿熸枻鎷烽敓鏂ゆ嫹鍌婚敓閰佃?閿熻剼纰夋嫹閿熸枻鎷锋椂鐩敓??
             ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-            //500锟斤拷图片锟斤拷锟饺ｏ拷300锟斤拷图片锟竭讹拷
+            //500閿熸枻鎷峰浘鐗囬敓鏂ゆ嫹閿熼ズ锝忔嫹300閿熸枻鎷峰浘鐗囬敓绔鎷�
             filename = ServletUtilities.saveChartAsPNG(chart, 500, 300, info, session);
             ChartUtilities.writeImageMap(pw, filename, info, true);
             pw.flush();
@@ -129,7 +129,7 @@ public class ChartUtil {
             CategoryPlot plot = new CategoryPlot(bardata, categoryAxis, valueAxis, renderer);
             JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, false);
             chart.setBackgroundPaint(java.awt.Color.white);
-            Font font = new Font("隶书", Font.CENTER_BASELINE, 20);//锟斤拷锟斤拷图片锟斤拷锟斤拷锟斤拷锟斤拷锟酵达拷小
+            Font font = new Font("闅朵功", Font.CENTER_BASELINE, 20);//閿熸枻鎷烽敓鏂ゆ嫹鍥剧墖閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閿熼叺杈炬嫹灏�
             TextTitle _title = new TextTitle(title);
             _title.setFont(font);
             chart.setTitle(_title);
