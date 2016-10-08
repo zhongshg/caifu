@@ -12,18 +12,18 @@
 	String phone = null;
 	String roleid = null;
 	String viplvl = null;
-	String isvip = null;
+	//String isvip = null;
 	String secpwd = null;
 	String address = null;
 	if (rmr != null) {
 		if (rmr.equals("edit")) {//修改会员信息
-			//name,pwd,code,cardid,bankcard,phone,parentid
+			//name,pwd,code,cardid,bankcard,phone,parentid，address，secpwd
 			uname = URLDecoder.decode(RequestUtil.getString(request, "uname"), "utf-8");
 			bankcard = URLDecoder.decode(RequestUtil.getString(request, "bankcard"), "utf-8");
 			cardid = URLDecoder.decode(RequestUtil.getString(request, "cardid"), "utf-8");
 			phone = URLDecoder.decode(RequestUtil.getString(request, "phone"), "utf-8");
 			roleid = URLDecoder.decode(RequestUtil.getString(request, "roleid"), "utf-8");
-			isvip = URLDecoder.decode(RequestUtil.getString(request, "isvip"), "utf-8");
+			//isvip = URLDecoder.decode(RequestUtil.getString(request, "isvip"), "utf-8");
 			address = URLDecoder.decode(RequestUtil.getString(request, "address"), "utf-8");
 			Map<String, String> user = new HashMap<String, String>();
 			if (RequestUtil.getString(request, "pwd") != null && RequestUtil.getString(request, "pwd")!="") {
@@ -41,7 +41,7 @@
 			user.put("cardid", cardid);
 			user.put("phone", phone);
 			user.put("roleid", roleid);
-			user.put("isvip",isvip);
+			//user.put("isvip",isvip);
 			user.put("address",address);
 			DaoFactory.getUserDao().update(uid, user);
 			response.sendRedirect("manageUsers.jsp?msg=suce");
@@ -58,7 +58,7 @@
 		phone = udf.getString("phone");
 		roleid = udf.getString("roleid");
 		viplvl = udf.getString("viplvl");
-		isvip = udf.getString("isvip");
+		//isvip = udf.getString("isvip");
 		secpwd = udf.getString("secpwd");
 		address = udf.getString("address");
 	}
@@ -119,18 +119,13 @@
 						name="roleid">
 				</div>
 				<div class="row">
-					<label class="field" for="isvip">是否会员</label> <input type="text"
-						value="<%=isvip %>" class="input-text-user noPic input-click" id="isvip"
-						name="isvip">
-				</div>
-				<div class="row">
 					<label class="field" for="viplvl">会员等级</label> <input type="text"
 						value="<%=viplvl %>" class="input-text-user noPic input-click" id="viplvl"
 						name="viplvl">
 				</div>
 				<div class="row">
 					<label class="field" for="address">地址</label> <input type="text"
-						value="<%=address %>" class="input-text-user noPic input-click" id="address"
+						value="<%=address==null?"":address %>" class="input-text-user noPic input-click" id="address"
 						name="address">
 				</div>
 				<div class="row btnArea">
@@ -142,21 +137,19 @@
 </body>
 <script>
 	function manageUser() {
-		alert("123");
 		var uname = document.getElementById("uname").value;
 		var pwd = document.getElementById("pwd").value;
 		var bankcard = document.getElementById("bankcard").value;
 		var cardid = document.getElementById("cardid").value;
 		var phone = document.getElementById("phone").value;
 		var roleid = document.getElementById("roleid").value;
-		var isvip = document.getElementById("isvip").value;
 		var secpwd = document.getElementById("secpwd").value;
 		var address = document.getElementById("address").value;
 		document.getElementById('uid').disabled = false;
 		var url = "manageUser.jsp?rmr=edit&uid=" + <%=id%> + "&uname=" + uname
 				+ "&pwd=" + pwd + "&bankcard=" + bankcard + "&cardid=" + cardid
-				+ "&phone=" + phone + "&roleid=" + roleid+ "&isvip=" + isvip
-				+ "&secpwd"+secpwd + "&address"+address;
+				+ "&phone=" + phone + "&roleid=" + roleid
+				+ "&secpwd="+secpwd + "&address="+address;
 		window.location.href = encodeURI(encodeURI(url));
 	}
 </script>

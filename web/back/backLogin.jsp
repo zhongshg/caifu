@@ -34,20 +34,20 @@
 		    DataField dfUser = userDao.getById(id, fieldArr);
 			userDao.remarkLogininfo(dfUser.getString("id"));
 			if (dfUser.getString("roleid").equals("1")) {//管理员
-			    request.getSession().setAttribute("admin_name", dfUser.getString("name"));
-			    request.getSession().setAttribute("admin_id", dfUser.getString("id"));
-			    request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
-			    request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
-			    request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
-			    request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
+			    session.setAttribute("admin_name", dfUser.getString("name"));
+			    session.setAttribute("admin_id", dfUser.getString("id"));
+			    session.setAttribute("admin_viplvl", dfUser.getString("viplvl"));
+			    session.setAttribute("admin_roleid", dfUser.getString("roleid"));
+			    session.setAttribute("admin_parentid", dfUser.getString("parentid"));
+			    session.setAttribute("admin_bankcard", dfUser.getString("bankcard"));
 			    response.sendRedirect("frames.jsp");
 			} else {//普通用户
-			    request.getSession().setAttribute("user_name", dfUser.getString("name"));
-			    request.getSession().setAttribute("user_id", dfUser.getString("id"));
-			    request.getSession().setAttribute("user_viplvl", dfUser.getString("viplvl"));
-			    request.getSession().setAttribute("user_roleid", dfUser.getString("roleid"));
-			    request.getSession().setAttribute("user_parentid", dfUser.getString("parentid"));
-			    request.getSession().setAttribute("user_bankcard", dfUser.getString("bankcard"));
+			    session.setAttribute("user_name", dfUser.getString("name"));
+			    session.setAttribute("user_id", dfUser.getString("id"));
+			    session.setAttribute("user_viplvl", dfUser.getString("viplvl"));
+			    session.setAttribute("user_roleid", dfUser.getString("roleid"));
+			    session.setAttribute("user_parentid", dfUser.getString("parentid"));
+			    session.setAttribute("user_bankcard", dfUser.getString("bankcard"));
 			    response.sendRedirect("../fore/frames.jsp");
 			}
 		} catch (Exception e) {
