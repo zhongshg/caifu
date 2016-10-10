@@ -108,7 +108,7 @@
 								<td class="tc"><input name="id[]" value="${userMap.id}"
 									type="checkbox"></td>
 								<td><a href="../showUsers.jsp?uid=${userMap.id}">${userMap.id}</a></td>
-								<td><a href="backLogin.jsp?uid=${userMap.id}" target="_blank">${userMap.name}</a></td>
+								<td><a href="javascript:newWindows(${userMap.id});" target="_blank">${userMap.name}</a></td>
 								<td>${userMap.viplvl}</td>
 								<td>${userMap.cardid}</td>
 								<td>${userMap.bankcard}</td>
@@ -122,9 +122,10 @@
 								<a class="link-update"
 									href="pay.jsp?id=${userMap.id}">充值</a>
 								<a class="link-update"
-									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a> <a
+									href="manageUser.jsp?rm=edit&id=${userMap.id}">修改</a>
+									<!--  <a
 									class="link-del"
-									href="javascript:del(${userMap.id});">删除</a></td>
+									href="javascript:del(${userMap.id});">删除</a> --></td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -162,6 +163,10 @@
 		if(confirm("确定删除会员"+id+"吗？")){
 			window.location.href="manageUser.jsp?rmr=del&uid="+id;
 		}
+	}
+	function newWindows(id){
+		var url = "backLogin.jsp?uid="+id;
+		window.open(url);
 	}
 </script>
 </html>

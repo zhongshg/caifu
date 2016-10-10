@@ -14,18 +14,27 @@
 		assets.put("assets", String.valueOf(new_assets));
 		assets.put("balance", String.valueOf(new_balance));
 		Connection conn = DBUtils.getConnection();
+		conn.setAutoCommit(false);
 		try{
 			//更新用户资产
 			flag = DaoFactory.getAssetsDao().update(conn,assets);
-			//新增资产收入
-			Map<String,String> assets_in = new HashMap<String,String>();
-			//uid,amount,type,oid
-			assets_in.put("uid", id);
-			assets_in.put("amount", money);
-			assets_in.put("type", "14");//充值
-			assets_in.put("oid", null);
-			assets_in.put("dr", "1");
-			DaoFactory.getAssetsINDao().add(assets_in, conn);
+			if(flag){
+				//新增资产收入
+				Map<String,String> assets_in = new HashMap<String,String>();
+				//uid,amount,type,oid
+				assets_in.put("uid", id);
+				assets_in.put("amount", money);
+				assets_in.put("type", "14");//充值
+				assets_in.put("oid", null);
+				assets_in.put("dr", "1");
+				flag = DaoFactory.getAssetsINDao().add(assets_in, conn);
+				if(flag){
+				    conn.commit();
+				}
+			}
+			if(!flag){
+			    conn.rollback(); 
+			}
 		}catch(Exception e){
 		    e.printStackTrace();
 		}finally{
@@ -56,13 +65,13 @@
 				<div class="row">
 					<label class="field" for="uid">会员号</label> <input type="text"
 						value="<%=id %>"
-						class="input-text-password noPic input-click" id="uid"
+						class="input-text-user noPic input-click" id="uid"
 						name="uid" disabled="disabled">
 				</div>
 				<div class="row">
 					<label class="field" for="money">充值额度</label> <input type="text"
 						value=""
-						class="input-text-password noPic input-click" id="money"
+						class="input-text-user noPic input-click" id="money"
 						name="money">
 				</div>
 				<div class="row btnArea">

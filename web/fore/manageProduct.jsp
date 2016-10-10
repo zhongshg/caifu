@@ -5,7 +5,6 @@
     String rm = RequestUtil.getString(request, "rm");
     String pid = RequestUtil.getString(request, "pid");
     String amount = RequestUtil.getString(request, "amount");
-    String user_name = session.getAttribute("user_name").toString();
     if (rm != null) {
 		if (rm.equals("buy") && amount!=null && pid!=null) { //购买商品
 		    //根据pid查询商品信息

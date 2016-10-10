@@ -71,6 +71,7 @@ public class Sysconfig {
         return driverClassName;
     }
 
+//    private static String databaseURL = "jdbc:mysql://222.43.124.155/caifu?useUnicode=true&characterEncoding=utf-8";
     private static String databaseURL = "jdbc:mysql://127.0.0.1/caifu?useUnicode=true&characterEncoding=utf-8";
     public static String getDatabaseURL() {
         return databaseURL;
@@ -81,7 +82,7 @@ public class Sysconfig {
         return databaseUser;
     }
 
-    private static String databasePassword = "root";
+    private static String databasePassword = "";
     public static String getDatabasePassword() {
         return databasePassword;
     }

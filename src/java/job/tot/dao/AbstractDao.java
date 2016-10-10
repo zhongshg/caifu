@@ -25,7 +25,6 @@ import job.tot.bean.DataField;
 import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
-import job.tot.util.DbConn;
 
 /**
  *
@@ -91,7 +90,6 @@ public class AbstractDao {
 	    log.error("Sql Exception Error:", e);
 	} finally {
 	    DBUtils.closeResultSet(rs);
-	    // DBUtils.resetStatement(stmt);
 	    DBUtils.closeStatement(stmt);
 	    DBUtils.closeConnection(conn);
 	}
@@ -139,7 +137,6 @@ public class AbstractDao {
 	    log.error("Sql Exception Error:", e);
 	} finally {
 	    DBUtils.closeResultSet(rs);
-	    DBUtils.resetStatement(ps);
 	    DBUtils.closeStatement(ps);
 	    DBUtils.closeConnection(conn);
 	}
@@ -164,7 +161,7 @@ public class AbstractDao {
 		}
 	    }
 	} catch (SQLException e) {
-	    log.error("Sql Exception Error:", e);
+	    e.printStackTrace();
 	} finally {
 	    DBUtils.closeResultSet(rs);
 	    DBUtils.closeStatement(stmt);

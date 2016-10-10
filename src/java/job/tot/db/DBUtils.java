@@ -56,7 +56,7 @@ public final class DBUtils {
 
     private static boolean useDatasource = false;
 
-    private static int maxTimeToWait = 2000;// 2 seconds
+    private static int maxTimeToWait = 10000;// 10 seconds
 
     private static int minutesBetweenRefresh = 30;// 30 minutes
 

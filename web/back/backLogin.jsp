@@ -18,14 +18,6 @@
     if (!IpFilter.filter(request.getRemoteAddr())) {
 		response.sendRedirect("404.jsp");
     }
-    String act = RequestUtil.getString(request, "act");
-    if (act != null && act.equals("exit")) {
-		session = request.getSession(false);//防止创建Session  
-		if (session == null) {
-		    return;
-		}
-		session.removeAttribute("user");
-    }
     String id = RequestUtil.getString(request, "uid");
     if (id != null) {
 		try {
@@ -51,6 +43,7 @@
 			    response.sendRedirect("../fore/frames.jsp");
 			}
 		} catch (Exception e) {
+		    e.printStackTrace();
 		    out.print("登录失败" + e.getMessage());
 		}
     }

@@ -9,7 +9,6 @@
 package job.tot.dao.jdbc;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +25,6 @@ import job.tot.db.DBUtils;
 import job.tot.exception.DatabaseException;
 import job.tot.exception.ObjectNotFoundException;
 import job.tot.util.CodeUtils;
-import job.tot.util.DateUtil;
 import job.tot.util.DbConn;
 
 /**
@@ -51,7 +49,7 @@ public class ProductDao extends AbstractDao {
 	return getFirstData("select " + fieldArr + " from product where " + where, fieldArr);
     }
 
-    public List<Map<String, String>> searchBywhere(String where, String fieldArr) {
+    public List<Map<String, String>> searchBywhere(String where, String fieldArr) throws SQLException {
 	if (fieldArr == null) {
 	    fieldArr = "id,procode,proname,propertys,picpath,ts,starttime,endtime,price,stock";
 	}
@@ -62,7 +60,7 @@ public class ProductDao extends AbstractDao {
 	    sql.append("where " + where);
 	}
 	List<Map<String, String>> userList = new ArrayList<Map<String, String>>();
-	Connection conn = DbConn.getConn();
+	Connection conn = DBUtils.getConnection();
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
 	try {
@@ -86,7 +84,9 @@ public class ProductDao extends AbstractDao {
 	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
-	    DbConn.getAllClose(conn, ptst, rs);
+	    DBUtils.closePrepareStatement(ptst);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closeConnection(conn);
 	}
 	return userList;
     }
@@ -177,7 +177,7 @@ public class ProductDao extends AbstractDao {
 	return exe("delete from product where id=" + id);
     }
 
-    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
+    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) throws SQLException {
 	String fieldArr = "id,procode,proname,propertys,picpath,ts,starttime,endtime,price,stock";
 	StringBuilder sql = new StringBuilder("select ");
 	sql.append(fieldArr);
@@ -189,7 +189,7 @@ public class ProductDao extends AbstractDao {
 	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
 	sql.append(" limit " + offset + "," + pagesize);
 	List<Map<String, String>> userList = new ArrayList<Map<String, String>>();
-	Connection conn = DbConn.getConn();
+	Connection conn = DBUtils.getConnection();
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
 	try {
@@ -213,7 +213,9 @@ public class ProductDao extends AbstractDao {
 	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
-	    DbConn.getAllClose(conn, ptst, rs);
+	    DBUtils.closePrepareStatement(ptst);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closeConnection(conn);
 	}
 	return userList;
     }

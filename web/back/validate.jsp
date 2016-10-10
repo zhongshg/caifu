@@ -57,15 +57,12 @@
 		    new_users.put("allName", allName);
 		    new_users.put("sum", sum);
 		    new_users.put("user_viplvl", String.valueOf(session.getAttribute("admin_viplvl")));
-		    Connection conn = DBUtils.getConnection();
 		    try {
-				code = DaoFactory.getUserDao().validate(conn, new_users);
+				code = DaoFactory.getUserDao().validate(new_users);
 		    } catch (Exception e) {
 				e.printStackTrace();
 				code = -1;
-		    } finally {
-			DBUtils.closeConnection(conn);
-		    }
+		    } 
 		}
 
 		// 返回json数据根据code判断是否成功

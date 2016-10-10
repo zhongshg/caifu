@@ -42,7 +42,7 @@ public class OrdersDao extends AbstractDao {
 	return getFirstData("select " + fieldArr + " from orders where " + where, fieldArr);
     }
 
-    public List<Map<String, String>> searchBywhere(String where) {
+    public List<Map<String, String>> searchBywhere(String where) throws SQLException {
 	String fieldArr = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark,pname";
 	StringBuffer sql = new StringBuffer("select ");
 	sql.append(fieldArr);
@@ -51,7 +51,7 @@ public class OrdersDao extends AbstractDao {
 	    sql.append("where " + where);
 	}
 	List<Map<String, String>> orderList = new ArrayList<Map<String, String>>();
-	Connection conn = DbConn.getConn();
+	Connection conn = DBUtils.getConnection();
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
 	try {
@@ -79,7 +79,9 @@ public class OrdersDao extends AbstractDao {
 	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
-	    DbConn.getAllClose(conn, ptst, rs);
+	    DBUtils.closePrepareStatement(ptst);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closeConnection(conn);
 	}
 	return orderList;
     }
@@ -172,7 +174,7 @@ public class OrdersDao extends AbstractDao {
 	return exe("delete from orders where oid=" + id);
     }
 
-    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) {
+    public List<Map<String, String>> get_Limit(int currentpage, int pagesize, String where) throws SQLException {
 	String str = "oid,otitle,odt,osenddt,olastupdatedt,ostatus,onum,ocount,oamountmoney,oprice,ouserid,ousername,pid,oproducttitle,opt,optint,mark,pname";
 	StringBuilder sql = new StringBuilder("select ");
 	sql.append(str);
@@ -184,7 +186,7 @@ public class OrdersDao extends AbstractDao {
 	int offset = currentpage == 1 ? 0 : (currentpage - 1) * pagesize;
 	sql.append(" limit " + offset + "," + pagesize);
 	List<Map<String, String>> orderList = new ArrayList<Map<String, String>>();
-	Connection conn = DbConn.getConn();
+	Connection conn = DBUtils.getConnection();
 	PreparedStatement ptst = null;
 	ResultSet rs = null;
 	try {
@@ -212,7 +214,9 @@ public class OrdersDao extends AbstractDao {
 	    log.log(Level.SEVERE, null, ex);
 	    ex.printStackTrace();
 	} finally {
-	    DbConn.getAllClose(conn, ptst, rs);
+	    DBUtils.closePrepareStatement(ptst);
+	    DBUtils.closeResultSet(rs);
+	    DBUtils.closeConnection(conn);
 	}
 	return orderList;
     }

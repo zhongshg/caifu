@@ -20,6 +20,11 @@
 		response.sendRedirect("404.jsp");
     }
     String user_id = (String) session.getAttribute("user_id");
+    int int_user_id=0;
+    if(user_id!=null){
+		int_user_id=Integer.parseInt(user_id);
+    }
+    String user_name = (String)session.getAttribute("user_name");
     if (user_id == null) {
 		session = request.getSession(false);
 		if (session == null) {
@@ -29,4 +34,5 @@
 		session.removeAttribute("user_id");
 		response.sendRedirect("../login.jsp");
     }
+    
 %>

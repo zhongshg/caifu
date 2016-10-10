@@ -40,7 +40,13 @@ body {
 			if (session == null) {
 			    return;
 			}
-			session.removeAttribute("user");
+			
+			session.setAttribute("admin_name", null);
+			session.setAttribute("admin_id", null);
+			session.setAttribute("admin_viplvl", null);
+			session.setAttribute("admin_roleid", null);
+			session.setAttribute("admin_parentid", null);
+			session.setAttribute("admin_bankcard", null);
 		}
 		String id = RequestUtil.getString(request, "code");
 		String pwd = RequestUtil.getString(request, "pwd");
@@ -53,20 +59,20 @@ body {
 				if(dfUser != null){
 				    userDao.remarkLogininfo(dfUser.getString("id"));
 					if(dfUser.getString("roleid").equals("1")){//管理员
-					    request.getSession().setAttribute("admin_name", dfUser.getString("name"));
-						request.getSession().setAttribute("admin_id", dfUser.getString("id"));
-						request.getSession().setAttribute("admin_viplvl", dfUser.getString("viplvl"));
-						request.getSession().setAttribute("admin_roleid", dfUser.getString("roleid"));
-						request.getSession().setAttribute("admin_parentid", dfUser.getString("parentid"));
-						request.getSession().setAttribute("admin_bankcard", dfUser.getString("bankcard"));
+					    session.setAttribute("admin_name", dfUser.getString("name"));
+						session.setAttribute("admin_id", dfUser.getString("id"));
+						session.setAttribute("admin_viplvl", dfUser.getString("viplvl"));
+						session.setAttribute("admin_roleid", dfUser.getString("roleid"));
+						session.setAttribute("admin_parentid", dfUser.getString("parentid"));
+						session.setAttribute("admin_bankcard", dfUser.getString("bankcard"));
 						response.sendRedirect("./back/frames.jsp");
 					}else{//普通用户
-					    request.getSession().setAttribute("user_name", dfUser.getString("name"));
-						request.getSession().setAttribute("user_id", dfUser.getString("id"));
-						request.getSession().setAttribute("user_viplvl", dfUser.getString("viplvl"));
-						request.getSession().setAttribute("user_roleid", dfUser.getString("roleid"));
-						request.getSession().setAttribute("user_parentid", dfUser.getString("parentid"));
-						request.getSession().setAttribute("user_bankcard", dfUser.getString("bankcard"));
+					    session.setAttribute("user_name", dfUser.getString("name"));
+						session.setAttribute("user_id", dfUser.getString("id"));
+						session.setAttribute("user_viplvl", dfUser.getString("viplvl"));
+						session.setAttribute("user_roleid", dfUser.getString("roleid"));
+						session.setAttribute("user_parentid", dfUser.getString("parentid"));
+						session.setAttribute("user_bankcard", dfUser.getString("bankcard"));
 					    response.sendRedirect("./fore/frames.jsp"); 
 					}
 				}else{
@@ -120,14 +126,14 @@ body {
 					<tr>
 						<td width="31%" height="35" class="login-text02">用户名称：<br />
 						</td>
-						<td width="69%"><input name="textfield" id="name" type="text"
+						<td width="69%"><input name="textfield" id="name" type="text" value="88888"
 							size="30" />
 						</td>
 					</tr>
 					<tr>
 						<td height="35" class="login-text02">密 码：<br />
 						</td>
-						<td><input name="textfield2" id="pwd" type="password"
+						<td><input name="textfield2" id="pwd" type="password" value="1"
 							size="30" />
 						</td>
 					</tr>

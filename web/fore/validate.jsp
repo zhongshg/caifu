@@ -64,20 +64,13 @@
 		    new_users.put("user_viplvl", String.valueOf(session.getAttribute("user_viplvl")));
 		    new_users.put("old_balance", String.valueOf(old_balance));
 		    new_users.put("old_assets", String.valueOf(old_assets));
-		    Connection conn = DBUtils.getConnection();
-		    conn.setAutoCommit(false);
 		    try {
-				code = DaoFactory.getUserDao().validate(conn, new_users);
+				code = DaoFactory.getUserDao().validate(new_users);
 				if(code==0){
-					// 提交所有操作
-					conn.commit();
-			    }else{
-					conn.rollback();
-			    }
+				    flag = DaoFactory.getAssetsINDao().agencyMoney(parentid, uid);
+				}
 		    } catch (Exception e) {
 				e.printStackTrace();
-		    }finally{
-				DBUtils.closeConnection(conn);
 		    }
 		}
 
